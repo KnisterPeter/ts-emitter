@@ -36,7 +36,9 @@ describe('emit', () => {
         }
       }
       type N = L;
-
+      interface IComponentOptions {
+        name?: string;
+      }
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);

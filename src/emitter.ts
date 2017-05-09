@@ -109,6 +109,54 @@ export function emitExportAssignment(this: any, node: ts.ExportAssignment, conte
   return source.join('');
 }
 
+export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
+  emitStatic(source, 'interface', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  if (node.heritageClauses) {
+    emitStatic(source, 'extends', node, context);
+    for (let i = 0, n = node.heritageClauses.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.heritageClauses[i], context));
+      if ((i < n - 1) || node.heritageClauses.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+  }
+  emitStatic(source, '{', node, context);
+  node.members.forEach(member => {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, member, context));
+  });
+  emitStatic(source, '}', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitPropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node.name, context);
+    source.push(emitType(node.type, context));
+  }
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   if (node.modifiers) {
