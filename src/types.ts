@@ -189,3 +189,20 @@ export function emitTypeTypeParameter(this: any, node: ts.TypeParameterDeclarati
   source.push(emitType.call(this, node.name, context));
   return source.join('');
 }
+
+export function emitTypePropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node.name, context);
+    source.push(emitType.call(this, node.type, context));
+  }
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}

@@ -40,6 +40,10 @@ describe('emit', () => {
       export interface IComponentOptions {
         name?: string;
       }
+      type Constructable<T> = {
+        name?: string;
+      };
+      let idx = -1;
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);

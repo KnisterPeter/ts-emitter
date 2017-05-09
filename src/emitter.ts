@@ -475,6 +475,23 @@ export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
   return source.join('');
 }
 
+export function emitPrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpression, context: EmitterContext): string {
+  function getPrefixUnaryOperator(): string {
+    switch (node.operator) {
+      case ts.SyntaxKind.MinusToken:
+        return '-';
+    }
+    throw new Error(`Unknown operator ${ts.SyntaxKind[node.operator]}`);
+  }
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(getPrefixUnaryOperator());
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.operand, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '(', node, context);
