@@ -15,7 +15,7 @@ describe('emit', () => {
       var c: boolean = true;
       const d: string = "string";
       var e: boolean = false;
-      export function f(g: object, h: () => {}): void {}
+      export function f(g: object, h: () => {}): void {};
       const i = (a, b) => a + b;
       let j = function(): string|number {
         console.log('some' + 'text');
@@ -36,14 +36,16 @@ describe('emit', () => {
         }
       }
       export type N = L;
-      type Constructable<T> = { new(...args: any[]): T; };
-      export interface IComponentOptions {
+      type O<T> = { new(...args: any[]): T; };
+      export interface P {
         name?: string;
       }
-      type Constructable<T> = {
+      type Q<T> = {
         name?: string;
       };
-      let idx = -1;
+      let r = -1;
+      const s = this.func();
+      declare function t(): boolean;
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);

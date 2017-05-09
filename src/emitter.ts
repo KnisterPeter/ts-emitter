@@ -288,6 +288,12 @@ export function emitReturnStatement(this: any, node: ts.ReturnStatement, context
   return source.join('');
 }
 
+export function emitEmptyStatement(this: any, node: ts.EmptyStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'throw', node, context);
@@ -359,6 +365,7 @@ export function emitVariableDeclaration(this: any, node: ts.VariableDeclaration,
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   if (node.modifiers) {
@@ -384,8 +391,11 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.body, context));
+  if (node.body) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.body, context));
+  }
+  emitStatic(source, ';', node, context);
   context.offset = node.end;
   return source.join('');
 }
@@ -659,6 +669,10 @@ export function emitExportKeyword(this: any, node: ts.Node, context: EmitterCont
 
 export function emitThisKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('this', node, context);
+}
+
+export function emitDeclareKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('declare', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
