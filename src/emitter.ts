@@ -494,6 +494,27 @@ export function emitIdentifier(this: any, node: ts.Identifier, context: EmitterC
   return source.join('');
 }
 
+export function emitTypeAliasDeclaration(this: any, node: ts.TypeAliasDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'type', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '=', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.type, context));
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitTypeReference(this: any, node: ts.TypeReferenceNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.typeName, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

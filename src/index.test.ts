@@ -35,6 +35,8 @@ describe('emit', () => {
           throw new Error('never');
         }
       }
+      type N = L;
+
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);
