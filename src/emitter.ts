@@ -33,6 +33,32 @@ export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: 
   return source.join('');
 }
 
+export function emitModuleDeclaration(this: any, node: ts.ModuleDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'module', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.body, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitModuleBlock(this: any, node: ts.ModuleBlock, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  for (let i = 0, n = node.statements.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.statements[i], context));
+    if ((i < n - 1) || node.statements.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, '}', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'import', node, context);
@@ -87,6 +113,49 @@ export function emitNamedImports(this: any, node: ts.NamedImports, context: Emit
 }
 
 export function emitImportSpecifier(this: any, node: ts.ImportSpecifier, context: EmitterContext): string {
+  const source: string[] = [];
+  if (node.propertyName) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.propertyName, context));
+    emitStatic(source, 'as', node, context);
+  }
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'export', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.exportClause, context));
+  if (node.moduleSpecifier) {
+    emitStatic(source, 'from', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.moduleSpecifier, context));
+  }
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitNamedExports(this: any, node: ts.NamedExports, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  for (let i = 0, n = node.elements.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.elements[i], context));
+    if ((i < n - 1) || node.elements.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, '}', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitExportSpecifier(this: any, node: ts.ExportSpecifier, context: EmitterContext): string {
   const source: string[] = [];
   if (node.propertyName) {
     addWhitespace(source, node, context);

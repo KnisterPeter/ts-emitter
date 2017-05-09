@@ -10,6 +10,7 @@ describe('emit', () => {
       import { join, other as other2 } from 'path';
       import test from './module';
       const a: string = 'string';
+      export { a, b as c } from 'asdf';
       export default a;
       let b: number = 0;
       var c: boolean = true;
@@ -65,6 +66,14 @@ describe('emit', () => {
     const source = `
       interface Test {
         [key: string]: any;
+      }
+    `;
+    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should know about ModuleDeclaration', () => {
+    const source = `
+      module 'test' {
       }
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
