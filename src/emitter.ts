@@ -33,8 +33,88 @@ export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: 
   return source.join('');
 }
 
+export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'import', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.importClause, context));
+  emitStatic(source, 'from', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.moduleSpecifier, context));
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitImportClause(this: any, node: ts.ImportClause, context: EmitterContext): string {
+  const source: string[] = [];
+  if (node.namedBindings) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.namedBindings, context));
+  }
+  if (node.name) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.name, context));
+  }
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitNamespaceImport(this: any, node: ts.NamespaceImport, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '* as ', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitNamedImports(this: any, node: ts.NamedImports, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  for (let i = 0, n = node.elements.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.elements[i], context));
+    if ((i < n - 1) || node.elements.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, '}', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitImportSpecifier(this: any, node: ts.ImportSpecifier, context: EmitterContext): string {
+  const source: string[] = [];
+  if (node.propertyName) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.propertyName, context));
+    emitStatic(source, 'as', node, context);
+  }
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitExportAssignment(this: any, node: ts.ExportAssignment, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'export default', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
   emitStatic(source, 'class', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
@@ -231,6 +311,12 @@ export function emitVariableDeclaration(this: any, node: ts.VariableDeclaration,
 
 export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
   emitStatic(source, 'function', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
@@ -435,6 +521,10 @@ export function emitFalseKeyword(this: any, node: ts.Node, context: EmitterConte
 
 export function emitSuperKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('super', node, context);
+}
+
+export function emitExportKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('export', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
