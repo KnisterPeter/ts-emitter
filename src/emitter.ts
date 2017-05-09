@@ -137,7 +137,7 @@ export function emitReturnStatement(this: any, node: ts.ReturnStatement, context
 export function emitVariableDeclarationList(this: any, node: ts.VariableDeclarationList,
   context: EmitterContext): string {
   const source: string[] = [];
-  switch ((node as ts.VariableDeclarationList).flags) {
+  switch (node.flags) {
     case ts.NodeFlags.Const:
       emitStatic(source, 'const', node, context);
       break;
