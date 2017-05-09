@@ -36,9 +36,11 @@ export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: 
 export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'import', node, context);
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.importClause, context));
-  emitStatic(source, 'from', node, context);
+  if (node.importClause) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.importClause, context));
+    emitStatic(source, 'from', node, context);
+  }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.moduleSpecifier, context));
   emitStatic(source, ';', node, context);

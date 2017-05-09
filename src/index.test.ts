@@ -5,6 +5,7 @@ import { emit } from './index';
 describe('emit', () => {
   it('should accept a typescript as and reprint it', () => {
     const source = `
+      import 'reflect-metadata';
       import * as path from 'path';
       import { join, other as other2 } from 'path';
       import test from './module';
