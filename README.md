@@ -1,5 +1,7 @@
 # ts-emitter
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/KnisterPeter/ts-emitter.svg)](https://greenkeeper.io/)
+
 [![GitHub license][license-image]][license-link]
 [![npm][npm-image]][npm-link]
 [![Travis][ci-image]][ci-link]
