@@ -183,13 +183,6 @@ export function emitTypeTypeQuery(this: any, node: ts.TypeQueryNode, context: Em
   return source.join('');
 }
 
-export function emitTypeTypeParameter(this: any, node: ts.TypeParameterDeclaration, context: EmitterContext): string {
-  const source: string[] = [];
-  addWhitespace(source, node, context);
-  source.push(emitType.call(this, node.name, context));
-  return source.join('');
-}
-
 export function emitTypePropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

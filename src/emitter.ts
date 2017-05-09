@@ -574,7 +574,7 @@ export function emitTypeAliasDeclaration(this: any, node: ts.TypeAliasDeclaratio
     emitStatic(source, '<', node, context);
     for (let i = 0, n = node.typeParameters.length; i < n; i++) {
       addWhitespace(source, node, context);
-      source.push(emitType(node.typeParameters[i], context));
+      source.push(emit.call(this, node.typeParameters[i], context));
       if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
         emitStatic(source, ',', node, context);
       }
@@ -586,6 +586,13 @@ export function emitTypeAliasDeclaration(this: any, node: ts.TypeAliasDeclaratio
   source.push(emitType(node.type, context));
   emitStatic(source, ';', node, context);
   context.offset = node.end;
+  return source.join('');
+}
+
+export function emitTypeParameter(this: any, node: ts.TypeParameterDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
   return source.join('');
 }
 
