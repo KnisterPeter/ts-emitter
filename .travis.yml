@@ -17,5 +17,5 @@ cache:
   - node_modules
 
 before_script: 'npm run linter'
-script: 'npm run test && npm run build && npm run update-harness && npm run harness'
+script: 'npm run test && npm run update-harness && npm run harness'
 after_script: 'npm run coverage'
