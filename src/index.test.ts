@@ -59,4 +59,13 @@ describe('emit', () => {
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about IndexSignature', () => {
+    const source = `
+      interface Test {
+        [key: string]: any;
+      }
+    `;
+    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

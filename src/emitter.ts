@@ -596,6 +596,26 @@ export function emitTypeParameter(this: any, node: ts.TypeParameterDeclaration, 
   return source.join('');
 }
 
+export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '[', node, context);
+  for (let i = 0, n = node.parameters.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.parameters[i], context));
+    if ((i < n - 1) || node.parameters.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ']', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
+  emitStatic(source, ';', node, context);
+  return source.join('');
+}
+
 export function emitStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
