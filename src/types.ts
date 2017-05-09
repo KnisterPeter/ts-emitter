@@ -30,6 +30,10 @@ export function emitTypeVoidKeyword(this: any, node: ts.KeywordTypeNode, context
   return _emitTypeKeyword('void', node, context);
 }
 
+export function emitTypeNeverKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('never', node, context);
+}
+
 export function _emitTypeKeyword(this: any, keyword: string, node: ts.KeywordTypeNode,
   context: EmitterContext): string {
   const source: string[] = [];
@@ -120,5 +124,13 @@ export function emitTypeUnionType(this: any, node: ts.UnionTypeNode, context: Em
       emitStatic(source, '|', node.types[i], context);
     }
   }
+  return source.join('');
+}
+
+export function emitTypeTypeQuery(this: any, node: ts.TypeQueryNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'typeof', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.exprName, context));
   return source.join('');
 }

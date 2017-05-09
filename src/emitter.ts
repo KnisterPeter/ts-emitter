@@ -98,6 +98,30 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
   return source.join('');
 }
 
+export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '(', node, context);
+  for (let i = 0, n = node.parameters.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.parameters[i], context));
+    if ((i < n - 1) || node.parameters.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.body, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitVariableStatement(this: any, node: ts.VariableStatement, context: EmitterContext): string {
   const source: string[] = [];
   node.forEachChild(child => {
@@ -130,6 +154,38 @@ export function emitReturnStatement(this: any, node: ts.ReturnStatement, context
   if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
     emitStatic(source, ';', node, context);
   }
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'throw', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitNewExpression(this: any, node: ts.NewExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'new', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, '(', node, context);
+  if (node.arguments) {
+    for (let i = 0, n = node.arguments.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.arguments[i], context));
+      if ((i < n - 1) || node.arguments.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+  }
+  emitStatic(source, ')', node, context);
   context.offset = node.end;
   return source.join('');
 }

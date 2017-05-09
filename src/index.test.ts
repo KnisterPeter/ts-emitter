@@ -25,6 +25,10 @@ describe('emit', () => {
         constructor(a) {
           super(a);
         }
+
+        method(p1: typeof k): never {
+          throw new Error('never');
+        }
       }
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
