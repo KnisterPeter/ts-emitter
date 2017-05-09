@@ -20,7 +20,7 @@ describe('emit', () => {
       const i = (a, b) => a + b;
       let j = function(): string|number {
         console.log('some' + 'text');
-      }j
+      }
       let k = function k(): {[key: string]: boolean} {
         return {
           'key0': true,
@@ -47,6 +47,9 @@ describe('emit', () => {
       let r = -1;
       const s = this.func();
       declare function t(): boolean;
+      for (var u in v) {}
+      for (var u of v) {}
+      for (var i, n; i < n; i++) {}
     `;
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);

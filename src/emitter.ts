@@ -334,6 +334,63 @@ export function emitVariableStatement(this: any, node: ts.VariableStatement, con
   return source.join('');
 }
 
+export function emitForStatement(this: any, node: ts.ForStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'for', node, context);
+  emitStatic(source, '(', node, context);
+  if (node.initializer) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.initializer, context));
+  }
+  emitStatic(source, ';', node, context);
+  if (node.condition) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.condition, context));
+  }
+  emitStatic(source, ';', node, context);
+  if (node.incrementor) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.incrementor, context));
+  }
+  emitStatic(source, ')', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.statement, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitForInStatement(this: any, node: ts.ForInStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'for', node, context);
+  emitStatic(source, '(', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.initializer, context));
+  emitStatic(source, 'in', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, ')', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.statement, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitForOfStatement(this: any, node: ts.ForOfStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'for', node, context);
+  emitStatic(source, '(', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.initializer, context));
+  emitStatic(source, 'of', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, ')', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.statement, context));
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitExpressionStatement(this: any, node: ts.ExpressionStatement, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
@@ -408,10 +465,13 @@ export function emitVariableDeclarationList(this: any, node: ts.VariableDeclarat
     default:
       emitStatic(source, 'var', node, context);
   }
-  node.forEachChild(child => {
+  for (let i = 0, n = node.declarations.length; i < n; i++) {
     addWhitespace(source, node, context);
-    source.push(emit.call(this, child, context));
-  });
+    source.push(emit.call(this, node.declarations[i], context));
+    if ((i < n - 1) || node.declarations.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -571,6 +631,24 @@ export function emitPrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpress
   return source.join('');
 }
 
+export function emitPostfixUnaryExpression(this: any, node: ts.PostfixUnaryExpression,
+    context: EmitterContext): string {
+  function getPostfixUnaryOperator(): string {
+    switch (node.operator) {
+      case ts.SyntaxKind.PlusPlusToken:
+        return '++';
+    }
+    throw new Error(`Unknown operator ${ts.SyntaxKind[node.operator]}`);
+  }
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.operand, context));
+  addWhitespace(source, node, context);
+  source.push(getPostfixUnaryOperator());
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '(', node, context);
@@ -626,6 +704,14 @@ export function emitBinaryExpression(this: any, node: ts.BinaryExpression, conte
 export function emitPlusToken(this: any, node: ts.Token<ts.SyntaxKind.PlusToken>, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '+', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitFirstBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.FirstBinaryOperator>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '<', node, context);
   context.offset = node.end;
   return source.join('');
 }
