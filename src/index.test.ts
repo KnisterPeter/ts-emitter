@@ -35,8 +35,8 @@ describe('emit', () => {
           throw new Error('never');
         }
       }
-      type N = L;
-      interface IComponentOptions {
+      export type N = L;
+      export interface IComponentOptions {
         name?: string;
       }
     `;

@@ -544,6 +544,12 @@ export function emitIdentifier(this: any, node: ts.Identifier, context: EmitterC
 
 export function emitTypeAliasDeclaration(this: any, node: ts.TypeAliasDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
   emitStatic(source, 'type', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
