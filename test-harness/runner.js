@@ -3,7 +3,7 @@ const { sync: globbySync } = require('globby');
 const { join } = require('path');
 const ts = require('typescript');
 
-const { emit } = require('../dist/src');
+const { emit } = require('..');
 
 module.exports = {
   runner: function(part) {
