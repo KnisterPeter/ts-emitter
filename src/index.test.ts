@@ -36,6 +36,7 @@ describe('emit', () => {
         }
       }
       export type N = L;
+      type Constructable<T> = { new(...args: any[]): T; };
       export interface IComponentOptions {
         name?: string;
       }

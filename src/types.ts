@@ -34,11 +34,23 @@ export function emitTypeNeverKeyword(this: any, node: ts.KeywordTypeNode, contex
   return _emitTypeKeyword('never', node, context);
 }
 
+export function emitTypeAnyKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('any', node, context);
+}
+
 export function _emitTypeKeyword(this: any, keyword: string, node: ts.KeywordTypeNode,
   context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(keyword);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitTypeTypeReference(this: any, node: ts.TypeReferenceNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.typeName, context));
   context.offset = node.end;
   return source.join('');
 }
@@ -73,6 +85,42 @@ export function emitTypeTypeLiteral(this: any, node: ts.TypeLiteralNode, context
     }
   }
   emitStatic(source, '}', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatureDeclaration,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'new', node, context);
+  emitStatic(source, '(', node, context);
+  for (let i = 0, n = node.parameters.length; i < n; i++) {
+    if (node.parameters[i].dotDotDotToken) {
+      emitStatic(source, '...', node, context);
+    }
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.parameters[i], context));
+    if ((i < n - 1) || node.parameters.hasTrailingComma) {
+      emitStatic(source, '|', node.parameters[i], context);
+    }
+  }
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.type, context));
+  }
+  emitStatic(source, ';', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
+export function emitTypeArrayType(this: any, node: ts.ArrayTypeNode,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.elementType, context));
+  emitStatic(source, '[]', node, context);
   context.offset = node.end;
   return source.join('');
 }
@@ -132,5 +180,12 @@ export function emitTypeTypeQuery(this: any, node: ts.TypeQueryNode, context: Em
   emitStatic(source, 'typeof', node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.exprName, context));
+  return source.join('');
+}
+
+export function emitTypeTypeParameter(this: any, node: ts.TypeParameterDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.name, context));
   return source.join('');
 }
