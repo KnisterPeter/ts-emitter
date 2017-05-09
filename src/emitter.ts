@@ -69,7 +69,9 @@ export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, con
   }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.moduleSpecifier, context));
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -135,7 +137,9 @@ export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, con
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.moduleSpecifier, context));
   }
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -173,7 +177,9 @@ export function emitExportAssignment(this: any, node: ts.ExportAssignment, conte
   emitStatic(source, 'export default', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -221,7 +227,9 @@ export function emitPropertySignature(this: any, node: ts.PropertySignature, con
     addWhitespace(source, node.name, context);
     source.push(emitType(node.type, context));
   }
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -524,7 +532,9 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.body, context));
   }
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -749,7 +759,9 @@ export function emitTypeAliasDeclaration(this: any, node: ts.TypeAliasDeclaratio
   emitStatic(source, '=', node, context);
   addWhitespace(source, node, context);
   source.push(emitType(node.type, context));
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -777,7 +789,9 @@ export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   return source.join('');
 }
 
