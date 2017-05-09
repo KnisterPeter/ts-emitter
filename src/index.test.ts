@@ -48,4 +48,15 @@ describe('emit', () => {
     const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about ThisExpression', () => {
+    const source = `
+      class Test {
+        constructor() {
+          this.abc = 'abc';
+        }
+      }
+    `;
+    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

@@ -608,6 +608,12 @@ export function emitFirstLiteralToken(this: any, node: ts.LiteralExpression, con
   return source.join('');
 }
 
+export function emitFirstAssignment(this: any, node: ts.Node, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '=', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
 export function emitTrueKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('true', node, context);
 }
@@ -622,6 +628,10 @@ export function emitSuperKeyword(this: any, node: ts.Node, context: EmitterConte
 
 export function emitExportKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('export', node, context);
+}
+
+export function emitThisKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('this', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
