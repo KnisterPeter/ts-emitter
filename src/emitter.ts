@@ -675,6 +675,18 @@ export function emitDeclareKeyword(this: any, node: ts.Node, context: EmitterCon
   return _emitKeyword('declare', node, context);
 }
 
+export function emitAbstractKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('abstract', node, context);
+}
+
+export function emitNullKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('null', node, context);
+}
+
+export function emitDefaultKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('default', node, context);
+}
+
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
