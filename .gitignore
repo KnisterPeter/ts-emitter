@@ -2,3 +2,4 @@ node_modules/
 coverage/
 dist/
 test-harness/typescript/
+npm-debug.log
