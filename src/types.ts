@@ -51,6 +51,17 @@ export function emitTypeTypeReference(this: any, node: ts.TypeReferenceNode, con
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.typeName, context));
+  if (node.typeArguments) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeArguments.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.typeArguments[i], context));
+      if ((i < n - 1) || node.typeArguments.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -197,5 +208,16 @@ export function emitTypePropertySignature(this: any, node: ts.PropertySignature,
   }
   emitStatic(source, ';', node, context);
   context.offset = node.end;
+  return source.join('');
+}
+
+export function emitTypeFirstNode(this: any, node: ts.QualifiedName, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.left, context));
+  emitStatic(source, '.', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.right, context));
+  context.offset = node.getEnd();
   return source.join('');
 }

@@ -50,9 +50,6 @@ export function emitModuleBlock(this: any, node: ts.ModuleBlock, context: Emitte
   for (let i = 0, n = node.statements.length; i < n; i++) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.statements[i], context));
-    if ((i < n - 1) || node.statements.hasTrailingComma) {
-      emitStatic(source, ',', node, context);
-    }
   }
   emitStatic(source, '}', node, context);
   context.offset = node.getEnd();
@@ -247,8 +244,61 @@ export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaratio
   return source.join('');
 }
 
+export function emitConstructSignature(this: any, node: ts.ConstructSignatureDeclaration,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'new', node, context);
+  emitStatic(source, '(', node, context);
+  for (let i = 0, n = node.parameters.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.parameters[i], context));
+    if ((i < n - 1) || node.parameters.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
+export function emitCallSignature(this: any, node: ts.CallSignatureDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, '(', node, context);
+  for (let i = 0, n = node.parameters.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.parameters[i], context));
+    if ((i < n - 1) || node.parameters.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
 export function emitPropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   if (node.questionToken) {
@@ -256,19 +306,21 @@ export function emitPropertySignature(this: any, node: ts.PropertySignature, con
   }
   if (node.type) {
     emitStatic(source, ':', node, context);
-    addWhitespace(source, node.name, context);
+    addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
   if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
     emitStatic(source, ';', node, context);
   }
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
 // tslint:disable-next-line cyclomatic-complexity
 export function emitMethodSignature(this: any, node: ts.MethodSignature, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   if (node.questionToken) {
@@ -292,6 +344,7 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
     emitStatic(source, ';', node, context);
   }
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -514,6 +567,7 @@ export function emitIfStatement(this: any, node: ts.IfStatement, context: Emitte
     source.push(emit.call(this, node.elseStatement, context));
   }
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -528,6 +582,7 @@ export function emitWhileStatement(this: any, node: ts.WhileStatement, context: 
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.statement, context));
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -554,6 +609,7 @@ export function emitForStatement(this: any, node: ts.ForStatement, context: Emit
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.statement, context));
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -571,6 +627,7 @@ export function emitForInStatement(this: any, node: ts.ForInStatement, context: 
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.statement, context));
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -588,6 +645,7 @@ export function emitForOfStatement(this: any, node: ts.ForOfStatement, context: 
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.statement, context));
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -602,17 +660,20 @@ export function emitWithStatement(this: any, node: ts.WithStatement, context: Em
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.statement, context));
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
 export function emitExpressionStatement(this: any, node: ts.ExpressionStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
     emitStatic(source, ';', node, context);
   }
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -669,6 +730,21 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
   return source.join('');
 }
 
+export function emitElementAccessExpression(this: any, node: ts.ElementAccessExpression,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, '[', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.argumentExpression, context));
+  emitStatic(source, ']', node, context);
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
 export function emitVariableDeclarationList(this: any, node: ts.VariableDeclarationList,
   context: EmitterContext): string {
   const source: string[] = [];
@@ -722,8 +798,22 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
     });
   }
   emitStatic(source, 'function', node, context);
+  if (node.asteriskToken) {
+    emitStatic(source, '*', node, context);
+  }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
     addWhitespace(source, node, context);
@@ -773,6 +863,17 @@ export function emitFunctionExpression(this: any, node: ts.FunctionExpression, c
   }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.body, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitYieldExpression(this: any, node: ts.YieldExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'yield', node, context);
+  if (node.expression) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.expression, context));
+  }
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -998,11 +1099,13 @@ export function emitTypeParameter(this: any, node: ts.TypeParameterDeclaration, 
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  context.offset = node.getEnd();
   return source.join('');
 }
 
 export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, '[', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
     addWhitespace(source, node, context);
@@ -1020,6 +1123,8 @@ export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration
   if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
     emitStatic(source, ';', node, context);
   }
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 

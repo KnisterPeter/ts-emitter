@@ -61,15 +61,17 @@ describe('emit', () => {
       export type N = L;
       type O<T> = { new(...args: any[]): T; };
       export interface P {
-        name?: string;
-        call(a, b): void;
+        (a: string): string; // comment
+        new (a: string): string; // comment
+        name?: string; // comment
+        call(a, b): void; // comment
       }
       type Q<T> = {
         name?: string;
       };
       let r = -1;
       const s = this.func();
-      declare function t(): boolean;
+      declare function t<T>(): A<T>;
       for (var u in v) {}
       for (var u of v) {}
       for (var i, n; i < n; i++) {}
@@ -87,6 +89,11 @@ describe('emit', () => {
         default:
           b = 2;
       }
+      function* foo() {
+        yield
+      }
+      var x = () => this["prop1"];
+      var v2:K1.I3=v1;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
