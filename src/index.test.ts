@@ -30,6 +30,7 @@ describe('emit', () => {
       import * as path from 'path';
       import { join, other as other2 } from 'path';
       import test from './module';
+      import p = Alpha.x;
       const a: string = 'string';
       export { a, b as c } from 'asdf';
       export default a;

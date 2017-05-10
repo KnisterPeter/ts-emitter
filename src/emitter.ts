@@ -59,8 +59,37 @@ export function emitModuleBlock(this: any, node: ts.ModuleBlock, context: Emitte
   return source.join('');
 }
 
+export function emitImportEqualsDeclaration(this: any, node: ts.ImportEqualsDeclaration,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'import', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '=', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.moduleReference, context));
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitFirstNode(this: any, node: ts.QualifiedName, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.left, context));
+  emitStatic(source, '.', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.right, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'import', node, context);
   if (node.importClause) {
     addWhitespace(source, node, context);
@@ -129,6 +158,7 @@ export function emitImportSpecifier(this: any, node: ts.ImportSpecifier, context
 
 export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'export', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.exportClause, context));
@@ -174,6 +204,7 @@ export function emitExportSpecifier(this: any, node: ts.ExportSpecifier, context
 
 export function emitExportAssignment(this: any, node: ts.ExportAssignment, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'export default', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
@@ -186,6 +217,7 @@ export function emitExportAssignment(this: any, node: ts.ExportAssignment, conte
 
 export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.modifiers) {
     node.modifiers.forEach(modifier => {
       addWhitespace(source, node, context);
@@ -265,6 +297,7 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
 
 export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.modifiers) {
     node.modifiers.forEach(modifier => {
       addWhitespace(source, node, context);
@@ -318,6 +351,7 @@ export function emitExpressionWithTypeArguments(this: any, node: ts.ExpressionWi
 
 export function emitConstructor(this: any, node: ts.ConstructorDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'constructor', node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
@@ -336,6 +370,7 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
 
 export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.modifiers) {
     for (let i = 0, n = node.modifiers.length; i < n; i++) {
       addWhitespace(source, node, context);
@@ -359,6 +394,7 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
 
 export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   emitStatic(source, '(', node, context);
@@ -412,6 +448,7 @@ export function emitBreakStatement(this: any, node: ts.BreakStatement, context: 
 
 export function emitSwitchStatement(this: any, node: ts.SwitchStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'switch', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
@@ -463,6 +500,7 @@ export function emitDefaultClause(this: any, node: ts.DefaultClause, context: Em
 
 export function emitIfStatement(this: any, node: ts.IfStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'if', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
@@ -481,6 +519,7 @@ export function emitIfStatement(this: any, node: ts.IfStatement, context: Emitte
 
 export function emitWhileStatement(this: any, node: ts.WhileStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'while', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
@@ -494,6 +533,7 @@ export function emitWhileStatement(this: any, node: ts.WhileStatement, context: 
 
 export function emitForStatement(this: any, node: ts.ForStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'for', node, context);
   emitStatic(source, '(', node, context);
   if (node.initializer) {
@@ -519,6 +559,7 @@ export function emitForStatement(this: any, node: ts.ForStatement, context: Emit
 
 export function emitForInStatement(this: any, node: ts.ForInStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'for', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
@@ -535,6 +576,7 @@ export function emitForInStatement(this: any, node: ts.ForInStatement, context: 
 
 export function emitForOfStatement(this: any, node: ts.ForOfStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'for', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
@@ -551,6 +593,7 @@ export function emitForOfStatement(this: any, node: ts.ForOfStatement, context: 
 
 export function emitWithStatement(this: any, node: ts.WithStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'with', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
@@ -575,6 +618,7 @@ export function emitExpressionStatement(this: any, node: ts.ExpressionStatement,
 
 export function emitReturnStatement(this: any, node: ts.ReturnStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'return', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
@@ -593,6 +637,7 @@ export function emitEmptyStatement(this: any, node: ts.EmptyStatement, context: 
 
 export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'throw', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
@@ -605,6 +650,7 @@ export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: 
 
 export function emitNewExpression(this: any, node: ts.NewExpression, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'new', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
@@ -668,6 +714,7 @@ export function emitVariableDeclaration(this: any, node: ts.VariableDeclaration,
 // tslint:disable-next-line cyclomatic-complexity
 export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.modifiers) {
     node.modifiers.forEach(modifier => {
       addWhitespace(source, node, context);
@@ -704,6 +751,7 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
 
 export function emitFunctionExpression(this: any, node: ts.FunctionExpression, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'function', node, context);
   if (node.name) {
     addWhitespace(source, node, context);
