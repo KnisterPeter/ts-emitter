@@ -9,11 +9,11 @@ export function emitStatic(source: string[], text: string, node: ts.Node,
 }
 
 export function addWhitespace(source: string[], node: ts.Node, context: EmitterContext): void {
-  if (context.offset <= node.pos) {
-    const text = context.sourceFile.text.substring(node.pos, node.end);
+  if (context.offset <= node.getFullStart()) {
+    const text = context.sourceFile.text.substring(node.getFullStart(), node.end);
     const leadingWhitespace = text.match(/^(\s+)/);
     if (leadingWhitespace) {
-      context.offset = node.pos + leadingWhitespace[1].length;
+      context.offset = node.getFullStart() + leadingWhitespace[1].length;
       source.push(leadingWhitespace[1]);
     }
   } else {
@@ -23,5 +23,35 @@ export function addWhitespace(source: string[], node: ts.Node, context: EmitterC
       context.offset = context.offset + trailingWhitespace[1].length;
       source.push(trailingWhitespace[1]);
     }
+  }
+}
+
+export function addLeadingComment(source: string[], node: ts.Node, context: EmitterContext): void {
+  const text = node.getSourceFile().getFullText();
+  const ranges = ts.getLeadingCommentRanges(text, node.getFullStart());
+  if (ranges) {
+    source.push(ranges
+      .map(range => {
+        const prefix = text.substring(context.offset, range.pos);
+        const comment = prefix + text.substring(range.pos, range.end);
+        context.offset += comment.length;
+        return comment;
+      })
+      .join(''));
+  }
+}
+
+export function addTrailingComment(source: string[], node: ts.Node, context: EmitterContext): void {
+  const text = node.getSourceFile().getFullText();
+  const ranges = ts.getTrailingCommentRanges(text, node.getEnd());
+  if (ranges) {
+    source.push(ranges
+      .map(range => {
+        const prefix = text.substring(context.offset, range.pos);
+        const comment = prefix + text.substring(range.pos, range.end);
+        context.offset += comment.length;
+        return comment;
+      })
+      .join(''));
   }
 }

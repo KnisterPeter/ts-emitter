@@ -2,6 +2,27 @@ import * as ts from 'typescript';
 
 import { emit } from './index';
 
+function getSourceFile(source: string): ts.SourceFile {
+  const options = {
+    ...ts.getDefaultCompilerOptions(),
+    experimentalDecorators: true,
+    jsx: ts.JsxEmit.Preserve,
+    noEmit: true,
+    noResolve: true,
+    preserveConstEnums: true,
+    removeComments: false,
+    target: ts.ScriptTarget.Latest
+  };
+  const host = {
+    ...ts.createCompilerHost(options, true),
+    getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
+      return ts.createSourceFile(fileName, source, languageVersion, true);
+    }
+  };
+  const program = ts.createProgram(['source.tsx'], options, host);
+  return program.getSourceFile('source.tsx');
+}
+
 describe('emit', () => {
   it('should accept a typescript as and reprint it', () => {
     const source = `
@@ -40,6 +61,7 @@ describe('emit', () => {
       type O<T> = { new(...args: any[]): T; };
       export interface P {
         name?: string;
+        call(a, b): void;
       }
       type Q<T> = {
         name?: string;
@@ -50,8 +72,22 @@ describe('emit', () => {
       for (var u in v) {}
       for (var u of v) {}
       for (var i, n; i < n; i++) {}
+      with (ooo) {
+        bing = true;
+      }
+      var a = [undefined, "def"];
+      while (true) {
+        break;
+      }
+      if (a) b else c;
+      switch (a) {
+        case b:
+          a = 1;
+        default:
+          b = 2;
+      }
     `;
-    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
   it('should know about ThisExpression', () => {
@@ -62,7 +98,7 @@ describe('emit', () => {
         }
       }
     `;
-    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
   it('should know about IndexSignature', () => {
@@ -71,7 +107,7 @@ describe('emit', () => {
         [key: string]: any;
       }
     `;
-    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
   it('should know about ModuleDeclaration', () => {
@@ -79,7 +115,24 @@ describe('emit', () => {
       module 'test' {
       }
     `;
-    const sourceFile = ts.createSourceFile('source', source, ts.ScriptTarget.ES2015);
+    const sourceFile = getSourceFile(source);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should keep trivia', () => {
+    const source = `
+      // leading
+      let r; // trailing
+    `;
+    const sourceFile = getSourceFile(source);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should know about PropertyDeclaration', () => {
+    const source = `
+      class Foo {
+        private Bar: number;
+      }
+    `;
+    const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
 });
