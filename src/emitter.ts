@@ -535,6 +535,32 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
   return source.join('');
 }
 
+export function emitGetAccessor(this: any, node: ts.GetAccessorDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
+  emitStatic(source, 'get', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '(', node, context);
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.body, context));
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
 // tslint:disable-next-line cyclomatic-complexity
 export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, context: EmitterContext): string {
   const source: string[] = [];
