@@ -946,8 +946,10 @@ export function emitElementAccessExpression(this: any, node: ts.ElementAccessExp
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   emitStatic(source, '[', node, context);
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.argumentExpression, context));
+  if (node.argumentExpression) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.argumentExpression, context));
+  }
   emitStatic(source, ']', node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
