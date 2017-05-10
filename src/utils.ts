@@ -41,7 +41,6 @@ export function addLeadingComment(source: string[], node: ts.Node, context: Emit
   }
 }
 
-
 export function addTrailingComment(source: string[], node: ts.Node, context: EmitterContext): void;
 export function addTrailingComment(source: string[], pos: number, node: ts.Node, context: EmitterContext): void;
 export function addTrailingComment(source: string[], posOrNode: number|ts.Node, nodeOrContext: ts.Node|EmitterContext,
