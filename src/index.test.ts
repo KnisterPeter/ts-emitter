@@ -59,8 +59,11 @@ describe('emit', () => {
         }
       }
       export type N = L;
-      type O<T> = { new(...args: any[]): T; };
-      export interface P {
+      type O<T> = {
+        new(...args: any[]): T;
+        method(p1: typeof k): never;
+      };
+      export interface P<S> extends U {
         (a: string): string; // comment
         new (a: string): string; // comment
         name?: string; // comment
@@ -75,7 +78,7 @@ describe('emit', () => {
       for (var u in v) {}
       for (var u of v) {}
       for (var i, n; i < n; i++) {}
-      with (ooo) {
+      with (ooo) { // test
         bing = true;
       }
       var a = [undefined, "def"];

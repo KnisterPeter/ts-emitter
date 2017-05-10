@@ -35,6 +35,12 @@ export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: 
 
 export function emitModuleDeclaration(this: any, node: ts.ModuleDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
   emitStatic(source, 'module', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
@@ -212,6 +218,7 @@ export function emitExportAssignment(this: any, node: ts.ExportAssignment, conte
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
@@ -224,6 +231,17 @@ export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaratio
   emitStatic(source, 'interface', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   if (node.heritageClauses) {
     emitStatic(source, 'extends', node, context);
     for (let i = 0, n = node.heritageClauses.length; i < n; i++) {
@@ -408,8 +426,18 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
   emitStatic(source, 'constructor', node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
+    const parameter = node.parameters[i];
+    if (parameter.modifiers) {
+      parameter.modifiers.forEach(modifier => {
+        addWhitespace(source, node, context);
+        source.push(emit.call(this, modifier, context));
+      });
+    }
+    if (parameter.dotDotDotToken) {
+      emitStatic(source, '...', node, context);
+    }
     addWhitespace(source, node, context);
-    source.push(emit.call(this, node.parameters[i], context));
+    source.push(emit.call(this, parameter, context));
     if ((i < n - 1) || node.parameters.hasTrailingComma) {
       emitStatic(source, ',', node, context);
     }
@@ -448,6 +476,12 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
 export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, modifier, context));
+    });
+  }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   emitStatic(source, '(', node, context);
@@ -758,6 +792,7 @@ export function emitVariableDeclarationList(this: any, node: ts.VariableDeclarat
     default:
       emitStatic(source, 'var', node, context);
   }
+  addTrailingComment(source, context.offset, node, context);
   for (let i = 0, n = node.declarations.length; i < n; i++) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.declarations[i], context));
@@ -1017,13 +1052,16 @@ export function emitParameter(this: any, node: ts.ParameterDeclaration, context:
 
 export function emitBlock(this: any, node: ts.Block, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, '{', node, context);
+  addTrailingComment(source, context.offset, node, context);
   node.statements.forEach(statement => {
     addWhitespace(source, node, context);
     source.push(emit.call(this, statement, context));
   });
   emitStatic(source, '}', node, context);
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 

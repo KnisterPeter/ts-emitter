@@ -66,6 +66,7 @@ export function emitTypeTypeReference(this: any, node: ts.TypeReferenceNode, con
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitTypeFunctionType(this: any, node: ts.FunctionTypeNode, context: EmitterContext): string {
   const source: string[] = [];
   if (node.name !== undefined) {
@@ -73,6 +74,15 @@ export function emitTypeFunctionType(this: any, node: ts.FunctionTypeNode, conte
     source.push(emitType.call(this, node.name, context));
   }
   emitStatic(source, '(', node, context);
+  if (node.parameters) {
+    for (let i = 0, n = node.parameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.parameters[i], context));
+      if ((i < n - 1) || node.parameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+  }
   emitStatic(source, ')', node, context);
   if (node.type) {
     emitStatic(source, '=>', node, context);
@@ -90,9 +100,6 @@ export function emitTypeTypeLiteral(this: any, node: ts.TypeLiteralNode, context
     for (let i = 0, n = node.members.length; i < n; i++) {
       addWhitespace(source, node, context);
       source.push(emitType.call(this, node.members[i], context));
-      if ((i < n - 1) || node.members.hasTrailingComma) {
-        emitStatic(source, ',', node, context);
-      }
     }
   }
   emitStatic(source, '}', node, context);
@@ -123,6 +130,35 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
   }
   emitStatic(source, ';', node, context);
   context.offset = node.end;
+  return source.join('');
+}
+
+// tslint:disable-next-line cyclomatic-complexity
+export function emitTypeMethodSignature(this: any, node: ts.MethodSignature, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
+  emitStatic(source, '(', node, context);
+  for (let i = 0, n = node.parameters.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.parameters[i], context));
+    if ((i < n - 1) || node.parameters.hasTrailingComma) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node.name, context);
+    source.push(emitType.call(this, node.type, context));
+  }
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.getEnd();
   return source.join('');
 }
 
