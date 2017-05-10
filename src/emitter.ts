@@ -499,8 +499,10 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
     }
   }
   emitStatic(source, ')', node, context);
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.body, context));
+  if (node.body) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.body, context));
+  }
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -852,8 +854,10 @@ export function emitReturnStatement(this: any, node: ts.ReturnStatement, context
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, 'return', node, context);
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.expression, context));
+  if (node.expression) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.expression, context));
+  }
   if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
     emitStatic(source, ';', node, context);
   }
