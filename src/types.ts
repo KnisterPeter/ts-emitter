@@ -38,6 +38,14 @@ export function emitTypeAnyKeyword(this: any, node: ts.KeywordTypeNode, context:
   return _emitTypeKeyword('any', node, context);
 }
 
+export function emitTypeNullKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('null', node, context);
+}
+
+export function emitTypeSymbolKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('symbol', node, context);
+}
+
 export function _emitTypeKeyword(this: any, keyword: string, node: ts.KeywordTypeNode,
   context: EmitterContext): string {
   const source: string[] = [];
@@ -113,9 +121,6 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
   emitStatic(source, 'new', node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
-    if (node.parameters[i].dotDotDotToken) {
-      emitStatic(source, '...', node, context);
-    }
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.parameters[i], context));
     if ((i < n - 1) || node.parameters.hasTrailingComma) {
@@ -194,8 +199,14 @@ export function emitTypeIndexSignature(this: any, node: ts.IndexSignatureDeclara
 
 export function emitTypeParameter(this: any, node: ts.ParameterDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.dotDotDotToken) {
+    emitStatic(source, '...', node, context);
+  }
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
   if (node.type) {
     emitStatic(source, ':', node, context);
     addWhitespace(source, node, context);

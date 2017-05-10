@@ -281,11 +281,23 @@ export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaratio
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitConstructSignature(this: any, node: ts.ConstructSignatureDeclaration,
     context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, 'new', node, context);
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
     addWhitespace(source, node, context);
@@ -501,9 +513,6 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
     for (let i = 0, n = node.modifiers.length; i < n; i++) {
       addWhitespace(source, node, context);
       source.push(emit.call(this, node.modifiers[i], context));
-      if ((i < n - 1) || node.modifiers.hasTrailingComma) {
-        emitStatic(source, ',', node, context);
-      }
     }
   }
   addWhitespace(source, node, context);
@@ -518,7 +527,9 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.initializer, context));
   }
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1009,6 +1020,7 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitFunctionExpression(this: any, node: ts.FunctionExpression, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
@@ -1016,6 +1028,17 @@ export function emitFunctionExpression(this: any, node: ts.FunctionExpression, c
   if (node.name) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.name, context));
+  }
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
   }
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
@@ -1310,6 +1333,14 @@ export function emitBarBarToken(this: any, node: ts.Token<ts.SyntaxKind.BarBarTo
   return source.join('');
 }
 
+export function emitAmpersandAmpersandToken(this: any, node: ts.Token<ts.SyntaxKind.AmpersandAmpersandToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '&&', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitFirstBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.FirstBinaryOperator>,
     context: EmitterContext): string {
   const source: string[] = [];
@@ -1477,6 +1508,26 @@ export function emitAnyKeyword(this: any, node: ts.Node, context: EmitterContext
 
 export function emitAsyncKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('async', node, context);
+}
+
+export function emitInstanceOfKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('instanceOf', node, context);
+}
+
+export function emitNumberKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('number', node, context);
+}
+
+export function emitInKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('in', node, context);
+}
+
+export function emitSymbolKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('symbol', node, context);
+}
+
+export function emitStringKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('string', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {

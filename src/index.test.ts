@@ -69,6 +69,7 @@ describe('emit', () => {
         new (a: string): string; // comment
         name?: string; // comment
         call(a, b): void; // comment
+        call2: (...a) => void;
       }
       type Q<T> = {
         name?: (string);
