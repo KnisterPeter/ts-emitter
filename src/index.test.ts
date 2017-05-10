@@ -39,7 +39,7 @@ describe('emit', () => {
       var c: boolean = true;
       const d: string = "string";
       var e: boolean = false;
-      export function f(g: object, h: () => {}): void {};
+      export function f(g: object, h: () => {}): void {}
       const i = (a, b) => a + b;
       let j = function(): string|number {
         console.log('some' + 'text');
@@ -99,6 +99,7 @@ describe('emit', () => {
       function* foo() {
         yield
       }
+      target1:
       var x = () => this["prop1"];
       var v2:K1.I3=v1;
       (()=>0);

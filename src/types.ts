@@ -185,6 +185,9 @@ export function emitTypeIndexSignature(this: any, node: ts.IndexSignatureDeclara
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
