@@ -1271,6 +1271,11 @@ export function emitParameter(this: any, node: ts.ParameterDeclaration, context:
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
+  if (node.initializer) {
+    emitStatic(source, '=', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.initializer, context));
+  }
   return source.join('');
 }
 
