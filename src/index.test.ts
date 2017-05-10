@@ -31,6 +31,7 @@ describe('emit', () => {
       import { join, other as other2 } from 'path';
       import test from './module';
       import p = Alpha.x;
+      import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
       const a: string = 'string';
       export { a, b as c } from 'asdf';
       export default a;
@@ -70,7 +71,7 @@ describe('emit', () => {
         call(a, b): void; // comment
       }
       type Q<T> = {
-        name?: string;
+        name?: (string);
       };
       let r = -1;
       const s = this.func();
@@ -85,6 +86,9 @@ describe('emit', () => {
       while (true) {
         break;
       }
+      do 
+        let l4 = 0;
+      while (true);
       if (a) b else c;
       switch (a) {
         case b:
@@ -97,6 +101,14 @@ describe('emit', () => {
       }
       var x = () => this["prop1"];
       var v2:K1.I3=v1;
+      (()=>0);
+      try {
+        class Test1 {
+          static "prop1" = 0;
+        }
+      } catch (e) {
+      } finally {
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
@@ -124,6 +136,7 @@ describe('emit', () => {
   it('should know about ModuleDeclaration', () => {
     const source = `
       module 'test' {
+        export function a(){  A.b();  } // A.b should be an unresolved symbol error
       }
     `;
     const sourceFile = getSourceFile(source);

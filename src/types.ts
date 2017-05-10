@@ -242,7 +242,9 @@ export function emitTypePropertySignature(this: any, node: ts.PropertySignature,
     addWhitespace(source, node.name, context);
     source.push(emitType.call(this, node.type, context));
   }
-  emitStatic(source, ';', node, context);
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
   context.offset = node.end;
   return source.join('');
 }
@@ -254,6 +256,16 @@ export function emitTypeFirstNode(this: any, node: ts.QualifiedName, context: Em
   emitStatic(source, '.', node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.right, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitTypeParenthesizedType(this: any, node: ts.ParenthesizedTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '(', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.type, context));
+  emitStatic(source, ')', node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
