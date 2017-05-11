@@ -283,3 +283,14 @@ export function emitTypeParenthesizedType(this: any, node: ts.ParenthesizedTypeN
   context.offset = node.getEnd();
   return source.join('');
 }
+
+export function emitTypeFirstTypeNode(this: any, node: ts.TypePredicateNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.parameterName, context));
+  emitStatic(source, 'is', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.type, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}

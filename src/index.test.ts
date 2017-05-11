@@ -116,6 +116,7 @@ describe('emit', () => {
       } finally {
       }
       !void 0 !== true
+      function isElement(el: any): el is JSX.Element;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
