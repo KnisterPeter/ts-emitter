@@ -1341,6 +1341,14 @@ export function emitPlusToken(this: any, node: ts.Token<ts.SyntaxKind.PlusToken>
   return source.join('');
 }
 
+export function emitMinusEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.MinusEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '-=', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitAsteriskToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskToken>,
     context: EmitterContext): string {
   const source: string[] = [];
