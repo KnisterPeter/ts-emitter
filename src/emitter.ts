@@ -1368,6 +1368,14 @@ export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration
   return source.join('');
 }
 
+export function emitRegularExpressionLiteral(this: any, node: ts.RegularExpressionLiteral,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, node.text, node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

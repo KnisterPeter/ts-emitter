@@ -181,4 +181,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about regular expressions', () => {
+    const source = `
+      var m = /q/;
+      var n = /\d+/g;
+      var o = /[3-5]+/i;
+    `;
+    const sourceFile = getSourceFile(source);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
