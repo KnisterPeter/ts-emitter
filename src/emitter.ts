@@ -575,6 +575,29 @@ export function emitGetAccessor(this: any, node: ts.GetAccessorDeclaration, cont
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   emitStatic(source, '(', node, context);
+  emitParameters.call(this, source, node, context);
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.body, context));
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
+export function emitSetAccessor(this: any, node: ts.SetAccessorDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
+  emitStatic(source, 'set', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '(', node, context);
+  emitParameters.call(this, source, node, context);
   emitStatic(source, ')', node, context);
   if (node.type) {
     emitStatic(source, ':', node, context);

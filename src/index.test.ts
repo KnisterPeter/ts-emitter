@@ -57,8 +57,8 @@ describe('emit', () => {
           super(a);
         }
 
-         get foo() { return 0; }
-
+        get foo() { return 0; }
+        set v(value) {}
         method(p1: typeof k): never {
           throw new Error('never');
         }
