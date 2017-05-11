@@ -417,11 +417,13 @@ export function emitPropertySignature(this: any, node: ts.PropertySignature, con
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitMethodSignature(this: any, node: ts.MethodSignature, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  emitTypeParameters.call(this, source, node, context);
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
@@ -1016,6 +1018,39 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
   addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
+  return source.join('');
+}
+
+export function emitClassExpression(this: any, node: ts.ClassExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'class', node, context);
+  if (node.name) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.name, context));
+  }
+  emitTypeParameters.call(this, source, node, context);
+  if (node.heritageClauses) {
+    for (let i = 0, n = node.heritageClauses.length; i < n; i++) {
+      switch (node.heritageClauses[i].token) {
+        case ts.SyntaxKind.ExtendsKeyword:
+          emitStatic(source, 'extends', node, context);
+          break;
+        case ts.SyntaxKind.ImplementsKeyword:
+          emitStatic(source, 'implements', node, context);
+          break;
+      }
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.heritageClauses[i], context));
+    }
+  }
+  emitStatic(source, '{', node, context);
+  node.members.forEach(member => {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, member, context));
+  });
+  emitStatic(source, '}', node, context);
+  context.offset = node.getEnd();
   return source.join('');
 }
 

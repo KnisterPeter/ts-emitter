@@ -123,6 +123,7 @@ describe('emit', () => {
       export interface I1 {register(inputClass: new(...params: any[]) => A);}
       namespace Element {}
       module Element {}
+      let y = class {};
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
