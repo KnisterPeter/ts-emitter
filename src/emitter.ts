@@ -945,6 +945,34 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
   return source.join('');
 }
 
+export function emitArrayBindingPattern(this: any, node: ts.ArrayBindingPattern, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, '[', node, context);
+  emitElements.call(this, source, node, context);
+  emitStatic(source, ']', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitObjectBindingPattern(this: any, node: ts.ObjectBindingPattern, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, '{', node, context);
+  emitElements.call(this, source, node, context);
+  emitStatic(source, '}', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitBindingElement(this: any, node: ts.BindingElement, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitAwaitExpression(this: any, node: ts.AwaitExpression, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
