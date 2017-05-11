@@ -130,6 +130,7 @@ describe('emit', () => {
       delete a; // error
       a ? b : c;
       var n = <number>(null);
+      await Promise.resolve("The test is passed without an error.")
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

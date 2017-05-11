@@ -945,6 +945,16 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
   return source.join('');
 }
 
+export function emitAwaitExpression(this: any, node: ts.AwaitExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'await', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitVoidExpression(this: any, node: ts.VoidExpression, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
