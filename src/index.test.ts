@@ -103,7 +103,7 @@ describe('emit', () => {
         yield
       }
       target1:
-      var x = () => this["prop1"];
+      var x = () => this["prop1"] ;
       var v2:K1.I3=v1;
       (()=>0);
       try {

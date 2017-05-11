@@ -1,7 +1,13 @@
 import * as ts from 'typescript';
 
 import { emitType } from './types';
-import { addWhitespace, emitStatic, addLeadingComment, addTrailingComment } from './utils';
+import {
+  addWhitespace,
+  emitStatic,
+  addLeadingComment,
+  addTrailingComment,
+  addSemicolon
+} from './utils';
 
 export interface EmitterContext {
   sourceFile: ts.SourceFile;
@@ -74,9 +80,7 @@ export function emitImportEqualsDeclaration(this: any, node: ts.ImportEqualsDecl
   emitStatic(source, '=', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.moduleReference, context));
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -116,9 +120,7 @@ export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, con
   }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.moduleSpecifier, context));
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -185,9 +187,7 @@ export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, con
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.moduleSpecifier, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -231,9 +231,7 @@ export function emitExportAssignment(this: any, node: ts.ExportAssignment, conte
   }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -312,9 +310,7 @@ export function emitConstructSignature(this: any, node: ts.ConstructSignatureDec
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -337,9 +333,7 @@ export function emitCallSignature(this: any, node: ts.CallSignatureDeclaration, 
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -358,9 +352,7 @@ export function emitPropertySignature(this: any, node: ts.PropertySignature, con
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -389,9 +381,7 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
     addWhitespace(source, node.name, context);
     source.push(emitType(node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -529,9 +519,7 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.initializer, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -604,9 +592,7 @@ export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, con
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.body, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -619,9 +605,7 @@ export function emitVariableStatement(this: any, node: ts.VariableStatement, con
     addWhitespace(source, node, context);
     source.push(emit.call(this, child, context));
   });
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -646,9 +630,7 @@ export function emitBreakStatement(this: any, node: ts.BreakStatement, context: 
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.label, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -751,9 +733,7 @@ export function emitDoStatement(this: any, node: ts.DoStatement, context: Emitte
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   emitStatic(source, ')', node, context);
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -842,9 +822,7 @@ export function emitExpressionStatement(this: any, node: ts.ExpressionStatement,
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -858,9 +836,7 @@ export function emitReturnStatement(this: any, node: ts.ReturnStatement, context
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.expression, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -911,9 +887,7 @@ export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: 
   emitStatic(source, 'throw', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -1044,9 +1018,7 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.body, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1421,9 +1393,7 @@ export function emitTypeAliasDeclaration(this: any, node: ts.TypeAliasDeclaratio
   emitStatic(source, '=', node, context);
   addWhitespace(source, node, context);
   source.push(emitType(node.type, context));
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1454,9 +1424,7 @@ export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   addTrailingComment(source, node, context);
   return source.join('');

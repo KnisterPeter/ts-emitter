@@ -62,3 +62,9 @@ export function addTrailingComment(source: string[], posOrNode: number|ts.Node, 
       .join(''));
   }
 }
+
+export function addSemicolon(source: string[], node: ts.Node, context: EmitterContext): void {
+  if (context.sourceFile.text.substring(context.offset).trim().startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+}
