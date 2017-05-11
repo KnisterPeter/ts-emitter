@@ -1753,7 +1753,7 @@ export function emitAsyncKeyword(this: any, node: ts.Node, context: EmitterConte
 }
 
 export function emitInstanceOfKeyword(this: any, node: ts.Node, context: EmitterContext): string {
-  return _emitKeyword('instanceOf', node, context);
+  return _emitKeyword('instanceof', node, context);
 }
 
 export function emitNumberKeyword(this: any, node: ts.Node, context: EmitterContext): string {
