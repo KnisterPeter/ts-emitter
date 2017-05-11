@@ -129,6 +129,7 @@ describe('emit', () => {
       }
       delete a; // error
       a ? b : c;
+      var n = <number>(null);
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

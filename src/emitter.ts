@@ -1017,6 +1017,20 @@ export function emitVariableDeclaration(this: any, node: ts.VariableDeclaration,
   return source.join('');
 }
 
+export function emitTypeAssertionExpression(this: any, node: ts.TypeAssertion, context: EmitterContext): string {
+  const source: string[] = [];
+
+  emitStatic(source, '<', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType(node.type, context));
+  emitStatic(source, '>', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
