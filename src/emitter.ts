@@ -1168,6 +1168,17 @@ export function emitObjectLiteralExpression(this: any, node: ts.ObjectLiteralExp
   return source.join('');
 }
 
+export function emitComputedPropertyName(this: any, node: ts.ComputedPropertyName,
+  context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '[', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, ']', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitArrayLiteralExpression(this: any, node: ts.ArrayLiteralExpression,
     context: EmitterContext): string {
   const source: string[] = [];

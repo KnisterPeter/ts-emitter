@@ -124,6 +124,9 @@ describe('emit', () => {
       namespace Element {}
       module Element {}
       let y = class {};
+      let x = {
+        [2]:1,
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
