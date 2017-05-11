@@ -942,6 +942,21 @@ export function emitDeleteExpression(this: any, node: ts.DeleteExpression, conte
   return source.join('');
 }
 
+export function emitConditionalExpression(this: any, node: ts.ConditionalExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.condition, context));
+  emitStatic(source, '?', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.whenTrue, context));
+  emitStatic(source, ':', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.whenFalse, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitElementAccessExpression(this: any, node: ts.ElementAccessExpression,
     context: EmitterContext): string {
   const source: string[] = [];
