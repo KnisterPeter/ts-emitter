@@ -29,8 +29,9 @@ function getSourceFile(path, source) {
       }
     }
   );
-  const program = ts.createProgram([path], options, host);
-  return program.getSourceFile(path);
+  const name = source.match(/@jsx/) ? 'source.tsx' : 'source.ts';
+  const program = ts.createProgram([name], options, host);
+  return program.getSourceFile(name);
 }
 
 module.exports = {
