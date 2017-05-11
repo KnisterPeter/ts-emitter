@@ -1551,6 +1551,20 @@ export function emitTypeParameter(this: any, node: ts.TypeParameterDeclaration, 
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.constraint) {
+    emitStatic(source, 'extends', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.constraint, context));
+  }
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitTypeOperator(this: any, node: ts.TypeOperatorNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'keyof', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.type, context));
   context.offset = node.getEnd();
   return source.join('');
 }

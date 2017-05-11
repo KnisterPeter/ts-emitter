@@ -133,6 +133,7 @@ describe('emit', () => {
       await Promise.resolve("The test is passed without an error.")
       const {a, a: y, a = 1} = test;
       const [a] = test;
+      declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
