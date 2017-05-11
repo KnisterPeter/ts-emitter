@@ -294,3 +294,59 @@ export function emitTypeFirstTypeNode(this: any, node: ts.TypePredicateNode, con
   context.offset = node.getEnd();
   return source.join('');
 }
+
+// tslint:disable-next-line cyclomatic-complexity
+export function emitTypeCallSignature(this: any, node: ts.CallSignatureDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '(', node, context);
+  if (node.parameters) {
+    for (let i = 0, n = node.parameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.parameters[i], context));
+      if ((i < n - 1) || node.parameters.hasTrailingComma) {
+        emitStatic(source, '|', node.parameters[i], context);
+      }
+    }
+  }
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.type, context));
+  }
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitTypeTypeOperator(this: any, node: ts.TypeOperatorNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'keyof', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.type, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitTypeConstructorType(this: any, node: ts.ConstructorTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'new', node, context);
+  emitStatic(source, '(', node, context);
+  node.parameters.forEach(paramter => {
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, paramter, context));
+  });
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, '=>', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.type, context));
+  }
+  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
+    emitStatic(source, ';', node, context);
+  }
+  context.offset = node.getEnd();
+  return source.join('');
+}

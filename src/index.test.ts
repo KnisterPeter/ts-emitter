@@ -118,6 +118,9 @@ describe('emit', () => {
       !void 0 !== true
       function isElement(el: any): el is JSX.Element;
       class Class4<T> extends Class3<T> {}
+      function sequence(...sequences:{():void;}[]) {}
+      let a: (keyof T)[] = ["a", "b"];
+      export interface I1 {register(inputClass: new(...params: any[]) => A);}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
