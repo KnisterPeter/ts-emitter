@@ -203,6 +203,8 @@ describe('emit', () => {
       var elemE = <e>{true}</e>;
       var elemF = <div>test</div>;
       var elemF = <div />;
+			var elemG = <meta content="helloworld"></meta>,
+			var elemH = <meta content={c.a!.b}></meta>
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);

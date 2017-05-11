@@ -1092,6 +1092,16 @@ export function emitPropertyAccessExpression(this: any, node: ts.PropertyAccessE
   return source.join('');
 }
 
+export function emitNonNullExpression(this: any, node: ts.NonNullExpression,
+  context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, '!', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitObjectLiteralExpression(this: any, node: ts.ObjectLiteralExpression,
   context: EmitterContext): string {
   const source: string[] = [];
@@ -1450,6 +1460,21 @@ export function emitJsxOpeningElement(this: any, node: ts.JsxOpeningElement, con
 
 export function emitJsxAttributes(this: any, node: ts.JsxAttributes, context: EmitterContext): string {
   const source: string[] = [];
+  node.properties.forEach(property => {
+    addWhitespace(source, property, context);
+    source.push(emit.call(this, property, context));
+  });
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxAttribute(this: any, node: ts.JsxAttribute, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '=', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.initializer, context));
   context.offset = node.getEnd();
   return source.join('');
 }
