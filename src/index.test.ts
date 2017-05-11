@@ -117,6 +117,7 @@ describe('emit', () => {
       }
       !void 0 !== true
       function isElement(el: any): el is JSX.Element;
+      class Class4<T> extends Class3<T> {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

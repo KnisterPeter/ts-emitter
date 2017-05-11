@@ -434,6 +434,14 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
   return source.join('');
 }
 
+export function emitTypeReference(this: any, node: ts.TypeReferenceNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.typeName, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 // tslint:disable-next-line cyclomatic-complexity
 export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, context: EmitterContext): string {
   const source: string[] = [];
