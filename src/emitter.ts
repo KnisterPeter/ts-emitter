@@ -116,8 +116,8 @@ export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: 
 
 export function emitEnumDeclaration(this: any, node: ts.EnumDeclaration, context: EmitterContext): string {
   const source: string[] = [];
-
   addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
   source.push(emitEnumKeyword(node, context));
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
@@ -1475,6 +1475,10 @@ export function emitStringKeyword(this: any, node: ts.Node, context: EmitterCont
 
 export function emitEnumKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('enum', node, context);
+}
+
+export function emitConstKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('const', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {

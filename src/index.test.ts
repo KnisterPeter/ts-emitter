@@ -174,7 +174,9 @@ describe('emit', () => {
   });
   it('should know about enum declarations', () => {
     const source = `
-      enum Key { UP, DOWN, LEFT, RIGHT = 3 }
+      enum Key1 { UP, DOWN, LEFT, RIGHT = 3 }
+      const enum Key2 { UP, DOWN, LEFT, RIGHT = 3 }
+      export enum Key3 { UP, DOWN, LEFT, RIGHT = 3 }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
