@@ -37,6 +37,7 @@ describe('emit', () => {
       export { a, b as c } from 'asdf';
       export default a;
       let b: number = 0;
+      b+=1;
       var c: boolean = true;
       const d: string = "string";
       var e: boolean = false;

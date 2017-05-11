@@ -1232,6 +1232,14 @@ export function emitBinaryExpression(this: any, node: ts.BinaryExpression, conte
   return source.join('');
 }
 
+export function emitFirstCompoundAssignment(this: any, node: ts.Token<ts.SyntaxKind.FirstCompoundAssignment>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '+=', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitPlusToken(this: any, node: ts.Token<ts.SyntaxKind.PlusToken>, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '+', node, context);
