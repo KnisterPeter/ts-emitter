@@ -172,4 +172,11 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about enum declarations', () => {
+    const source = `
+      enum Key { UP, DOWN, LEFT, RIGHT = 3 }
+    `;
+    const sourceFile = getSourceFile(source);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

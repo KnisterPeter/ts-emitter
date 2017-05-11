@@ -114,6 +114,44 @@ export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: 
   return source.join('');
 }
 
+export function emitEnumDeclaration(this: any, node: ts.EnumDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+
+  addLeadingComment(source, node, context);
+  source.push(emitEnumKeyword(node, context));
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  emitStatic(source, '{', node, context);
+  if (node.members) {
+    for (let i = 0, n = node.members.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.members[i], context));
+      if ((i < n - 1) || node.members.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+  }
+  emitStatic(source, '}', node, context);
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
+export function emitEnumMember(this: any, node: ts.EnumMember, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  if (node.initializer) {
+    emitStatic(source, '=', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.initializer, context));
+  }
+  context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
 export function emitModuleDeclaration(this: any, node: ts.ModuleDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
@@ -1433,6 +1471,10 @@ export function emitSymbolKeyword(this: any, node: ts.Node, context: EmitterCont
 
 export function emitStringKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('string', node, context);
+}
+
+export function emitEnumKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('enum', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
