@@ -131,7 +131,7 @@ describe('emit', () => {
       a ? b : c;
       var n = <number>(null);
       await Promise.resolve("The test is passed without an error.")
-      const {a} = test;
+      const {a, a: y, a = 1} = test;
       const [a] = test;
     `;
     const sourceFile = getSourceFile(source);

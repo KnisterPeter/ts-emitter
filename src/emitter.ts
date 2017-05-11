@@ -967,8 +967,18 @@ export function emitObjectBindingPattern(this: any, node: ts.ObjectBindingPatter
 
 export function emitBindingElement(this: any, node: ts.BindingElement, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.propertyName) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.propertyName, context));
+    emitStatic(source, ':', node, context);
+  }
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.initializer) {
+    emitStatic(source, '=', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.initializer, context));
+  }
   context.offset = node.getEnd();
   return source.join('');
 }
