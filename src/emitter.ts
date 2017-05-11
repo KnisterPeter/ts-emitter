@@ -913,6 +913,16 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
   return source.join('');
 }
 
+export function emitVoidExpression(this: any, node: ts.VoidExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'void', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitElementAccessExpression(this: any, node: ts.ElementAccessExpression,
     context: EmitterContext): string {
   const source: string[] = [];
@@ -1306,6 +1316,14 @@ export function emitEqualsEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxK
     context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '===', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitExclamationEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.ExclamationEqualsEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '!==', node, context);
   context.offset = node.getEnd();
   return source.join('');
 }

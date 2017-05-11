@@ -113,6 +113,7 @@ describe('emit', () => {
       } catch (e) {
       } finally {
       }
+      !void 0 !== true
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
