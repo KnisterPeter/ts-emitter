@@ -164,4 +164,12 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about strict pragma', () => {
+    const source = `
+      // @skipDefaultLibCheck: false
+      "use strict";
+    `;
+    const sourceFile = getSourceFile(source);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

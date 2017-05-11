@@ -1451,7 +1451,7 @@ export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration
 export function emitStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  const literal = context.sourceFile.text.substring(node.pos, node.getEnd()).trim();
+  const literal = context.sourceFile.text.substring(node.getStart(), node.getEnd()).trim();
   source.push(literal.substr(0, 1));
   source.push(node.text);
   source.push(literal.substr(-1));
