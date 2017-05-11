@@ -932,6 +932,16 @@ export function emitVoidExpression(this: any, node: ts.VoidExpression, context: 
   return source.join('');
 }
 
+export function emitDeleteExpression(this: any, node: ts.DeleteExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'delete', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitElementAccessExpression(this: any, node: ts.ElementAccessExpression,
     context: EmitterContext): string {
   const source: string[] = [];

@@ -127,6 +127,7 @@ describe('emit', () => {
       let x = {
         [2]:1,
       }
+      delete a; // error
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
