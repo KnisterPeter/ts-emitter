@@ -5,7 +5,7 @@ const ts = require('typescript');
 
 const { emit } = require('..');
 
-function getSourceFile(source) {
+function getSourceFile(path, source) {
   const options = Object.assign(
     {},
     ts.getDefaultCompilerOptions(),
@@ -28,8 +28,8 @@ function getSourceFile(source) {
       }
     }
   );
-  const program = ts.createProgram(['source.tsx'], options, host);
-  return program.getSourceFile('source.tsx');
+  const program = ts.createProgram([path], options, host);
+  return program.getSourceFile(path);
 }
 
 module.exports = {
@@ -39,7 +39,7 @@ module.exports = {
       paths.forEach(path => {
         test(path, () => {
           const source = readFileSync(path).toString();
-          expect(emit(getSourceFile(source))).toBe(source);
+          expect(emit(getSourceFile(path, source))).toBe(source);
         });
       });
     } else {
