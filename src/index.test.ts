@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 
 import { emit } from './index';
 
-function getSourceFile(source: string): ts.SourceFile {
+function getSourceFile(source: string, enableJsx = false): ts.SourceFile {
   const options = {
     ...ts.getDefaultCompilerOptions(),
     experimentalDecorators: true,
@@ -19,8 +19,9 @@ function getSourceFile(source: string): ts.SourceFile {
       return ts.createSourceFile(fileName, source, languageVersion, true);
     }
   };
-  const program = ts.createProgram(['source.tsx'], options, host);
-  return program.getSourceFile('source.tsx');
+  const fileName = enableJsx ? 'source.tsx' : 'source.ts';
+  const program = ts.createProgram([fileName], options, host);
+  return program.getSourceFile(fileName);
 }
 
 describe('emit', () => {
