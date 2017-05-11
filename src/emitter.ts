@@ -525,6 +525,7 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.body, context));
   }
+  addSemicolon(source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }

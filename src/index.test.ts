@@ -125,6 +125,7 @@ describe('emit', () => {
         constructor() {
           this.abc = 'abc';
         }
+        constructor();
       }
     `;
     const sourceFile = getSourceFile(source);
