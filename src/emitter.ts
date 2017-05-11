@@ -1410,6 +1410,78 @@ export function emitFirstAssignment(this: any, node: ts.Node, context: EmitterCo
   context.offset = node.getEnd();
   return source.join('');
 }
+
+export function emitJsxElement(this: any, node: ts.JsxElement, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.openingElement, context));
+  for (let i = 0, n = node.children.length; i < n; i++) {
+    const child = node.children[i];
+    addWhitespace(source, child, context);
+    source.push(emit.call(this, child, context));
+  }
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.closingElement, context));
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxSelfClosingElement(this: any, node: ts.JsxSelfClosingElement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '<', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.tagName, context));
+  source.push(emit.call(this, node.attributes, context));
+  emitStatic(source, '/>', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxOpeningElement(this: any, node: ts.JsxOpeningElement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '<', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.tagName, context));
+  source.push(emit.call(this, node.attributes, context));
+  emitStatic(source, '>', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxAttributes(this: any, node: ts.JsxAttributes, context: EmitterContext): string {
+  const source: string[] = [];
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxText(this: any, node: ts.JsxText, context: EmitterContext): string {
+  const source: string[] = [];
+  const text = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd());
+  emitStatic(source, text, node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxExpression(this: any, node: ts.JsxExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, '}', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitJsxClosingElement(this: any, node: ts.JsxClosingElement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '</', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.tagName, context));
+  emitStatic(source, '>', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitTrueKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('true', node, context);
 }

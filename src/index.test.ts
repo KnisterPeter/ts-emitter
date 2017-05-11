@@ -193,4 +193,17 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about JSX', () => {
+    const source = `
+      var elemA = 42;
+      var elemB = <b>{"test"}</b>;
+      var elemC = <c>{42}</c>;
+      var elemD = 42;
+      var elemE = <e>{true}</e>;
+      var elemF = <div>test</div>;
+      var elemF = <div />;
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
