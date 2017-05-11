@@ -1348,6 +1348,14 @@ export function emitFirstCompoundAssignment(this: any, node: ts.Token<ts.SyntaxK
   return source.join('');
 }
 
+export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '*=', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitPlusToken(this: any, node: ts.Token<ts.SyntaxKind.PlusToken>, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '+', node, context);
