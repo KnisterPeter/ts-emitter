@@ -551,6 +551,7 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
   }
   addSemicolon(source, node, context);
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
