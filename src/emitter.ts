@@ -58,6 +58,25 @@ function emitTypeParameters<T extends TypedNode>(this: any,
   }
 }
 
+interface TypeArgumentedNode extends ts.Node {
+  typeArguments?: ts.NodeArray<ts.Node>;
+}
+
+function emitTypeArguments<T extends TypeArgumentedNode>(this: any,
+    source: string[], node: T, context: EmitterContext): void {
+  if (node.typeArguments) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeArguments.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.typeArguments[i], context));
+      if ((i < n - 1) || node.typeArguments.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
+}
+
 interface NodeWithParameters extends ts.Node {
   parameters?: ts.NodeArray<ts.Node>;
 }
@@ -501,17 +520,7 @@ export function emitExpressionWithTypeArguments(this: any, node: ts.ExpressionWi
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
-  if (node.typeArguments) {
-    emitStatic(source, '<', node, context);
-    for (let i = 0, n = node.typeArguments.length; i < n; i++) {
-      addWhitespace(source, node, context);
-      source.push(emit.call(this, node.typeArguments[i], context));
-      if ((i < n - 1) || node.typeArguments.hasTrailingComma) {
-        emitStatic(source, ',', node, context);
-      }
-    }
-    emitStatic(source, '>', node, context);
-  }
+  emitTypeArguments.call(this, source, node, context);
   context.offset = node.getEnd();
   return source.join('');
 }
@@ -943,6 +952,7 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
   emitStatic(source, 'new', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
+  emitTypeArguments.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   if (node.arguments) {
     for (let i = 0, n = node.arguments.length; i < n; i++) {
@@ -1227,17 +1237,7 @@ export function emitCallExpression(this: any, node: ts.CallExpression, context: 
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
-  if (node.typeArguments) {
-    emitStatic(source, '<', node, context);
-    for (let i = 0, n = node.typeArguments.length; i < n; i++) {
-      addWhitespace(source, node, context);
-      source.push(emit.call(this, node.typeArguments[i], context));
-      if ((i < n - 1) || node.typeArguments.hasTrailingComma) {
-        emitStatic(source, ',', node, context);
-      }
-    }
-    emitStatic(source, '>', node, context);
-  }
+  emitTypeArguments.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.arguments.length; i < n; i++) {
     addWhitespace(source, node, context);
