@@ -1382,6 +1382,11 @@ export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: Em
   if (parenthesis) {
     emitStatic(source, ')', node, context);
   }
+  if (node.type) {
+    emitStatic(source, ':', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType(node.type, context));
+  }
   emitStatic(source, '=>', node, context);
   source.push(emit.call(this, node.body, context));
   return source.join('');
