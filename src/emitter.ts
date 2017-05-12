@@ -451,7 +451,7 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
   emitStatic(source, ')', node, context);
   if (node.type) {
     emitStatic(source, ':', node, context);
-    addWhitespace(source, node.name, context);
+    addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
   addSemicolon(source, node, context);
