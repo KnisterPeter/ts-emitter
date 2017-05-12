@@ -1450,6 +1450,14 @@ export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
   return source.join('');
 }
 
+export function emitMinusToken(this: any, node: ts.Token<ts.SyntaxKind.MinusToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '-', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitLastBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.LastBinaryOperator>,
     context: EmitterContext): string {
   const source: string[] = [];
