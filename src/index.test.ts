@@ -136,6 +136,7 @@ describe('emit', () => {
       declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
       continue;
       a ^= 1;
+      let z = y.map(s => s.toLowerCase());
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
