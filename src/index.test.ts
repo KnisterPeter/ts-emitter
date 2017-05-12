@@ -43,7 +43,7 @@ describe('emit', () => {
       var e: boolean = false;
       export function f(g: object, h: () => {}): void {}
       const i = (a, b) => a + b;
-      let j = function(): string|number {
+      let j = function(): string | number {
         console.log('some' + 'text');
       }
       let k = function k(): {[key: string]: boolean} {
@@ -220,8 +220,15 @@ describe('emit', () => {
       var elemE = <e>{true}</e>;
       var elemF = <div>test</div>;
       var elemF = <div />;
-			var elemG = <meta content="helloworld"></meta>,
-			var elemH = <meta content={c.a!.b}></meta>
+      var elemG = <meta content="helloworld"></meta>,
+      var elemH = <meta content={c.a!.b}></meta>
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should know about JSX', () => {
+    const source = `
+      type elemA = string | number;
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
