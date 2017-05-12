@@ -142,6 +142,8 @@ describe('emit', () => {
       new X<{ a: string }>();
       export class C {    // comment
       }
+      module EndGate.Tweening {
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

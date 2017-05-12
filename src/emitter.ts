@@ -175,12 +175,15 @@ export function emitModuleDeclaration(this: any, node: ts.ModuleDeclaration, con
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitModifiers.call(this, source, node, context);
-  // tslint:disable-next-line no-bitwise
+  // tslint:disable no-bitwise
   if (node.flags & ts.NodeFlags.Namespace) {
     emitStatic(source, 'namespace', node, context);
+  } else if (node.flags & ts.NodeFlags.NestedNamespace) {
+    emitStatic(source, '.', node, context);
   } else {
     emitStatic(source, 'module', node, context);
   }
+  // tslint:enable no-bitwise
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   addWhitespace(source, node, context);
