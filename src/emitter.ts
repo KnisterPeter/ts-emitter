@@ -1625,6 +1625,20 @@ export function emitRegularExpressionLiteral(this: any, node: ts.RegularExpressi
   return source.join('');
 }
 
+export function emitTypeLiteral(this: any, node: ts.TypeLiteralNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  if (node.members !== undefined) {
+    for (let i = 0, n = node.members.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, node.members[i], context));
+    }
+  }
+  emitStatic(source, '}', node, context);
+  context.offset = node.end;
+  return source.join('');
+}
+
 export function emitStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

@@ -139,6 +139,7 @@ describe('emit', () => {
       let z = y.map(s => s.toLowerCase());
       let z = y.map(<string>(s) => s.toLowerCase());
       var lazyArray = new LazyArray<string>();
+      new X<{ a: string }>();
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
