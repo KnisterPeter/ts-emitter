@@ -1369,8 +1369,10 @@ export function emitPostfixUnaryExpression(this: any, node: ts.PostfixUnaryExpre
 
 export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: EmitterContext): string {
   const source: string[] = [];
-  const parenthesis = node.getSourceFile().getFullText()
-    .substring(context.offset, node.getEnd()).trim().startsWith('(');
+  emitTypeParameters.call(this, source, node, context);
+  const parenthesis = Boolean(node.typeParameters)
+    || node.getSourceFile().getFullText()
+      .substring(context.offset, node.getEnd()).trim().startsWith('(');
   if (parenthesis) {
     emitStatic(source, '(', node, context);
   }

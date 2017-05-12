@@ -137,6 +137,7 @@ describe('emit', () => {
       continue;
       a ^= 1;
       let z = y.map(s => s.toLowerCase());
+      let z = y.map(<string>(s) => s.toLowerCase());
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
