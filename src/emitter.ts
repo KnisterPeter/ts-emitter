@@ -933,6 +933,7 @@ export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: 
   source.push(emit.call(this, node.expression, context));
   addSemicolon(source, node, context);
   context.offset = node.getEnd();
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
