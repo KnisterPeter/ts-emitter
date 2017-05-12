@@ -913,6 +913,18 @@ export function emitEmptyStatement(this: any, node: ts.EmptyStatement, context: 
   return source.join('');
 }
 
+export function emitContinueStatement(this: any, node: ts.ContinueStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'continue', node, context);
+  if (node.label) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.label, context));
+  }
+  emitStatic(source, ';', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
 export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
@@ -1045,19 +1057,19 @@ export function emitElementAccessExpression(this: any, node: ts.ElementAccessExp
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitVariableDeclarationList(this: any, node: ts.VariableDeclarationList,
   context: EmitterContext): string {
   const source: string[] = [];
-  switch (node.flags) {
-    case ts.NodeFlags.Const:
-      emitStatic(source, 'const', node, context);
-      break;
-    case ts.NodeFlags.Let:
-      emitStatic(source, 'let', node, context);
-      break;
-    default:
-      emitStatic(source, 'var', node, context);
+  // tslint:disable no-bitwise
+  if (node.flags & ts.NodeFlags.Const) {
+    emitStatic(source, 'const', node, context);
+  } else if (node.flags & ts.NodeFlags.Let) {
+    emitStatic(source, 'let', node, context);
+  } else {
+    emitStatic(source, 'var', node, context);
   }
+  // tslint:enable no-bitwise
   addTrailingComment(source, context.offset, node, context);
   for (let i = 0, n = node.declarations.length; i < n; i++) {
     addWhitespace(source, node, context);
@@ -1423,6 +1435,14 @@ export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
     context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '*=', node, context);
+  context.offset = node.getEnd();
+  return source.join('');
+}
+
+export function emitLastBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.LastBinaryOperator>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '^=', node, context);
   context.offset = node.getEnd();
   return source.join('');
 }

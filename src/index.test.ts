@@ -82,7 +82,7 @@ describe('emit', () => {
       const s = this.func();
       declare function t<T>(): A<T>;
       for (var u in v) {}
-      for (var u of v) {}
+      for (const u of v) {}
       for (var i, n; i < n; i++) {}
       with (ooo) { // test
         bing = true;
@@ -134,6 +134,8 @@ describe('emit', () => {
       const {a, a: y, a = 1} = test;
       const [a] = test;
       declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
+      continue;
+      a ^= 1;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
@@ -222,13 +224,6 @@ describe('emit', () => {
       var elemF = <div />;
       var elemG = <meta content="helloworld"></meta>,
       var elemH = <meta content={c.a!.b}></meta>
-    `;
-    const sourceFile = getSourceFile(source, true);
-    expect(emit(sourceFile)).toBe(source);
-  });
-  it('should know about JSX', () => {
-    const source = `
-      type elemA = string | number;
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
