@@ -1326,6 +1326,8 @@ export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
 export function emitPrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpression, context: EmitterContext): string {
   function getPrefixUnaryOperator(): string {
     switch (node.operator) {
+      case ts.SyntaxKind.PlusToken:
+        return '+';
       case ts.SyntaxKind.PlusPlusToken:
         return '++';
       case ts.SyntaxKind.MinusToken:
