@@ -1302,6 +1302,7 @@ export function emitObjectLiteralExpression(this: any, node: ts.ObjectLiteralExp
     source.push(emit.call(this, node.properties[i], context));
     if ((i < n - 1) || node.properties.hasTrailingComma) {
       emitStatic(source, ',', node, context);
+      addTrailingComment(source, context.offset, node, context);
     }
   }
   emitStatic(source, '}', node, context);

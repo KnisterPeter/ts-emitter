@@ -269,4 +269,15 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept trailing comments in object literals', () => {
+    const source = `
+      var result = {
+        stat: 1, // _this needs to be emitted to the js file
+        isNew: 2,
+        foo: 3 // foo
+      };
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
