@@ -940,7 +940,7 @@ export function emitContinueStatement(this: any, node: ts.ContinueStatement, con
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.label, context));
   }
-  emitStatic(source, ';', node, context);
+  addSemicolon(source, node, context);
   endNode(node, context);
   return source.join('');
 }
