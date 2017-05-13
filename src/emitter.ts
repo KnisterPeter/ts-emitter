@@ -1498,6 +1498,14 @@ export function emitLessThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
   return source.join('');
 }
 
+export function emitLessThanLessThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.LessThanLessThanEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '<<=', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitBarEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.BarEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
