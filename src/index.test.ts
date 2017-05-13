@@ -262,4 +262,11 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should not mess up trailing comments', () => {
+    const source = `
+      var fra3: (v:any)=>string = (function() { return function (v:string) {return v;}; })() // should work
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
