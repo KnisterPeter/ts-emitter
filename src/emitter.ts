@@ -1335,6 +1335,7 @@ export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.initializer, context));
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
