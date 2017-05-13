@@ -86,6 +86,17 @@ export function emitTypeFunctionType(this: any, node: ts.FunctionTypeNode, conte
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.name, context));
   }
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   emitStatic(source, '(', node, context);
   if (node.parameters) {
     for (let i = 0, n = node.parameters.length; i < n; i++) {
@@ -343,6 +354,19 @@ export function emitTypeConstructorType(this: any, node: ts.ConstructorTypeNode,
     source.push(emitType.call(this, node.type, context));
   }
   addSemicolon(source, node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTypeTypeParameter(this: any, node: ts.TypeParameterDeclaration, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.name, context));
+  if (node.constraint) {
+    emitStatic(source, 'extends', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.constraint, context));
+  }
   endNode(node, context);
   return source.join('');
 }
