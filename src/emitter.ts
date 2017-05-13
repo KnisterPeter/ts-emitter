@@ -931,6 +931,7 @@ export function emitEmptyStatement(this: any, node: ts.EmptyStatement, context: 
   const source: string[] = [];
   emitStatic(source, ';', node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
