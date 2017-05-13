@@ -155,6 +155,7 @@ describe('emit', () => {
       function m2() { }; // ok since the module is not instantiated
       [...a];
       ({ ...o })
+      typeof a
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

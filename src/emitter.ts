@@ -1291,6 +1291,16 @@ export function emitNonNullExpression(this: any, node: ts.NonNullExpression,
   return source.join('');
 }
 
+export function emitTypeOfExpression(this: any, node: ts.TypeOfExpression,
+  context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'typeof', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitObjectLiteralExpression(this: any, node: ts.ObjectLiteralExpression,
   context: EmitterContext): string {
   const source: string[] = [];
