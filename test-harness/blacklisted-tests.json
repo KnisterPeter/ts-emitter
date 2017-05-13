@@ -1,4 +1,5 @@
 [
   "typescript/tests/cases/compiler/autoLift2.ts",
-  "typescript/tests/cases/compiler/bases.ts"
+  "typescript/tests/cases/compiler/bases.ts",
+  "typescript/tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts"
 ]
