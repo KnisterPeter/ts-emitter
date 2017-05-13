@@ -1691,6 +1691,15 @@ export function emitSpreadElement(this: any, node: ts.SpreadElement, context: Em
   return source.join('');
 }
 
+export function emitSpreadAssignment(this: any, node: ts.SpreadAssignment, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '...', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
