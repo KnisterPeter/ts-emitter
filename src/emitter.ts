@@ -1373,8 +1373,9 @@ export function emitPostfixUnaryExpression(this: any, node: ts.PostfixUnaryExpre
     switch (node.operator) {
       case ts.SyntaxKind.PlusPlusToken:
         return '++';
+      case ts.SyntaxKind.MinusMinusToken:
+        return '--';
     }
-    throw new Error(`Unknown operator ${ts.SyntaxKind[node.operator]}`);
   }
   const source: string[] = [];
   addWhitespace(source, node, context);
