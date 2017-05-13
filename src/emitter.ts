@@ -435,6 +435,9 @@ export function emitPropertySignature(this: any, node: ts.PropertySignature, con
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
+  if (context.sourceFile.text.substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
+  }
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);

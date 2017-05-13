@@ -147,6 +147,7 @@ describe('emit', () => {
       var y1: { C: new() => ext.C; } = ext;
       new CBaseBase<Wrapper<T1>>(this);
       var r = < <T>(x: T) => T > ((x) => { return null; });
+      function foo<T extends { a: string, b: string }>() {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

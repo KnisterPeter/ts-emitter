@@ -269,6 +269,9 @@ export function emitTypePropertySignature(this: any, node: ts.PropertySignature,
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
+  if (context.sourceFile.text.substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
+  }
   addSemicolon(source, node, context);
   endNode(node, context);
   return source.join('');
