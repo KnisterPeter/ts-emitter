@@ -2,6 +2,7 @@ const { readFileSync } = require('fs');
 const { sync: globbySync } = require('globby');
 const { join } = require('path');
 const ts = require('typescript');
+const blacklisted = require('./blacklisted-tests.json');
 
 const { emit } = require('..');
 
@@ -33,8 +34,11 @@ function getSourceFile(path, source) {
 }
 
 module.exports = {
-  runner: function(part) {
-    const paths = globbySync([join(__dirname, `typescript/tests/cases/compiler/${part}*.ts`)]);
+  runner: function (part) {
+    const paths = globbySync([
+      join(__dirname, `typescript/tests/cases/compiler/${part}*.ts`),
+      ...blacklisted.map(entry => `!${join(__dirname, entry)}`)
+    ]);
     if (paths.length > 0) {
       paths.forEach(path => {
         test(path, () => {
@@ -43,7 +47,7 @@ module.exports = {
         });
       });
     } else {
-      test.skip(`Runner for ${part} as zero tests`, () => {});
+      test.skip(`Runner for ${part} as zero tests`, () => { });
     }
   }
 };
