@@ -1262,6 +1262,7 @@ export function emitCallExpression(this: any, node: ts.CallExpression, context: 
   }
   emitStatic(source, ')', node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
