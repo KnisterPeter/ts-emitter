@@ -384,3 +384,22 @@ export function emitTypeTypeParameter(this: any, node: ts.TypeParameterDeclarati
   endNode(node, context);
   return source.join('');
 }
+
+export function emitTypeLastTypeNode(this: any, node: ts.LiteralTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.literal, context));
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTypeStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal.substr(0, 1));
+  source.push(node.text);
+  source.push(literal.substr(-1));
+  endNode(node, context);
+  return source.join('');
+}

@@ -149,6 +149,9 @@ describe('emit', () => {
       var r = < <T>(x: T) => T > ((x) => { return null; });
       function foo<T extends { a: string, b: string }>() {}
       var a2 = new Z[];
+      interface I {
+          x1(a: number, callback: (x: 'hi') => number);
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
