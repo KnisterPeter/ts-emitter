@@ -254,4 +254,12 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should not drop trailing comments at end of file', () => {
+    const source = `
+      var x = foo('foo');
+      // comment
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

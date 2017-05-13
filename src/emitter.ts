@@ -129,6 +129,7 @@ export function emitSourceFile(this: any, node: ts.SourceFile, context: EmitterC
 
 export function emitEndOfFileToken(this: any, node: ts.EndOfFileToken, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   endNode(node, context);
   return source.join('');
