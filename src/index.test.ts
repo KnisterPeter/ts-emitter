@@ -290,6 +290,17 @@ describe('emit', () => {
       interface MyDoc {
         // comment
       }
+      function f1(): string {
+          // comment
+      }
+      class C {
+          public get m1() {
+              // comment
+          }
+      }
+      class C {
+          // comment
+      }
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);

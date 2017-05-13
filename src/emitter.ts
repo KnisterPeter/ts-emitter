@@ -511,6 +511,7 @@ export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, conte
     addWhitespace(source, node, context);
     source.push(emit.call(this, member, context));
   });
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1456,6 +1457,7 @@ export function emitBlock(this: any, node: ts.Block, context: EmitterContext): s
     addWhitespace(source, node, context);
     source.push(emit.call(this, statement, context));
   });
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
   return source.join('');
