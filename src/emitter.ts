@@ -1469,6 +1469,14 @@ export function emitSlashEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.Sla
   return source.join('');
 }
 
+export function emitAmpersandEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.AmpersandEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '&=', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitMinusToken(this: any, node: ts.Token<ts.SyntaxKind.MinusToken>,
     context: EmitterContext): string {
   const source: string[] = [];
