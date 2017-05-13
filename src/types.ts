@@ -1,6 +1,11 @@
 import * as ts from 'typescript';
 import { EmitterContext } from './emitter';
-import { addWhitespace, emitStatic } from './utils';
+import {
+  addWhitespace,
+  emitStatic,
+  addSemicolon,
+  endNode
+} from './utils';
 
 export function emitType(this: any, node: ts.TypeNode, context: EmitterContext): string {
   const typeEmitterName = `emitType${ts.SyntaxKind[node.kind]}`;
@@ -51,7 +56,7 @@ export function _emitTypeKeyword(this: any, keyword: string, node: ts.KeywordTyp
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(keyword);
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -70,7 +75,7 @@ export function emitTypeTypeReference(this: any, node: ts.TypeReferenceNode, con
     }
     emitStatic(source, '>', node, context);
   }
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -97,7 +102,7 @@ export function emitTypeFunctionType(this: any, node: ts.FunctionTypeNode, conte
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -111,7 +116,7 @@ export function emitTypeTypeLiteral(this: any, node: ts.TypeLiteralNode, context
     }
   }
   emitStatic(source, '}', node, context);
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -133,8 +138,8 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  emitStatic(source, ';', node, context);
-  context.offset = node.end;
+  addSemicolon(source, node, context);
+  endNode(node, context);
   return source.join('');
 }
 
@@ -157,13 +162,11 @@ export function emitTypeMethodSignature(this: any, node: ts.MethodSignature, con
   emitStatic(source, ')', node, context);
   if (node.type) {
     emitStatic(source, ':', node, context);
-    addWhitespace(source, node.name, context);
+    addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
-  context.offset = node.getEnd();
+  addSemicolon(source, node, context);
+  endNode(node, context);
   return source.join('');
 }
 
@@ -173,7 +176,7 @@ export function emitTypeArrayType(this: any, node: ts.ArrayTypeNode,
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.elementType, context));
   emitStatic(source, '[]', node, context);
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -190,10 +193,8 @@ export function emitTypeIndexSignature(this: any, node: ts.IndexSignatureDeclara
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
-  context.offset = node.end;
+  addSemicolon(source, node, context);
+  endNode(node, context);
   return source.join('');
 }
 
@@ -212,7 +213,7 @@ export function emitTypeParameter(this: any, node: ts.ParameterDeclaration, cont
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -220,7 +221,7 @@ export function emitTypeIdentifier(this: any, node: ts.Identifier, context: Emit
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(node.text);
-  context.offset = node.end;
+  endNode(node, context);
   return source.join('');
 }
 
@@ -254,13 +255,11 @@ export function emitTypePropertySignature(this: any, node: ts.PropertySignature,
   }
   if (node.type) {
     emitStatic(source, ':', node, context);
-    addWhitespace(source, node.name, context);
+    addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
-  context.offset = node.end;
+  addSemicolon(source, node, context);
+  endNode(node, context);
   return source.join('');
 }
 
@@ -271,7 +270,7 @@ export function emitTypeFirstNode(this: any, node: ts.QualifiedName, context: Em
   emitStatic(source, '.', node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.right, context));
-  context.offset = node.getEnd();
+  endNode(node, context);
   return source.join('');
 }
 
@@ -281,7 +280,7 @@ export function emitTypeParenthesizedType(this: any, node: ts.ParenthesizedTypeN
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.type, context));
   emitStatic(source, ')', node, context);
-  context.offset = node.getEnd();
+  endNode(node, context);
   return source.join('');
 }
 
@@ -292,7 +291,7 @@ export function emitTypeFirstTypeNode(this: any, node: ts.TypePredicateNode, con
   emitStatic(source, 'is', node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.type, context));
-  context.offset = node.getEnd();
+  endNode(node, context);
   return source.join('');
 }
 
@@ -315,10 +314,8 @@ export function emitTypeCallSignature(this: any, node: ts.CallSignatureDeclarati
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
-  context.offset = node.getEnd();
+  addSemicolon(source, node, context);
+  endNode(node, context);
   return source.join('');
 }
 
@@ -327,7 +324,7 @@ export function emitTypeTypeOperator(this: any, node: ts.TypeOperatorNode, conte
   emitStatic(source, 'keyof', node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.type, context));
-  context.offset = node.getEnd();
+  endNode(node, context);
   return source.join('');
 }
 
@@ -345,9 +342,7 @@ export function emitTypeConstructorType(this: any, node: ts.ConstructorTypeNode,
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).startsWith(';')) {
-    emitStatic(source, ';', node, context);
-  }
-  context.offset = node.getEnd();
+  addSemicolon(source, node, context);
+  endNode(node, context);
   return source.join('');
 }

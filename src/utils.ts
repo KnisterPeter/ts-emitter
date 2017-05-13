@@ -68,3 +68,10 @@ export function addSemicolon(source: string[], node: ts.Node, context: EmitterCo
     emitStatic(source, ';', node, context);
   }
 }
+
+export function endNode(node: ts.Node, context: EmitterContext): void {
+  const end = node.getEnd();
+  if (context.offset < end) {
+    context.offset = end;
+  }
+}
