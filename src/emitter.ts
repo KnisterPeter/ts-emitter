@@ -407,6 +407,7 @@ export function emitConstructSignature(this: any, node: ts.ConstructSignatureDec
 export function emitCallSignature(this: any, node: ts.CallSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  emitTypeParameters.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   emitParameters.call(this, source, node, context);
   emitStatic(source, ')', node, context);
