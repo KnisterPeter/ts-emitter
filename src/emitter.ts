@@ -376,10 +376,13 @@ export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaratio
   }
   emitStatic(source, '{', node, context);
   addTrailingComment(source, context.offset, node, context);
+  console.log(node.members);
   node.members.forEach(member => {
     addWhitespace(source, node, context);
     source.push(emit.call(this, member, context));
+    addTrailingComment(source, context.offset, node, context);
   });
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);

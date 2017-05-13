@@ -285,4 +285,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it.only('should accept empty block like with comment', () => {
+    const source = `
+      interface MyDoc {
+        // comment
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

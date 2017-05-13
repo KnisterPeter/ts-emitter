@@ -26,9 +26,16 @@ export function addWhitespace(source: string[], node: ts.Node, context: EmitterC
   }
 }
 
-export function addLeadingComment(source: string[], node: ts.Node, context: EmitterContext): void {
+export function addLeadingComment(source: string[], node: ts.Node, context: EmitterContext): void;
+export function addLeadingComment(source: string[], pos: number, node: ts.Node, context: EmitterContext): void;
+export function addLeadingComment(source: string[], posOrNode: number|ts.Node, nodeOrContext: ts.Node|EmitterContext,
+    optionalContext?: EmitterContext): void {
+  const context = optionalContext || (nodeOrContext as EmitterContext);
+  const node = optionalContext ? nodeOrContext as ts.Node : posOrNode as ts.Node;
+  const pos = optionalContext ? posOrNode as number : node.getFullStart();
+
   const text = node.getSourceFile().getFullText();
-  const ranges = ts.getLeadingCommentRanges(text, node.getFullStart());
+  const ranges = ts.getLeadingCommentRanges(text, pos);
   if (ranges) {
     source.push(ranges
       .map(range => {
