@@ -1890,6 +1890,10 @@ export function emitConstKeyword(this: any, node: ts.Node, context: EmitterConte
   return _emitKeyword('const', node, context);
 }
 
+export function emitBooleanKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('Boolean', node, context);
+}
+
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
