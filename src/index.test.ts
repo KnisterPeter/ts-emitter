@@ -145,6 +145,7 @@ describe('emit', () => {
       module EndGate.Tweening {
       }
       var y1: { C: new() => ext.C; } = ext;
+      new CBaseBase<Wrapper<T1>>(this);
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

@@ -468,6 +468,7 @@ export function emitTypeReference(this: any, node: ts.TypeReferenceNode, context
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.typeName, context));
+  emitTypeArguments.call(this, source, node, context);
   endNode(node, context);
   return source.join('');
 }
