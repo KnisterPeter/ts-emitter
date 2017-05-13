@@ -156,6 +156,7 @@ describe('emit', () => {
       [...a];
       ({ ...o })
       typeof a
+      class Comp<T, S> extends Component<S & T> {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

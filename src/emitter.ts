@@ -1692,6 +1692,20 @@ export function emitTypeOperator(this: any, node: ts.TypeOperatorNode, context: 
   return source.join('');
 }
 
+export function emitIntersectionType(this: any, node: ts.IntersectionTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  for (let i = 0, n = node.types.length; i < n; i++) {
+    const type = node.types[i];
+    addWhitespace(source, node, context);
+    source.push(emitType(type, context));
+    if ((i < n - 1)) {
+      emitStatic(source, '&', node, context);
+    }
+  }
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitSpreadElement(this: any, node: ts.SpreadElement, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '...', node, context);
