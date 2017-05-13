@@ -309,6 +309,17 @@ export function emitTypeFirstTypeNode(this: any, node: ts.TypePredicateNode, con
 // tslint:disable-next-line cyclomatic-complexity
 export function emitTypeCallSignature(this: any, node: ts.CallSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   emitStatic(source, '(', node, context);
   if (node.parameters) {
     for (let i = 0, n = node.parameters.length; i < n; i++) {
