@@ -1891,7 +1891,7 @@ export function emitConstKeyword(this: any, node: ts.Node, context: EmitterConte
 }
 
 export function emitBooleanKeyword(this: any, node: ts.Node, context: EmitterContext): string {
-  return _emitKeyword('Boolean', node, context);
+  return _emitKeyword('boolean', node, context);
 }
 
 function _emitKeyword(this: any, keyword: string, node: ts.Node, context: EmitterContext): string {
