@@ -244,4 +244,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about overloaded function signatures', () => {
+    const source = `
+      function foo(foo:string);
+      function foo(foo?:string){ return '' };
+      var x = foo('foo');
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
