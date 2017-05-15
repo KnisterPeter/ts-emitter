@@ -1374,6 +1374,9 @@ export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
   emitStatic(source, ':', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.initializer, context));
