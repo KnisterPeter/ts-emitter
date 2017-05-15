@@ -376,7 +376,6 @@ export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaratio
   }
   emitStatic(source, '{', node, context);
   addTrailingComment(source, context.offset, node, context);
-  console.log(node.members);
   node.members.forEach(member => {
     addWhitespace(source, node, context);
     source.push(emit.call(this, member, context));
@@ -505,6 +504,7 @@ export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, conte
       source.push(emit.call(this, node.heritageClauses[i], context));
     }
   }
+  addTrailingComment(source, context.offset, node, context);
   emitStatic(source, '{', node, context);
   addTrailingComment(source, context.offset, node, context);
   node.members.forEach(member => {

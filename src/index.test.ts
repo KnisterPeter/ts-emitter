@@ -159,6 +159,7 @@ describe('emit', () => {
       class Comp<T, S> extends Component<S & T> {}
       function a<U extends number[]>(): void { }
       ({a})
+      class ConnectionError /* extends Error */ {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
