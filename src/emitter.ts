@@ -1682,6 +1682,14 @@ export function emitFirstBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.
   return source.join('');
 }
 
+export function emitLastTypeNode(this: any, node: ts.LiteralTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.literal, context));
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitIdentifier(this: any, node: ts.Identifier, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

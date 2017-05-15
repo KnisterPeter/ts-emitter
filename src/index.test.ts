@@ -161,6 +161,7 @@ describe('emit', () => {
       ({a})
       class ConnectionError /* extends Error */ {}
       @internal class C { }
+      type Foo<T extends "true"> = string;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
