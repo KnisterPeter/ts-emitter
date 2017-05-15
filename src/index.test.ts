@@ -160,6 +160,7 @@ describe('emit', () => {
       function a<U extends number[]>(): void { }
       ({a})
       class ConnectionError /* extends Error */ {}
+      @internal class C { }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

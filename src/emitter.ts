@@ -485,6 +485,12 @@ export function emitTypeReference(this: any, node: ts.TypeReferenceNode, context
 export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  if (node.decorators) {
+    node.decorators.forEach(decorator => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, decorator, context));
+    });
+  }
   emitModifiers.call(this, source, node, context);
   emitStatic(source, 'class', node, context);
   addWhitespace(source, node, context);
@@ -515,6 +521,15 @@ export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, conte
   emitStatic(source, '}', node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
+  return source.join('');
+}
+
+export function emitDecorator(this: any, node: ts.Decorator, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  emitStatic(source, '@', node, context);
+  source.push(emit.call(this, node.expression, context));
+  endNode(node, context);
   return source.join('');
 }
 
