@@ -158,6 +158,7 @@ describe('emit', () => {
       typeof a
       class Comp<T, S> extends Component<S & T> {}
       function a<U extends number[]>(): void { }
+      ({a})
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

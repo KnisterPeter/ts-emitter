@@ -1324,6 +1324,15 @@ export function emitObjectLiteralExpression(this: any, node: ts.ObjectLiteralExp
   return source.join('');
 }
 
+export function emitShorthandPropertyAssignment(this: any, node: ts.ShorthandPropertyAssignment,
+  context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitComputedPropertyName(this: any, node: ts.ComputedPropertyName,
   context: EmitterContext): string {
   const source: string[] = [];
