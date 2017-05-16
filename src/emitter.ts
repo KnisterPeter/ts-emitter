@@ -1105,6 +1105,14 @@ export function emitBindingElement(this: any, node: ts.BindingElement, context: 
   return source.join('');
 }
 
+export function emitOmittedExpression(this: any, node: ts.OmittedExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  addWhitespace(source, node, context);
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
 export function emitAwaitExpression(this: any, node: ts.AwaitExpression, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);

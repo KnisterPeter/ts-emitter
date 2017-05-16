@@ -385,4 +385,11 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should emit OmittedExpression in array destructuring', () => {
+    const source = `
+      let [, nameA] = robotA
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
