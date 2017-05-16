@@ -1506,6 +1506,7 @@ export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: Em
 
 export function emitParameter(this: any, node: ts.ParameterDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  emitModifiers.call(this, source, node, context);
   if (node.dotDotDotToken) {
     emitStatic(source, '...', node, context);
   }
