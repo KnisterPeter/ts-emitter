@@ -1389,6 +1389,11 @@ export function emitShorthandPropertyAssignment(this: any, node: ts.ShorthandPro
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.objectAssignmentInitializer) {
+    emitStatic(source, '=', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.objectAssignmentInitializer, context));
+  }
   endNode(node, context);
   return source.join('');
 }

@@ -178,6 +178,7 @@ describe('emit', () => {
         method(this: this, ...args: string[]) {};
       }
       "string" as number;
+      ({a = 5})
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
