@@ -1608,6 +1608,14 @@ export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
   return source.join('');
 }
 
+export function emitLessThanLessThanToken(this: any, node: ts.Token<ts.SyntaxKind.LessThanLessThanToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '<<', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitSlashToken(this: any, node: ts.Token<ts.SyntaxKind.SlashToken>,
     context: EmitterContext): string {
   const source: string[] = [];
