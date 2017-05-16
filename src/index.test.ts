@@ -194,6 +194,7 @@ describe('emit', () => {
       debugger;
       a != b
       a & b
+      enumType ^ numberType
       f \`123qdawdrqw${ 1 }\`;
     `;
     const sourceFile = getSourceFile(source);

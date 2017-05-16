@@ -1715,6 +1715,14 @@ export function emitAmpersandToken(this: any, node: ts.Token<ts.SyntaxKind.Amper
   return source.join('');
 }
 
+export function emitCaretToken(this: any, node: ts.Token<ts.SyntaxKind.CaretToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '^', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitMinusToken(this: any, node: ts.Token<ts.SyntaxKind.MinusToken>,
     context: EmitterContext): string {
   const source: string[] = [];
