@@ -1996,6 +1996,60 @@ export function emitTaggedTemplateExpression(this: any, node: ts.TaggedTemplateE
   return source.join('');
 }
 
+export function emitTemplateExpression(this: any, node: ts.TemplateExpression,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '`', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.head, context));
+  node.templateSpans.forEach(span => {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, span, context));
+  });
+  emitStatic(source, '`', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTemplateHead(this: any, node: ts.TemplateHead,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, node.text, node, context);
+  emitStatic(source, '${', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTemplateSpan(this: any, node: ts.TemplateSpan,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.literal, context));
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTemplateMiddle(this: any, node: ts.TemplateMiddle,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '}', node, context);
+  emitStatic(source, node.text, node, context);
+  emitStatic(source, '${', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitLastTemplateToken(this: any, node: ts.LiteralLikeNode,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '}', node, context);
+  emitStatic(source, node.text, node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitFirstTemplateToken(this: any, node: ts.LiteralLikeNode, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

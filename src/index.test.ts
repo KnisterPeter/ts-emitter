@@ -192,7 +192,7 @@ describe('emit', () => {
       }
       function foo(){new.target}
       debugger;
-      f \`123qdawdrqw${ 1 }\`
+      f \`123qdawdrqw${ 1 }\`;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
@@ -367,6 +367,11 @@ describe('emit', () => {
           export function foo() {}
       }
     `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should accept tagged template strings', () => {
+    const source = 'f`abcdef${ 1234 }${ 5678 }ghijkl`';
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
