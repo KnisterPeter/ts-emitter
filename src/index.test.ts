@@ -191,6 +191,7 @@ describe('emit', () => {
           var t;
       }
       function foo(){new.target}
+      debugger;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

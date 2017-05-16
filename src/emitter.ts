@@ -965,6 +965,16 @@ export function emitReturnStatement(this: any, node: ts.ReturnStatement, context
   return source.join('');
 }
 
+export function emitDebuggerStatement(this: any, node: ts.DebuggerStatement, context: EmitterContext): string {
+  const source: string[] = [];
+  addLeadingComment(source, node, context);
+  emitStatic(source, 'debugger', node, context);
+  addSemicolon(source, node, context);
+  endNode(node, context);
+  addTrailingComment(source, node, context);
+  return source.join('');
+}
+
 export function emitTryStatement(this: any, node: ts.TryStatement, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
