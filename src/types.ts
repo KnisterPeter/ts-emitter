@@ -152,7 +152,7 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.parameters[i], context));
     if ((i < n - 1) || node.parameters.hasTrailingComma) {
-      emitStatic(source, '|', node.parameters[i], context);
+      emitStatic(source, ',', node.parameters[i], context);
     }
   }
   emitStatic(source, ')', node, context);

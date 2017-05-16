@@ -169,6 +169,7 @@ describe('emit', () => {
         // do something
         127
       function foo(a = \`\`) { }
+      const a: { new(a: any, b: any): T; }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
