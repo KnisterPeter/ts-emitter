@@ -1834,6 +1834,14 @@ export function emitAmpersandAmpersandToken(this: any, node: ts.Token<ts.SyntaxK
   return source.join('');
 }
 
+export function emitAsteriskAsteriskToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskAsteriskToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '**', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitFirstBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.FirstBinaryOperator>,
     context: EmitterContext): string {
   const source: string[] = [];
