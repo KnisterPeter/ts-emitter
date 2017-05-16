@@ -416,6 +416,21 @@ export function emitTypeLastTypeNode(this: any, node: ts.LiteralTypeNode, contex
   return source.join('');
 }
 
+export function emitTypeTupleType(this: any, node: ts.TupleTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '[', node, context);
+  for (let i = 0, n = node.elementTypes.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.elementTypes[i], context));
+    if (i < n - 1) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ']', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitTypeStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
