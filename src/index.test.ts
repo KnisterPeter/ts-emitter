@@ -375,4 +375,14 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should emit async arrow functions', () => {
+    const source = `
+      (async () => {
+        await 10
+        throw new Error();
+      })();
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
