@@ -1303,6 +1303,22 @@ export function emitYieldExpression(this: any, node: ts.YieldExpression, context
   return source.join('');
 }
 
+export function emitMetaProperty(this: any, node: ts.MetaProperty, context: EmitterContext): string {
+  const source: string[] = [];
+  switch (node.keywordToken) {
+    case ts.SyntaxKind.NewKeyword:
+      emitStatic(source, 'new', node, context);
+      break;
+    default:
+      throw new Error(`Unknown meta property ${ts.SyntaxKind[node.keywordToken]}`);
+  }
+  emitStatic(source, '.', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitParenthesizedExpression(this: any, node: ts.ParenthesizedExpression,
     context: EmitterContext): string {
   const source: string[] = [];
