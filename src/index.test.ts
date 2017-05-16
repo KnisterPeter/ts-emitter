@@ -197,6 +197,9 @@ describe('emit', () => {
       enumType ^ numberType
       a ** b
       f \`123qdawdrqw${ 1 }\`;
+      class A {
+          readonly kind = "A"; // (property) A.kind: "A"
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

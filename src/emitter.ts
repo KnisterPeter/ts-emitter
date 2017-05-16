@@ -2230,6 +2230,10 @@ export function emitDefaultKeyword(this: any, node: ts.Node, context: EmitterCon
   return _emitKeyword('default', node, context);
 }
 
+export function emitReadonlyKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('readonly', node, context);
+}
+
 export function emitPrivateKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('private', node, context);
 }
