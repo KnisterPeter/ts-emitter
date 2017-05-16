@@ -1731,6 +1731,14 @@ export function emitTypeParameter(this: any, node: ts.TypeParameterDeclaration, 
   return source.join('');
 }
 
+export function emitTypeQuery(this: any, node: ts.TypeQueryNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'typeof', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.exprName, context));
+  return source.join('');
+}
+
 export function emitTypeOperator(this: any, node: ts.TypeOperatorNode, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'keyof', node, context);
