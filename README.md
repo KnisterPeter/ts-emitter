@@ -20,7 +20,17 @@ Emitting typescript as back to typescript.
 Install as npm package:
 
 ```sh
-npm install ts-emitter
+$ npm install ts-emitter
+```
+
+### Tests
+
+The typescript compiler test suite is used to test the code generator.
+To create and run the test harness execute
+
+```sh
+$ npm run update-harness
+$ npm run harness
 ```
 
 ### API
