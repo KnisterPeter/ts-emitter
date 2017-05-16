@@ -1850,6 +1850,7 @@ export function emitStringLiteral(this: any, node: ts.StringLiteral, context: Em
 
 export function emitFirstLiteralToken(this: any, node: ts.LiteralExpression, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(node.text);
   endNode(node, context);
