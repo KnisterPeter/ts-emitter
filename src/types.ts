@@ -455,3 +455,10 @@ export function emitTypeIntersectionType(this: any, node: ts.IntersectionTypeNod
   endNode(node, context);
   return source.join('');
 }
+
+export function emitTypeThisType(this: any, node: ts.ThisTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'this', node, context);
+  endNode(node, context);
+  return source.join('');
+}

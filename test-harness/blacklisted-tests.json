@@ -8,5 +8,7 @@
   "typescript/tests/cases/compiler/objectLiteralWithSemicolons2.ts",
   "typescript/tests/cases/compiler/objectLiteralWithSemicolons3.ts",
   "typescript/tests/cases/compiler/objectLiteralWithSemicolons4.ts",
-  "typescript/tests/cases/compiler/objectLiteralWithSemicolons5.ts"
+  "typescript/tests/cases/compiler/objectLiteralWithSemicolons5.ts",
+  "typescript/tests/cases/compiler/objectLitArrayDeclNoNew.ts",
+  "typescript/tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts"
 ]

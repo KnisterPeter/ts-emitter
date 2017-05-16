@@ -173,6 +173,9 @@ describe('emit', () => {
       const a: { new(a: any, b: any): T; }
       declare class C1<T = number> {}
       var b4: Book & Cover
+      class Test {
+        method(this: this, ...args: string[]) {};
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

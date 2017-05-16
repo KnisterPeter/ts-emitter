@@ -684,9 +684,15 @@ export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, con
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.body, context));
   }
-  addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
+  return source.join('');
+}
+
+export function emitSemicolonClassElement(this: any, node: ts.SemicolonClassElement, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, ';', node, context);
+  endNode(node, context);
   return source.join('');
 }
 
