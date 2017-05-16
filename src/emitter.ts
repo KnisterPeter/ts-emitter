@@ -592,12 +592,6 @@ export function emitConstructor(this: any, node: ts.ConstructorDeclaration, cont
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {
     const parameter = node.parameters[i];
-    if (parameter.modifiers) {
-      parameter.modifiers.forEach(modifier => {
-        addWhitespace(source, node, context);
-        source.push(emit.call(this, modifier, context));
-      });
-    }
     addWhitespace(source, node, context);
     source.push(emit.call(this, parameter, context));
     if ((i < n - 1) || node.parameters.hasTrailingComma) {
