@@ -185,6 +185,9 @@ describe('emit', () => {
         ) {
         }
       }
+      module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+          var t;
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

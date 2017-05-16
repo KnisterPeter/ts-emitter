@@ -212,6 +212,7 @@ export function emitModuleDeclaration(this: any, node: ts.ModuleDeclaration, con
 export function emitModuleBlock(this: any, node: ts.ModuleBlock, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '{', node, context);
+  addTrailingComment(source, context.offset, node, context);
   emitStatements.call(this, source, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
