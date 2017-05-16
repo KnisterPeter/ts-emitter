@@ -352,4 +352,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should reprint namespaces', () => {
+    const source = `
+      export namespace A.B.C {
+          export function foo() {}
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
