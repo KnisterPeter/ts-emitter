@@ -231,6 +231,7 @@ export function emitImportEqualsDeclaration(this: any, node: ts.ImportEqualsDecl
   source.push(emit.call(this, node.moduleReference, context));
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
