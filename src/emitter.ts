@@ -683,6 +683,8 @@ export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, con
   if (node.body) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.body, context));
+  } else {
+    addSemicolon(source, node, context);
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
