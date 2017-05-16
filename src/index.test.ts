@@ -179,6 +179,12 @@ describe('emit', () => {
       }
       "string" as number;
       ({a = 5})
+      class Test {
+        constructor(
+          public a: string // comment
+        ) {
+        }
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

@@ -1500,6 +1500,7 @@ export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: Em
   }
   emitStatic(source, '=>', node, context);
   source.push(emit.call(this, node.body, context));
+  endNode(node, context);
   return source.join('');
 }
 
@@ -1523,6 +1524,8 @@ export function emitParameter(this: any, node: ts.ParameterDeclaration, context:
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.initializer, context));
   }
+  endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
