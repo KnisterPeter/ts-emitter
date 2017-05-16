@@ -1521,6 +1521,18 @@ export function emitBlock(this: any, node: ts.Block, context: EmitterContext): s
   return source.join('');
 }
 
+export function emitAsExpression(this: any, node: ts.AsExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.expression, context));
+  emitStatic(source, 'as', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType(node.type, context));
+
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitBinaryExpression(this: any, node: ts.BinaryExpression, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);

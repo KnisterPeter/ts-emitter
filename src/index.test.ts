@@ -177,6 +177,7 @@ describe('emit', () => {
       class Test {
         method(this: this, ...args: string[]) {};
       }
+      "string" as number;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
