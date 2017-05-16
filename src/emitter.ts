@@ -1029,7 +1029,6 @@ export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: 
 
 export function emitNewExpression(this: any, node: ts.NewExpression, context: EmitterContext): string {
   const source: string[] = [];
-  addLeadingComment(source, node, context);
   emitStatic(source, 'new', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));

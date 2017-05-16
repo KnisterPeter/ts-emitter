@@ -229,6 +229,8 @@ describe('emit', () => {
     const source = `
       // leading
       let r; // trailing
+      // Can be an expression
+      new String;
     `;
     console.log(source);
     const sourceFile = getSourceFile(source);
