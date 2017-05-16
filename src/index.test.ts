@@ -60,6 +60,7 @@ describe('emit', () => {
 
         get foo() { return 0; }
         set v(value) {}
+        @test
         method(p1: typeof k): never {
           throw new Error('never');
         }
