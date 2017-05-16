@@ -202,6 +202,7 @@ describe('emit', () => {
       }
       a = ~1
       a >> b
+      a >>> b
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

@@ -1819,6 +1819,14 @@ export function emitGreaterThanGreaterThanToken(this: any, node: ts.Token<ts.Syn
   return source.join('');
 }
 
+export function emitGreaterThanGreaterThanGreaterThanToken(this: any, node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '>>>', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitBarToken(this: any, node: ts.Token<ts.SyntaxKind.BarToken>,
     context: EmitterContext): string {
   const source: string[] = [];
