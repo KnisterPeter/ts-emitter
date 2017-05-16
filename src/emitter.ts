@@ -1857,6 +1857,16 @@ export function emitFirstLiteralToken(this: any, node: ts.LiteralExpression, con
   return source.join('');
 }
 
+export function emitFirstTemplateToken(this: any, node: ts.LiteralLikeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  emitStatic(source, '`', node, context);
+  source.push(node.text);
+  emitStatic(source, '`', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitFirstAssignment(this: any, node: ts.Node, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '=', node, context);
