@@ -27,6 +27,10 @@ export function emitTypeFalseKeyword(this: any, node: ts.KeywordTypeNode, contex
   return _emitTypeKeyword('false', node, context);
 }
 
+export function emitTypeUndefinedKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('undefined', node, context);
+}
+
 export function emitTypeNumberKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
   return _emitTypeKeyword('number', node, context);
 }
