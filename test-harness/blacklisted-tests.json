@@ -25,5 +25,6 @@
   "typescript/tests/cases/compiler/pathMappingBasedModuleResolution6_node.ts",
   "typescript/tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts",
   "typescript/tests/cases/compiler/pathMappingBasedModuleResolution7_node.ts",
-  "typescript/tests/cases/compiler/slashBeforeVariableDeclaration1.ts"
+  "typescript/tests/cases/compiler/slashBeforeVariableDeclaration1.ts",
+  "typescript/tests/cases/compiler/shebangError.ts"
 ]
