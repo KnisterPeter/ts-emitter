@@ -217,6 +217,7 @@ describe('emit', () => {
       // leading
       let r; // trailing
     `;
+    console.log(source);
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
@@ -330,6 +331,13 @@ describe('emit', () => {
       var b = {
           x?: 1 // error
       }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should keep shebang', () => {
+    const source = `#!/usr/bin/env gjs
+      class Doo {}
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);

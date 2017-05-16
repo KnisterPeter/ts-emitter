@@ -117,8 +117,22 @@ export function emit(this: any, node: ts.Node, context: EmitterContext): string 
   throw new Error(`Unknown node kind ${ts.SyntaxKind[node.kind]}`);
 }
 
+function emitShebang(this: any, node: ts.SourceFile, context: EmitterContext): string {
+  const source: string[] = [];
+  const ranges = ts.getLeadingCommentRanges(node.getSourceFile().getFullText(), node.getFullStart());
+  let pos = node.getStart();
+  if (ranges) {
+    pos = ranges[0].pos;
+  }
+  const filePrefix = node.getSourceFile().getFullText().substring(0, pos);
+  source.push(filePrefix);
+  context.offset += filePrefix.length;
+  return source.join('');
+}
+
 export function emitSourceFile(this: any, node: ts.SourceFile, context: EmitterContext): string {
   const source: string[] = [];
+  source.push(emitShebang(node, context));
   node.forEachChild(child => {
     addWhitespace(source, node, context);
     source.push(emit.call(this, child, context));
