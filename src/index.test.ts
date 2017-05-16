@@ -200,6 +200,7 @@ describe('emit', () => {
       class A {
           readonly kind = "A"; // (property) A.kind: "A"
       }
+      a = ~1
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

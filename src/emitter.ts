@@ -1490,8 +1490,9 @@ export function emitPrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpress
         return '--';
       case ts.SyntaxKind.ExclamationToken:
         return '!';
+      case ts.SyntaxKind.TildeToken:
+        return '~';
     }
-    throw new Error(`Unknown operator ${ts.SyntaxKind[node.operator]}`);
   }
   const source: string[] = [];
   addWhitespace(source, node, context);
