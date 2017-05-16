@@ -672,6 +672,9 @@ export function emitMethodDeclaration(this: any, node: ts.MethodDeclaration, con
   emitModifiers.call(this, source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
   emitTypeParameters.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   emitParameters.call(this, source, node, context);
