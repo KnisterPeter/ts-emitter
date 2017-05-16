@@ -162,7 +162,9 @@ describe('emit', () => {
       function a<U extends number[]>(): void { }
       ({a})
       class ConnectionError /* extends Error */ {}
-      @internal class C { }
+      @internal class C {
+        @decorator prop: string;
+      }
       type Foo<T extends "true"> = string;
       function f20<A, B>(): [A, B];
       foo(x => new G<typeof x>(x))
