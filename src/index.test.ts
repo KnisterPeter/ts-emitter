@@ -193,6 +193,7 @@ describe('emit', () => {
       function foo(){new.target}
       debugger;
       a != b
+      a & b
       f \`123qdawdrqw${ 1 }\`;
     `;
     const sourceFile = getSourceFile(source);
