@@ -1891,6 +1891,13 @@ export function emitIntersectionType(this: any, node: ts.IntersectionTypeNode, c
   return source.join('');
 }
 
+export function emitThisType(this: any, node: ts.ThisTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'this', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitArrayType(this: any, node: ts.ArrayTypeNode, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
