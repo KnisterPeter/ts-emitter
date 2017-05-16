@@ -221,6 +221,8 @@ describe('emit', () => {
       module 'test' {
         export function a(){  A.b();  } // A.b should be an unresolved symbol error
       }
+      declare global {
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

@@ -196,6 +196,9 @@ export function emitModuleDeclaration(this: any, node: ts.ModuleDeclaration, con
     emitStatic(source, '.', node, context);
   } else if (node.flags & ts.NodeFlags.Namespace) {
     emitStatic(source, 'namespace', node, context);
+  } else if (node.flags & ts.NodeFlags.GlobalAugmentation) {
+    // note: the static 'global' is emitted below as name property
+    // emitStatic(source, 'global', node, context);
   } else {
     emitStatic(source, 'module', node, context);
   }
