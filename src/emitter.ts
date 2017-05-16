@@ -971,6 +971,7 @@ export function emitTryStatement(this: any, node: ts.TryStatement, context: Emit
     source.push(emit.call(this, node.finallyBlock, context));
   }
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
