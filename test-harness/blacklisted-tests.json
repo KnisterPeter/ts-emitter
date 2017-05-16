@@ -25,6 +25,14 @@
   "typescript/tests/cases/compiler/pathMappingBasedModuleResolution6_node.ts",
   "typescript/tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts",
   "typescript/tests/cases/compiler/pathMappingBasedModuleResolution7_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution_withExtension.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution_withExtension_failedLookup.ts",
   "typescript/tests/cases/compiler/slashBeforeVariableDeclaration1.ts",
-  "typescript/tests/cases/compiler/shebangError.ts"
+  "typescript/tests/cases/compiler/shebangError.ts",
+  "typescript/tests/cases/compiler/pathsValidation1.ts",
+  "typescript/tests/cases/compiler/pathsValidation2.ts",
+  "typescript/tests/cases/compiler/pathsValidation3.ts",
+  "typescript/tests/cases/compiler/parserConstructorDeclaration12.ts",
+  "typescript/tests/cases/compiler/parseErrorInHeritageClause1.ts",
+  "typescript/tests/cases/compiler/parse2.ts"
 ]
