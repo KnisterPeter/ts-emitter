@@ -10,5 +10,19 @@
   "typescript/tests/cases/compiler/objectLiteralWithSemicolons4.ts",
   "typescript/tests/cases/compiler/objectLiteralWithSemicolons5.ts",
   "typescript/tests/cases/compiler/objectLitArrayDeclNoNew.ts",
-  "typescript/tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts"
+  "typescript/tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution1_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution1_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution2_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution2_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution3_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution3_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution4_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution4_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution5_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution5_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution6_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution6_node.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts",
+  "typescript/tests/cases/compiler/pathMappingBasedModuleResolution7_node.ts"
 ]
