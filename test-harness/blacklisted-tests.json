@@ -3,5 +3,10 @@
   "typescript/tests/cases/compiler/bases.ts",
   "typescript/tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts",
   "typescript/tests/cases/compiler/functionTypesLackingReturnTypes.ts",
-  "typescript/tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts"
+  "typescript/tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts",
+  "typescript/tests/cases/compiler/objectLiteralWithSemicolons1.ts",
+  "typescript/tests/cases/compiler/objectLiteralWithSemicolons2.ts",
+  "typescript/tests/cases/compiler/objectLiteralWithSemicolons3.ts",
+  "typescript/tests/cases/compiler/objectLiteralWithSemicolons4.ts",
+  "typescript/tests/cases/compiler/objectLiteralWithSemicolons5.ts"
 ]
