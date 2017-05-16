@@ -172,6 +172,7 @@ describe('emit', () => {
       function foo(a = \`\`) { }
       const a: { new(a: any, b: any): T; }
       declare class C1<T = number> {}
+      var b4: Book & Cover
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

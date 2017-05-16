@@ -441,3 +441,17 @@ export function emitTypeStringLiteral(this: any, node: ts.StringLiteral, context
   endNode(node, context);
   return source.join('');
 }
+
+export function emitTypeIntersectionType(this: any, node: ts.IntersectionTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  for (let i = 0, n = node.types.length; i < n; i++) {
+    const type = node.types[i];
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, type, context));
+    if ((i < n - 1)) {
+      emitStatic(source, '&', node, context);
+    }
+  }
+  endNode(node, context);
+  return source.join('');
+}
