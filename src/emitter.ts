@@ -304,6 +304,19 @@ export function emitImportSpecifier(this: any, node: ts.ImportSpecifier, context
   return source.join('');
 }
 
+export function emitNamespaceExportDeclaration(this: any, node: ts.NamespaceExportDeclaration,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, 'export', node, context);
+  emitStatic(source, 'as', node, context);
+  emitStatic(source, 'namespace', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  addSemicolon(source, node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);

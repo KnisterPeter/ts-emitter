@@ -36,6 +36,7 @@ describe('emit', () => {
       const a: string = 'string';
       export { a, b as c } from 'asdf';
       export default a;
+      export as namespace Alpha;
       let b: number = 0;
       b+=1;
       var c: boolean = true;
