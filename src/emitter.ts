@@ -1735,6 +1735,11 @@ export function emitTypeParameter(this: any, node: ts.TypeParameterDeclaration, 
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.constraint, context));
   }
+  if (node.default) {
+    emitStatic(source, '=', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.default, context));
+  }
   endNode(node, context);
   return source.join('');
 }
