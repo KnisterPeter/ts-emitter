@@ -164,6 +164,7 @@ describe('emit', () => {
       type Foo<T extends "true"> = string;
       function f20<A, B>(): [A, B];
       foo(x => new G<typeof x>(x))
+      a >>>= 1;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

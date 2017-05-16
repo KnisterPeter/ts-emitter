@@ -1518,6 +1518,14 @@ export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
   return source.join('');
 }
 
+export function emitGreaterThanGreaterThanGreaterThanEqualsToken(this: any,
+    node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '>>>=', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitPercentEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.PercentEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
