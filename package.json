@@ -13,7 +13,7 @@
     "clean": "rimraf dist",
     "build": "tsc",
     "test": "jest",
-    "update-harness": "./test-harness/update.sh",
+    "update-harness": "./test-harness/update.sh && ./test-harness/gen-specs.sh",
     "preharness": "npm run build",
     "harness": "jest --coverage false --testRegex '.spec.js$'",
     "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",

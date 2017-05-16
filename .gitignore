@@ -3,3 +3,4 @@ coverage/
 dist/
 test-harness/typescript/
 npm-debug.log
+test-harness/specs/
