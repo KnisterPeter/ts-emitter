@@ -1762,6 +1762,14 @@ export function emitEqualsEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxK
   return source.join('');
 }
 
+export function emitExclamationEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.ExclamationEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '!=', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitExclamationEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.ExclamationEqualsEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
