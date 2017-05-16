@@ -208,6 +208,7 @@ export function emitImportEqualsDeclaration(this: any, node: ts.ImportEqualsDecl
     context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
   emitStatic(source, 'import', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
