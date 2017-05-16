@@ -1066,6 +1066,9 @@ export function emitObjectBindingPattern(this: any, node: ts.ObjectBindingPatter
 
 export function emitBindingElement(this: any, node: ts.BindingElement, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.dotDotDotToken) {
+    emitStatic(source, '...', node, context);
+  }
   if (node.propertyName) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.propertyName, context));
