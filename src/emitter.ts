@@ -1985,6 +1985,17 @@ export function emitFirstLiteralToken(this: any, node: ts.LiteralExpression, con
   return source.join('');
 }
 
+export function emitTaggedTemplateExpression(this: any, node: ts.TaggedTemplateExpression,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.tag, context));
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.template, context));
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitFirstTemplateToken(this: any, node: ts.LiteralLikeNode, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
