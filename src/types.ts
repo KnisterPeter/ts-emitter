@@ -23,6 +23,10 @@ export function emitTypeTrueKeyword(this: any, node: ts.KeywordTypeNode, context
   return _emitTypeKeyword('true', node, context);
 }
 
+export function emitTypeFalseKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('false', node, context);
+}
+
 export function emitTypeNumberKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
   return _emitTypeKeyword('number', node, context);
 }
