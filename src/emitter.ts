@@ -2082,11 +2082,11 @@ export function emitStringLiteral(this: any, node: ts.StringLiteral, context: Em
   return source.join('');
 }
 
-export function emitFirstLiteralToken(this: any, node: ts.LiteralExpression, context: EmitterContext): string {
+export function emitFirstLiteralToken(this: any, node: ts.NumericLiteral, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(node.text);
+  source.push(node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()));
   endNode(node, context);
   return source.join('');
 }
