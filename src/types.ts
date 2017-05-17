@@ -19,6 +19,10 @@ export function emitTypeStringKeyword(this: any, node: ts.KeywordTypeNode, conte
   return _emitTypeKeyword('string', node, context);
 }
 
+export function emitTypeReadonlyKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
+  return _emitTypeKeyword('readonly', node, context);
+}
+
 export function emitTypeTrueKeyword(this: any, node: ts.KeywordTypeNode, context: EmitterContext): string {
   return _emitTypeKeyword('true', node, context);
 }
@@ -283,6 +287,12 @@ export function emitTypeTypeQuery(this: any, node: ts.TypeQueryNode, context: Em
 
 export function emitTypePropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, modifier, context));
+    });
+  }
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.name, context));
   if (node.questionToken) {
@@ -479,6 +489,56 @@ export function emitTypeFirstLiteralToken(this: any, node: ts.LiteralExpression,
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(node.text);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTypeMappedType(this: any, node: ts.MappedTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  if (node.readonlyToken) {
+    emitStatic(source, 'readonly', node, context);
+  }
+  if (node.typeParameter) {
+    emitStatic(source, '[', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitTypeMappedTypeTypeParameter.call(this, node.typeParameter, context));
+    emitStatic(source, ']', node, context);
+  }
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
+  emitStatic(source, ':', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.type, context));
+  addSemicolon(source, node, context);
+  emitStatic(source, '}', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTypeMappedTypeTypeParameter(this: any, node: ts.TypeParameterDeclaration,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.name, context));
+  if (node.constraint) {
+    emitStatic(source, 'in', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitType.call(this, node.constraint, context));
+  }
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitTypeIndexedAccessType(this: any, node: ts.IndexedAccessTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.objectType, context));
+  emitStatic(source, '[', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.indexType, context));
+  emitStatic(source, ']', node, context);
   endNode(node, context);
   return source.join('');
 }

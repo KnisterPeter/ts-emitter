@@ -406,4 +406,17 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should know about MappedType', () => {
+    const source = `
+      type Meta<T, A> = {
+        readonly[P in keyof T]: {
+          value: T[P];
+          also: A;
+          readonly children: Meta<T[P], A>;
+        };
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
