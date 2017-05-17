@@ -474,3 +474,11 @@ export function emitTypeThisType(this: any, node: ts.ThisTypeNode, context: Emit
   endNode(node, context);
   return source.join('');
 }
+
+export function emitTypeFirstLiteralToken(this: any, node: ts.LiteralExpression, context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(node.text);
+  endNode(node, context);
+  return source.join('');
+}
