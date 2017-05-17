@@ -659,6 +659,8 @@ export function emitGetAccessor(this: any, node: ts.GetAccessorDeclaration, cont
   addWhitespace(source, node, context);
   if (node.body) {
     source.push(emit.call(this, node.body, context));
+  } else {
+    addSemicolon(source, node, context);
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -683,6 +685,8 @@ export function emitSetAccessor(this: any, node: ts.SetAccessorDeclaration, cont
   addWhitespace(source, node, context);
   if (node.body) {
     source.push(emit.call(this, node.body, context));
+  } else {
+    addSemicolon(source, node, context);
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
