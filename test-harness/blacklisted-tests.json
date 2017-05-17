@@ -42,5 +42,6 @@
   "typescript/tests/cases/compiler/shebangBeforeReferences.ts",
   "typescript/tests/cases/compiler/duplicateLocalVariable1.ts",
   "typescript/tests/cases/compiler/dontShowCompilerGeneratedMembers.ts",
-  "typescript/tests/cases/compiler/throwWithoutNewLine2.ts"
+  "typescript/tests/cases/compiler/throwWithoutNewLine2.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions6.ts"
 ]
