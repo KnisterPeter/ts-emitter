@@ -1478,6 +1478,7 @@ export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
 }
 
 export function emitPrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpression, context: EmitterContext): string {
+  // tslint:disable-next-line cyclomatic-complexity
   function getPrefixUnaryOperator(): string {
     switch (node.operator) {
       case ts.SyntaxKind.PlusToken:
@@ -1819,8 +1820,8 @@ export function emitGreaterThanGreaterThanToken(this: any, node: ts.Token<ts.Syn
   return source.join('');
 }
 
-export function emitGreaterThanGreaterThanGreaterThanToken(this: any, node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken>,
-    context: EmitterContext): string {
+export function emitGreaterThanGreaterThanGreaterThanToken(this: any,
+    node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken>, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '>>>', node, context);
   endNode(node, context);
