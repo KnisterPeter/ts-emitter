@@ -657,7 +657,9 @@ export function emitGetAccessor(this: any, node: ts.GetAccessorDeclaration, cont
     source.push(emitType(node.type, context));
   }
   addWhitespace(source, node, context);
-  source.push(emit.call(this, node.body, context));
+  if (node.body) {
+    source.push(emit.call(this, node.body, context));
+  }
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -679,7 +681,9 @@ export function emitSetAccessor(this: any, node: ts.SetAccessorDeclaration, cont
     source.push(emitType(node.type, context));
   }
   addWhitespace(source, node, context);
-  source.push(emit.call(this, node.body, context));
+  if (node.body) {
+    source.push(emit.call(this, node.body, context));
+  }
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
