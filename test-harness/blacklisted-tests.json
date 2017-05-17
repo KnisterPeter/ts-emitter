@@ -43,6 +43,12 @@
   "typescript/tests/cases/compiler/duplicateLocalVariable1.ts",
   "typescript/tests/cases/compiler/dontShowCompilerGeneratedMembers.ts",
   "typescript/tests/cases/compiler/throwWithoutNewLine2.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions1.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions4.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions2.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts",
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions6.ts",
-  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts"
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts",
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts"
 ]
