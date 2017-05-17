@@ -940,6 +940,19 @@ export function emitWithStatement(this: any, node: ts.WithStatement, context: Em
   return source.join('');
 }
 
+export function emitUnionType(this: any, node: ts.UnionTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  for (let i = 0, n = node.types.length; i < n; i++) {
+    const type = node.types[i];
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, type, context));
+    if ((i < n - 1) || node.types.hasTrailingComma) {
+      emitStatic(source, '|', node, context);
+    }
+  }
+  return source.join('');
+}
+
 export function emitExpressionStatement(this: any, node: ts.ExpressionStatement, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
