@@ -59,10 +59,9 @@ export function addTrailingComment(source: string[], posOrNode: number|ts.Node, 
   const text = node.getSourceFile().getFullText();
   const ranges = ts.getTrailingCommentRanges(text, pos);
   if (ranges) {
-    console.log(ranges);
     source.push(ranges
       .map(range => {
-        if (context.offset < range.pos) {
+        if (context.offset <= range.pos) {
           const prefix = text.substring(context.offset, range.pos);
           const comment = prefix + text.substring(range.pos, range.end);
           context.offset += comment.length;

@@ -1909,6 +1909,7 @@ export function emitIdentifier(this: any, node: ts.Identifier, context: EmitterC
   addWhitespace(source, node, context);
   source.push(node.text);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
