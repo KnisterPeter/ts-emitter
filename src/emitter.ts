@@ -2010,6 +2010,40 @@ export function emitRegularExpressionLiteral(this: any, node: ts.RegularExpressi
   return source.join('');
 }
 
+export function emitTupleType(this: any, node: ts.TupleTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '[', node, context);
+  for (let i = 0, n = node.elementTypes.length; i < n; i++) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.elementTypes[i], context));
+    if (i < n - 1) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  emitStatic(source, ']', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitFunctionType(this: any, node: ts.FunctionTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  if (node.name !== undefined) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.name, context));
+  }
+  emitTypeParameters.call(this, source, node, context);
+  emitStatic(source, '(', node, context);
+  emitParameters.call(this, source, node, context);
+  emitStatic(source, ')', node, context);
+  if (node.type) {
+    emitStatic(source, '=>', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.type, context));
+  }
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitTypeLiteral(this: any, node: ts.TypeLiteralNode, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '{', node, context);

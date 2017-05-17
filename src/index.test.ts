@@ -204,6 +204,7 @@ describe('emit', () => {
       a = ~1
       a >> b
       a >>> b
+      declare function f<T extends [(x: number) => number]>(a: T): void;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
