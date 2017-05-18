@@ -161,6 +161,7 @@ export function emitEnumDeclaration(this: any, node: ts.EnumDeclaration, context
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   emitStatic(source, '{', node, context);
+  addTrailingComment(source, context.offset, node, context);
   if (node.members) {
     for (let i = 0, n = node.members.length; i < n; i++) {
       addWhitespace(source, node, context);

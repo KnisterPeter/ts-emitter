@@ -458,4 +458,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should handle trailing comments in enums', () => {
+    const source = `
+      export enum Utensils { // Shouldn't error
+      	Spork = 3
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
