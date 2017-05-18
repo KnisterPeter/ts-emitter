@@ -2123,14 +2123,12 @@ export function emitTaggedTemplateExpression(this: any, node: ts.TaggedTemplateE
 export function emitTemplateExpression(this: any, node: ts.TemplateExpression,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '`', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.head, context));
   node.templateSpans.forEach(span => {
     addWhitespace(source, node, context);
     source.push(emit.call(this, span, context));
   });
-  emitStatic(source, '`', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2138,8 +2136,8 @@ export function emitTemplateExpression(this: any, node: ts.TemplateExpression,
 export function emitTemplateHead(this: any, node: ts.TemplateHead,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, node.text, node, context);
-  emitStatic(source, '${', node, context);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
@@ -2158,9 +2156,8 @@ export function emitTemplateSpan(this: any, node: ts.TemplateSpan,
 export function emitTemplateMiddle(this: any, node: ts.TemplateMiddle,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '}', node, context);
-  emitStatic(source, node.text, node, context);
-  emitStatic(source, '${', node, context);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
@@ -2168,8 +2165,8 @@ export function emitTemplateMiddle(this: any, node: ts.TemplateMiddle,
 export function emitLastTemplateToken(this: any, node: ts.LiteralLikeNode,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '}', node, context);
-  emitStatic(source, node.text, node, context);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
@@ -2177,9 +2174,8 @@ export function emitLastTemplateToken(this: any, node: ts.LiteralLikeNode,
 export function emitFirstTemplateToken(this: any, node: ts.LiteralLikeNode, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  emitStatic(source, '`', node, context);
-  source.push(node.text);
-  emitStatic(source, '`', node, context);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
