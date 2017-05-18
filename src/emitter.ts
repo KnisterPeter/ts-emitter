@@ -1911,7 +1911,8 @@ export function emitLastTypeNode(this: any, node: ts.LiteralTypeNode, context: E
 export function emitIdentifier(this: any, node: ts.Identifier, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(node.text);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');

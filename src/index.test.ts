@@ -444,4 +444,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should handle special characters in literals', () => {
+    const source = `
+      var x = {
+          \\u0061: \"ss\" // Duplicate
+      };
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
