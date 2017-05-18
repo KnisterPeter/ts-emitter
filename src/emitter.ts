@@ -26,7 +26,11 @@ function emitStatements<T extends {statements?: ts.NodeArray<ts.Statement>}>(thi
   }
 }
 
-function emitElements<T extends {elements?: ts.NodeArray<ts.Node>}>(this: any,
+interface ElementsNode extends ts.Node {
+  elements?: ts.NodeArray<ts.Node>;
+}
+
+function emitElements<T extends ElementsNode>(this: any,
     source: string[], node: T, context: EmitterContext): void {
   if (node.elements) {
     for (let i = 0, n = node.elements.length; i < n; i++) {
@@ -34,7 +38,7 @@ function emitElements<T extends {elements?: ts.NodeArray<ts.Node>}>(this: any,
       addWhitespace(source, element, context);
       source.push(emit.call(this, element, context));
       if ((i < n - 1) || node.elements.hasTrailingComma) {
-        emitStatic(source, ',', element, context);
+        emitStatic(source, ',', node, context);
       }
     }
   }
