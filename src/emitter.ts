@@ -1324,6 +1324,7 @@ export function emitClassExpression(this: any, node: ts.ClassExpression, context
 export function emitFunctionExpression(this: any, node: ts.FunctionExpression, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
   emitStatic(source, 'function', node, context);
   if (node.name) {
     addWhitespace(source, node, context);

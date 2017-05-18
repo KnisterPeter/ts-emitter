@@ -222,6 +222,7 @@ describe('emit', () => {
       function foo10<T extends (1)> (test: T) { }
       function foo13<T extends void>(test: T) { }
       var x: { readonly a: E; readonly b: E; readonly [x: number]: string; };
+      const a = async function() {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
