@@ -220,6 +220,7 @@ describe('emit', () => {
       //@filename: v1/index.d.ts
       export as namespace Alpha;
       function foo10<T extends (1)> (test: T) { }
+      function foo13<T extends void>(test: T) { }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
