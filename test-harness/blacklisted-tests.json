@@ -53,5 +53,6 @@
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts",
   "typescript/tests/cases/compiler/validRegexp.ts",
   "typescript/tests/cases/compiler/fatarrowfunctionsErrors.ts",
-  "typescript/tests/cases/compiler/maxNodeModuleJsDepthDefaultsToZero.ts"
+  "typescript/tests/cases/compiler/maxNodeModuleJsDepthDefaultsToZero.ts",
+  "typescript/tests/cases/compiler/fatarrowfunctionsErrors.ts"
 ]
