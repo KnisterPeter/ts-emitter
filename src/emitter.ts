@@ -39,6 +39,7 @@ function emitElements<T extends ElementsNode>(this: any,
       source.push(emit.call(this, element, context));
       if ((i < n - 1) || node.elements.hasTrailingComma) {
         emitStatic(source, ',', node, context);
+        addTrailingComment(source, context.offset, node, context);
       }
     }
   }

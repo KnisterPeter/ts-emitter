@@ -500,4 +500,15 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept lead comments in PropertyAssignment', () => {
+    const source = `
+      const {
+          children, // here!
+          active: _a, // here!
+        ...rest,
+      } = props;
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
