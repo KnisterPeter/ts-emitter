@@ -258,7 +258,6 @@ describe('emit', () => {
       // Can be an expression
       new String;
     `;
-    console.log(source);
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
   });
