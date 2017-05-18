@@ -51,5 +51,6 @@
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions6.ts",
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts",
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts",
-  "typescript/tests/cases/compiler/validRegexp.ts"
+  "typescript/tests/cases/compiler/validRegexp.ts",
+  "typescript/tests/cases/compiler/fatarrowfunctionsErrors.ts"
 ]
