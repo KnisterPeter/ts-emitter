@@ -287,13 +287,16 @@ export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, con
 
 export function emitImportClause(this: any, node: ts.ImportClause, context: EmitterContext): string {
   const source: string[] = [];
-  if (node.namedBindings) {
-    addWhitespace(source, node, context);
-    source.push(emit.call(this, node.namedBindings, context));
-  }
   if (node.name) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.name, context));
+    if (node.namedBindings) {
+      emitStatic(source, ',', node, context);
+    }
+  }
+  if (node.namedBindings) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.namedBindings, context));
   }
   endNode(node, context);
   return source.join('');

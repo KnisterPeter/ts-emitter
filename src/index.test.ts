@@ -30,6 +30,7 @@ describe('emit', () => {
       import 'reflect-metadata';
       import * as path from 'path';
       import { join, other as other2 } from 'path';
+      import a, { b } from 'path';
       import test from './module';
       import p = Alpha.x;
       import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
