@@ -597,6 +597,7 @@ export function emitExpressionWithTypeArguments(this: any, node: ts.ExpressionWi
 export function emitConstructor(this: any, node: ts.ConstructorDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
   emitStatic(source, 'constructor', node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.parameters.length; i < n; i++) {

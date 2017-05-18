@@ -229,7 +229,7 @@ describe('emit', () => {
         constructor() {
           this.abc = 'abc';
         }
-        constructor();
+        public constructor();
       }
     `;
     const sourceFile = getSourceFile(source);
