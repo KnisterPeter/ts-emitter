@@ -215,6 +215,9 @@ describe('emit', () => {
       var x = / [a - z /]$ /i;
       var x1 = /[a-z/]$/i;
       var x2 = /[a-z/]$ /i;
+
+      //@filename: v1/index.d.ts
+      export as namespace Alpha;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

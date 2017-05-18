@@ -327,6 +327,7 @@ export function emitImportSpecifier(this: any, node: ts.ImportSpecifier, context
 export function emitNamespaceExportDeclaration(this: any, node: ts.NamespaceExportDeclaration,
     context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'export', node, context);
   emitStatic(source, 'as', node, context);
   emitStatic(source, 'namespace', node, context);
