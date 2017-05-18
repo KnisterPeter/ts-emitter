@@ -55,5 +55,7 @@
   "typescript/tests/cases/compiler/fatarrowfunctionsErrors.ts",
   "typescript/tests/cases/compiler/maxNodeModuleJsDepthDefaultsToZero.ts",
   "typescript/tests/cases/compiler/fatarrowfunctionsErrors.ts",
-  "typescript/tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts"
+  "typescript/tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts",
+  "typescript/tests/cases/compiler/moduleResolutionWithSymlinks_notInNodeModules.ts",
+  "typescript/tests/cases/compiler/moduleResolutionWithSymlinks_referenceTypes.ts"
 ]
