@@ -476,4 +476,15 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept modifier in IndexSignature', () => {
+    const source = `
+      class C {
+        *[Symbol.iterator]() {
+          let a = yield 1;
+        }
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
