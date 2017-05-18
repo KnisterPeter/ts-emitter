@@ -476,13 +476,14 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
-  it('should accept modifier in IndexSignature', () => {
+  it('should accept generators', () => {
     const source = `
       class C {
         *[Symbol.iterator]() {
           let a = yield 1;
         }
       }
+      let f = function*() {}
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);

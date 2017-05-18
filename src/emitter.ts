@@ -1334,6 +1334,9 @@ export function emitFunctionExpression(this: any, node: ts.FunctionExpression, c
   addLeadingComment(source, node, context);
   emitModifiers.call(this, source, node, context);
   emitStatic(source, 'function', node, context);
+  if (node.asteriskToken) {
+    emitStatic(source, '*', node, context);
+  }
   if (node.name) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.name, context));
