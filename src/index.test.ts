@@ -429,11 +429,17 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
-
   it('should know about different re-exports', () => {
     const source = `
       export * from "./b";
       export { x as y } from "./c";
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should handle special characters in literals', () => {
+    const source = `
+      var k = 'q\\tq';
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);

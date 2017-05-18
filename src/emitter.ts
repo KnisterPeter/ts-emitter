@@ -2095,9 +2095,7 @@ export function emitStringLiteral(this: any, node: ts.StringLiteral, context: Em
   const source: string[] = [];
   addWhitespace(source, node, context);
   const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
-  source.push(literal.substr(0, 1));
-  source.push(node.text);
-  source.push(literal.substr(-1));
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
