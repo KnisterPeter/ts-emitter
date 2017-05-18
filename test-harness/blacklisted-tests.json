@@ -50,5 +50,6 @@
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions5.ts",
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions6.ts",
   "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts",
-  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts"
+  "typescript/tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts",
+  "/home/zaubernerd/workspace/ts-emitter/test-harness/typescript/tests/cases/compiler/validRegexp.ts"
 ]

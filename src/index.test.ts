@@ -211,6 +211,10 @@ describe('emit', () => {
         .func();    // should error
       // ternary with leading comment
       true ? false : true;
+
+      var x = / [a - z /]$ /i;
+      var x1 = /[a-z/]$/i;
+      var x2 = /[a-z/]$ /i;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
