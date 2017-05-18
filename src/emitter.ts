@@ -2192,6 +2192,16 @@ export function emitFirstAssignment(this: any, node: ts.Node, context: EmitterCo
   return source.join('');
 }
 
+export function emitParenthesizedType(this: any, node: ts.ParenthesizedTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '(', node, context);
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.type, context));
+  emitStatic(source, ')', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitJsxElement(this: any, node: ts.JsxElement, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
