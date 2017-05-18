@@ -106,6 +106,7 @@ describe('emit', () => {
       }
       function* foo() {
         yield
+        yield*
       }
       target1:
       var x = () => this["prop1"] ;

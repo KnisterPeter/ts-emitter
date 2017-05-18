@@ -1346,6 +1346,9 @@ export function emitFunctionExpression(this: any, node: ts.FunctionExpression, c
 export function emitYieldExpression(this: any, node: ts.YieldExpression, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'yield', node, context);
+  if (node.asteriskToken) {
+    emitStatic(source, '*', node, context);
+  }
   if (node.expression) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.expression, context));
