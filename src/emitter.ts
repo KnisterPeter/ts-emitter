@@ -342,7 +342,11 @@ export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, con
   addLeadingComment(source, node, context);
   source.push(emitExportKeyword(node, context));
   addWhitespace(source, node, context);
-  source.push(emit.call(this, node.exportClause, context));
+  if (node.exportClause) {
+    source.push(emit.call(this, node.exportClause, context));
+  } else {
+    emitStatic(source, '*', node, context);
+  }
   if (node.moduleSpecifier) {
     emitStatic(source, 'from', node, context);
     addWhitespace(source, node, context);
