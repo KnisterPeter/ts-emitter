@@ -2282,6 +2282,10 @@ export function emitTrueKeyword(this: any, node: ts.Node, context: EmitterContex
   return _emitKeyword('true', node, context);
 }
 
+export function emitUndefinedKeyword(this: any, node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('undefined', node, context);
+}
+
 export function emitFalseKeyword(this: any, node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('false', node, context);
 }
