@@ -58,5 +58,6 @@
   "typescript/tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts",
   "typescript/tests/cases/compiler/moduleResolutionWithSymlinks_notInNodeModules.ts",
   "typescript/tests/cases/compiler/moduleResolutionWithSymlinks_referenceTypes.ts",
-  "typescript/tests/cases/compiler/dottedModuleName.ts"
+  "typescript/tests/cases/compiler/dottedModuleName.ts",
+  "typescript/tests/cases/compiler/moduleResolutionWithExtensions_unexpected2.ts"
 ]
