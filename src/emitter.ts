@@ -2032,6 +2032,7 @@ export function emitSpreadAssignment(this: any, node: ts.SpreadAssignment, conte
 export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
   emitStatic(source, '[', node, context);
   emitParameters.call(this, source, node, context);
   emitStatic(source, ']', node, context);

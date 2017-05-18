@@ -467,4 +467,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept modifier in IndexSignature', () => {
+    const source = `
+      interface I {
+        public [a: string]: number;
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
