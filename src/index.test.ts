@@ -488,4 +488,16 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept lead comments in PropertyAssignment', () => {
+    const source = `
+      var o = {
+          // in a property initalizer
+          p: defered(() => {
+              prop1;
+          })
+      };
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

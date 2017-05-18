@@ -1506,6 +1506,7 @@ export function emitArrayLiteralExpression(this: any, node: ts.ArrayLiteralExpre
 export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
   context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   if (node.questionToken) {
