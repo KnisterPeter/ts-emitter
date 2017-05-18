@@ -221,6 +221,12 @@ export function emitTypeArrayType(this: any, node: ts.ArrayTypeNode,
 
 export function emitTypeIndexSignature(this: any, node: ts.IndexSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.modifiers) {
+    node.modifiers.forEach(modifier => {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, modifier, context));
+    });
+  }
   emitStatic(source, '[', node, context);
   node.parameters.forEach(paramter => {
     addWhitespace(source, node, context);
