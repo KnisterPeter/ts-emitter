@@ -209,7 +209,8 @@ describe('emit', () => {
       var expected = [0xEF];
       func() // Correctly returns an I1<string>
         .func();    // should error
-
+      // ternary with leading comment
+      true ? false : true;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
