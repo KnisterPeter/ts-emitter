@@ -639,4 +639,20 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept arrow cases', () => {
+    const source = `
+      // multi line with a comment 3
+      f(  // comment 1
+          // comment 2
+          () =>
+          // comment 3
+          {
+              // comment 4
+          }
+          // comment 5
+      ); 
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

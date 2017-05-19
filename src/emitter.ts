@@ -1427,6 +1427,7 @@ export function emitCallExpression(this: any, node: ts.CallExpression, context: 
   emitTypeArguments.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.arguments.length; i < n; i++) {
+    addLeadingComment(source, context.offset, node, context);
     addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.arguments[i], context));
@@ -1434,6 +1435,8 @@ export function emitCallExpression(this: any, node: ts.CallExpression, context: 
       emitStatic(source, ',', node, context);
     }
   }
+  addLeadingComment(source, context.offset, node, context);
+  addTrailingComment(source, context.offset, node, context);
   emitStatic(source, ')', node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1612,6 +1615,7 @@ export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: Em
   emitStatic(source, '=>', node, context);
   source.push(emit.call(this, node.body, context));
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
