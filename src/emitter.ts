@@ -36,17 +36,23 @@ interface ElementsNode extends ts.Node {
 
 function emitElements<T extends ElementsNode>(this: any,
     source: string[], node: T, context: EmitterContext): void {
+  addLeadingComment(source, context.offset, node, context);
   if (node.elements) {
     for (let i = 0, n = node.elements.length; i < n; i++) {
+      addLeadingComment(source, context.offset, node, context);
+      addTrailingComment(source, context.offset, node, context);
       const element = node.elements[i];
       addWhitespace(source, element, context);
       source.push(emit.call(this, element, context));
+      addLeadingComment(source, context.offset, node, context);
+      addTrailingComment(source, context.offset, node, context);
       if ((i < n - 1) || node.elements.hasTrailingComma) {
         emitStatic(source, ',', node, context);
         addTrailingComment(source, context.offset, node, context);
       }
     }
   }
+  addTrailingComment(source, context.offset, node, context);
 }
 
 interface TypedNode extends ts.Node {

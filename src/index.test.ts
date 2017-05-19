@@ -261,6 +261,13 @@ describe('emit', () => {
       export default class {
         method() { }
       }
+      var array = [
+        /* element 1*/
+        1
+        /* end of element 1 */,
+        2
+        /* end of element 2 */
+      ];
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
