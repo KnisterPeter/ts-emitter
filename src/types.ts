@@ -4,7 +4,8 @@ import {
   addWhitespace,
   emitStatic,
   addSemicolon,
-  endNode
+  endNode,
+  addTrailingComment
 } from './utils';
 
 export function emitType(this: any, node: ts.TypeNode, context: EmitterContext): string {
@@ -325,6 +326,7 @@ export function emitTypePropertySignature(this: any, node: ts.PropertySignature,
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
