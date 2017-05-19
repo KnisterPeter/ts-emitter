@@ -561,3 +561,14 @@ export function emitTypeIndexedAccessType(this: any, node: ts.IndexedAccessTypeN
   endNode(node, context);
   return source.join('');
 }
+
+export function emitTypeComputedPropertyName(this: any, node: ts.ComputedPropertyName,
+  context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '[', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.expression, context));
+  emitStatic(source, ']', node, context);
+  endNode(node, context);
+  return source.join('');
+}
