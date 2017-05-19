@@ -248,6 +248,9 @@ describe('emit', () => {
       }
       var a = Promise.resolve<Obj["stringProp"]>(obj.stringProp);
       function foo(/** nothing */) {}
+      interface I1 {
+        const: new (options?, element?) => any;
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

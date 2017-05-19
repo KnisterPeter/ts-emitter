@@ -409,6 +409,7 @@ export function emitTypeTypeOperator(this: any, node: ts.TypeOperatorNode, conte
   return source.join('');
 }
 
+// tslint:disable-next-line cyclomatic-complexity
 export function emitTypeConstructorType(this: any, node: ts.ConstructorTypeNode, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'new', node, context);
@@ -424,10 +425,15 @@ export function emitTypeConstructorType(this: any, node: ts.ConstructorTypeNode,
     emitStatic(source, '>', node, context);
   }
   emitStatic(source, '(', node, context);
-  node.parameters.forEach(paramter => {
-    addWhitespace(source, node, context);
-    source.push(emitType.call(this, paramter, context));
-  });
+  if (node.parameters) {
+    for (let i = 0, n = node.parameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.parameters[i], context));
+      if ((i < n - 1) || node.parameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+  }
   emitStatic(source, ')', node, context);
   if (node.type) {
     emitStatic(source, '=>', node, context);
