@@ -1285,8 +1285,10 @@ export function emitFunctionDeclaration(this: any, node: ts.FunctionDeclaration,
   if (node.asteriskToken) {
     emitStatic(source, '*', node, context);
   }
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.name, context));
+  if (node.name) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.name, context));
+  }
   emitTypeParameters.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   emitParameters.call(this, source, node, context);
