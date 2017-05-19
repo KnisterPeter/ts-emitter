@@ -82,5 +82,6 @@
   "typescript/tests/cases/compiler/overloadConsecutiveness.ts",
   "typescript/tests/cases/compiler/propertyWrappedInTry.ts",
   "typescript/tests/cases/compiler/errorRecoveryInClassDeclaration.ts",
-  "typescript/tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts"
+  "typescript/tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts",
+  "typescript/tests/cases/compiler/es6ClassTest9.ts"
 ]
