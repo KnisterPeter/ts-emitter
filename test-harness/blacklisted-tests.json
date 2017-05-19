@@ -96,5 +96,7 @@
   "typescript/tests/cases/compiler/untypedModuleImport_withAugmentation2.ts",
   "typescript/tests/cases/compiler/class2.ts",
   "typescript/tests/cases/compiler/modifiersInObjectLiterals.ts",
-  "typescript/tests/cases/compiler/unexpectedStatementBlockTerminator.ts"
+  "typescript/tests/cases/compiler/unexpectedStatementBlockTerminator.ts",
+  "typescript/tests/cases/compiler/unclosedExportClause01.ts",
+  "typescript/tests/cases/compiler/unclosedExportClause02.ts"
 ]
