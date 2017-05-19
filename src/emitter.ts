@@ -1612,6 +1612,7 @@ export function emitParameter(this: any, node: ts.ParameterDeclaration, context:
   if (node.dotDotDotToken) {
     emitStatic(source, '...', node, context);
   }
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   if (node.questionToken) {

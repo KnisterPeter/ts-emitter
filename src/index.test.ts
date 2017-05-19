@@ -240,6 +240,7 @@ describe('emit', () => {
       var x: { readonly a: E; readonly b: E; readonly [x: number]: string; };
       const a = async function() {}
       var a = (num) => num % 2 == 0
+      var x: (...y: string[]) => void = function (.../*3*/y) { };
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
