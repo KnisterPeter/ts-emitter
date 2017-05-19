@@ -15,7 +15,11 @@ export interface EmitterContext {
   offset: number;
 }
 
-function emitStatements<T extends {statements?: ts.NodeArray<ts.Statement>}>(this: any,
+interface StatementsNode extends ts.Node {
+  statements?: ts.NodeArray<ts.Node>;
+}
+
+function emitStatements<T extends StatementsNode>(this: any,
     source: string[], node: T, context: EmitterContext): void {
   if (node.statements) {
     for (let i = 0, n = node.statements.length; i < n; i++) {
@@ -228,6 +232,7 @@ export function emitModuleBlock(this: any, node: ts.ModuleBlock, context: Emitte
   emitStatic(source, '{', node, context);
   addTrailingComment(source, context.offset, node, context);
   emitStatements.call(this, source, node, context);
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
   return source.join('');

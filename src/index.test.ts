@@ -251,6 +251,10 @@ describe('emit', () => {
       interface I1 {
         const: new (options?, element?) => any;
       }
+      namespace hello.hi.world {
+        function foo() {}      
+        // TODO, blah
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
