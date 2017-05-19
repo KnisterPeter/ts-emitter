@@ -67,6 +67,7 @@
   "typescript/tests/cases/compiler/exportAssignmentWithExportModifier.ts",
   "typescript/tests/cases/compiler/ambiguousGenericAssertion1.ts",
   "typescript/tests/cases/compiler/exportInFunction.ts",
+  "typescript/tests/cases/compiler/commaOperatorLeftSideUnused.ts",
   "typescript/tests/cases/compiler/conflictMarkerTrivia1.ts",
   "typescript/tests/cases/compiler/conflictMarkerTrivia2.ts",
   "typescript/tests/cases/compiler/conflictMarkerTrivia3.tsx",
