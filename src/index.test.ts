@@ -576,4 +576,16 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept trailing comments in type literals', () => {
+    const source = `
+      var v21: {
+        (i: number, ...arguments); // comment
+        new (i: number, ...arguments); // comment
+        foo(i: number, ...arguments); // comment
+        prop: (i: number, ...arguments) => void; // comment
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

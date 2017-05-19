@@ -180,6 +180,7 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -218,6 +219,7 @@ export function emitTypeMethodSignature(this: any, node: ts.MethodSignature, con
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -394,6 +396,7 @@ export function emitTypeCallSignature(this: any, node: ts.CallSignatureDeclarati
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
