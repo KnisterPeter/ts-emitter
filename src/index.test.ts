@@ -21,7 +21,22 @@ function getSourceFile(source: string, enableJsx = false): ts.SourceFile {
   };
   const fileName = enableJsx ? 'source.tsx' : 'source.ts';
   const program = ts.createProgram([fileName], options, host);
+  const diagnostics = program.getSyntacticDiagnostics();
+  if (diagnostics.length > 0) {
+    diagnostics.forEach(diagnostic => {
+      console.warn(getDiagnosticMessage(diagnostic));
+    });
+  }
   return program.getSourceFile(fileName);
+}
+
+function getDiagnosticMessage(diagnostic: ts.Diagnostic): string {
+  const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+  if (diagnostic.file) {
+    const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+    return `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`;
+  }
+  return message;
 }
 
 describe('emit', () => {
