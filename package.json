@@ -20,7 +20,7 @@
     "prerelease": "git checkout master && git pull origin master && npm test && npm run update-harness && npm run harness",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && npm publish",
-    "precommit": "npm run linter && npm run test"
+    "prepush": "npm run linter && npm run test"
   },
   "author": {
     "name": "Markus Wolf",
