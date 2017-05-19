@@ -86,5 +86,6 @@
   "typescript/tests/cases/compiler/es6ClassTest9.ts",
   "typescript/tests/cases/compiler/es3-oldStyleOctalLiteralTypes.ts",
   "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1WithExport.ts",
-  "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportWithExport.ts"
+  "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportWithExport.ts",
+  "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.ts"
 ]
