@@ -101,5 +101,6 @@
   "typescript/tests/cases/compiler/unclosedExportClause02.ts",
   "typescript/tests/cases/compiler/restParamModifier.ts",
   "typescript/tests/cases/compiler/reservedWords2.ts",
-  "typescript/tests/cases/compiler/defaultValueInFunctionTypes.ts"
+  "typescript/tests/cases/compiler/defaultValueInFunctionTypes.ts",
+  "typescript/tests/cases/compiler/defaultArgsInOverloads.ts"
 ]
