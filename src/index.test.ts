@@ -270,6 +270,12 @@ describe('emit', () => {
       ];
       var C = class extends A {     // comment
       };
+      (...x: string[]) =>
+            /// <summary>Test summary</summary>
+            /// <param name="message" type="String" />
+            /// <returns type="Function" />
+
+            message + this.name;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
@@ -655,7 +661,7 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
-  it.only('should optional allow comma separated type literal members', () => {
+  it('should optional allow comma separated type literal members', () => {
     const source = `  
       let yy: { readonly [x: number]: string, [x: string]: string };
     `;

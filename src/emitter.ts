@@ -1701,6 +1701,7 @@ export function emitAsExpression(this: any, node: ts.AsExpression, context: Emit
 
 export function emitBinaryExpression(this: any, node: ts.BinaryExpression, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.left, context));
   addWhitespace(source, node, context);
