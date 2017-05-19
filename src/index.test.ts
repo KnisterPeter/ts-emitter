@@ -527,4 +527,14 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept lead comments in Parameter', () => {
+    const source = `
+      class c2 {
+        set p3(/** this is value*/value: number) {
+        }
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
