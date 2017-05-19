@@ -185,6 +185,17 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
 // tslint:disable-next-line cyclomatic-complexity
 export function emitTypeMethodSignature(this: any, node: ts.MethodSignature, context: EmitterContext): string {
   const source: string[] = [];
+  if (node.typeParameters) {
+    emitStatic(source, '<', node, context);
+    for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addWhitespace(source, node, context);
+      source.push(emitType.call(this, node.typeParameters[i], context));
+      if ((i < n - 1) || node.typeParameters.hasTrailingComma) {
+        emitStatic(source, ',', node, context);
+      }
+    }
+    emitStatic(source, '>', node, context);
+  }
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.name, context));
   if (node.questionToken) {
