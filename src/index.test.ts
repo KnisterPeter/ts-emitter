@@ -655,4 +655,11 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it.only('should optional allow comma separated type literal members', () => {
+    const source = `  
+      let yy: { readonly [x: number]: string, [x: string]: string };
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

@@ -494,6 +494,7 @@ export function emitCallSignature(this: any, node: ts.CallSignatureDeclaration, 
 export function emitPropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  emitModifiers.call(this, source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   if (node.questionToken) {
@@ -2124,6 +2125,9 @@ export function emitIndexSignature(this: any, node: ts.IndexSignatureDeclaration
     emitStatic(source, ':', node, context);
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
+  }
+  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
   }
   addSemicolon(source, node, context);
   endNode(node, context);

@@ -252,6 +252,9 @@ export function emitTypeIndexSignature(this: any, node: ts.IndexSignatureDeclara
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
+  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
+  }
   addSemicolon(source, node, context);
   endNode(node, context);
   return source.join('');
