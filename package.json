@@ -19,7 +19,8 @@
     "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "prerelease": "git checkout master && git pull origin master && npm test && npm run update-harness && npm run harness",
     "release": "standard-version",
-    "postrelease": "git push --follow-tags origin master && npm publish"
+    "postrelease": "git push --follow-tags origin master && npm publish",
+    "precommit": "npm run linter && npm run test"
   },
   "author": {
     "name": "Markus Wolf",
@@ -36,6 +37,7 @@
     "@types/node": "^7.0.18",
     "coveralls": "^2.11.15",
     "globby": "^6.1.0",
+    "husky": "^0.13.3",
     "jest": "^20.0.1",
     "rimraf": "^2.6.1",
     "standard-version": "^4.0.0",
