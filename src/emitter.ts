@@ -1700,6 +1700,14 @@ export function emitFirstCompoundAssignment(this: any, node: ts.Token<ts.SyntaxK
   return source.join('');
 }
 
+export function emitGreaterThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.GreaterThanEqualsToken>,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '>=', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
