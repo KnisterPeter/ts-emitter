@@ -276,6 +276,7 @@ describe('emit', () => {
             /// <returns type="Function" />
 
             message + this.name;
+      function /*1*/makePoint(x: number) {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
