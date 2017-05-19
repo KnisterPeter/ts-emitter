@@ -1341,6 +1341,7 @@ export function emitClassExpression(this: any, node: ts.ClassExpression, context
     }
   }
   emitStatic(source, '{', node, context);
+  addTrailingComment(source, context.offset, node, context);
   node.members.forEach(member => {
     addWhitespace(source, node, context);
     source.push(emit.call(this, member, context));

@@ -268,6 +268,8 @@ describe('emit', () => {
         2
         /* end of element 2 */
       ];
+      var C = class extends A {     // comment
+      };
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
