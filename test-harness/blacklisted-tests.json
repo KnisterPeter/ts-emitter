@@ -64,5 +64,6 @@
   "typescript/tests/cases/compiler/declarationEmitUnknownImport2.ts",
   "typescript/tests/cases/compiler/exportAssignmentWithDeclareAndExportModifiers.ts",
   "typescript/tests/cases/compiler/exportAssignmentWithDeclareModifier.ts",
-  "typescript/tests/cases/compiler/exportAssignmentWithExportModifier.ts"
+  "typescript/tests/cases/compiler/exportAssignmentWithExportModifier.ts",
+  "typescript/tests/cases/compiler/ambiguousGenericAssertion1.ts"
 ]
