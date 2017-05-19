@@ -552,8 +552,10 @@ export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, conte
   }
   emitModifiers.call(this, source, node, context);
   emitStatic(source, 'class', node, context);
-  addWhitespace(source, node, context);
-  source.push(emit.call(this, node.name, context));
+  if (node.name) {
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.name, context));
+  }
   emitTypeParameters.call(this, source, node, context);
   if (node.heritageClauses) {
     for (let i = 0, n = node.heritageClauses.length; i < n; i++) {

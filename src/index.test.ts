@@ -258,6 +258,9 @@ describe('emit', () => {
       export default function () {
         return "test";
       }
+      export default class {
+        method() { }
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
