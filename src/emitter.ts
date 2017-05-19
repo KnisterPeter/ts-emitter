@@ -1482,6 +1482,7 @@ export function emitPropertyAccessExpression(this: any, node: ts.PropertyAccessE
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   emitStatic(source, '.', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   endNode(node, context);
