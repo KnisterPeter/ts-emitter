@@ -239,6 +239,7 @@ describe('emit', () => {
       function foo13<T extends void>(test: T) { }
       var x: { readonly a: E; readonly b: E; readonly [x: number]: string; };
       const a = async function() {}
+      var a = (num) => num % 2 == 0
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
