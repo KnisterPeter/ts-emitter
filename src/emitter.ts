@@ -89,6 +89,7 @@ interface NodeWithParameters extends ts.Node {
 
 function emitParameters<T extends NodeWithParameters>(this: any,
     source: string[], node: T, context: EmitterContext): void {
+  addLeadingComment(source, context.offset, node, context);
   if (node.parameters) {
     for (let i = 0, n = node.parameters.length; i < n; i++) {
       addTrailingComment(source, context.offset, node, context);
@@ -100,6 +101,7 @@ function emitParameters<T extends NodeWithParameters>(this: any,
       }
     }
   }
+  addTrailingComment(source, context.offset, node, context);
 }
 
 interface NodeWithModifiers extends ts.Node {
