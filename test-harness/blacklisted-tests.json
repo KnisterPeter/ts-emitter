@@ -73,5 +73,6 @@
   "typescript/tests/cases/compiler/conflictMarkerTrivia4.ts",
   "typescript/tests/cases/compiler/commonSourceDirectory.ts",
   "typescript/tests/cases/compiler/enumWithParenthesizedInitializer1.ts",
+  "typescript/tests/cases/compiler/errorOnInitializerInInterfaceProperty.ts",
   "typescript/tests/cases/compiler/overloadConsecutiveness.ts"
 ]
