@@ -103,5 +103,9 @@
   "typescript/tests/cases/compiler/reservedWords2.ts",
   "typescript/tests/cases/compiler/defaultValueInFunctionTypes.ts",
   "typescript/tests/cases/compiler/defaultArgsInOverloads.ts",
-  "typescript/tests/cases/compiler/declarationEmitInvalidExport.ts"
+  "typescript/tests/cases/compiler/declarationEmitInvalidExport.ts",
+  "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance.ts",
+  "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance2.ts",
+  "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance3.ts",
+  "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance4.ts"
 ]
