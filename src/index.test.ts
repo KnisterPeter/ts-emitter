@@ -246,6 +246,7 @@ describe('emit', () => {
             progress?: (progress: any) => void): IPromise<U>;
           done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
       }
+      var a = Promise.resolve<Obj["stringProp"]>(obj.stringProp);
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
