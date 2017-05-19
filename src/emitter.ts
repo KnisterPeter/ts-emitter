@@ -546,6 +546,25 @@ export function emitTypeReference(this: any, node: ts.TypeReferenceNode, context
   return source.join('');
 }
 
+export function emitMappedType(this: any, node: ts.MappedTypeNode, context: EmitterContext): string {
+  const source: string[] = [];
+  emitStatic(source, '{', node, context);
+  if (node.readonlyToken) {
+    emitStatic(source, 'readonly', node, context);
+  }
+  emitTypeParameters.call(this, source, node, context);
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
+  emitStatic(source, ':', node, context);
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.type, context));
+  addSemicolon(source, node, context);
+  emitStatic(source, '}', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
 // tslint:disable-next-line cyclomatic-complexity
 export function emitClassDeclaration(this: any, node: ts.ClassDeclaration, context: EmitterContext): string {
   const source: string[] = [];
