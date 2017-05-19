@@ -692,6 +692,12 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
 export function emitGetAccessor(this: any, node: ts.GetAccessorDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  if (node.decorators) {
+    node.decorators.forEach(decorator => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, decorator, context));
+    });
+  }
   emitModifiers.call(this, source, node, context);
   emitStatic(source, 'get', node, context);
   addWhitespace(source, node, context);
@@ -718,6 +724,12 @@ export function emitGetAccessor(this: any, node: ts.GetAccessorDeclaration, cont
 export function emitSetAccessor(this: any, node: ts.SetAccessorDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
+  if (node.decorators) {
+    node.decorators.forEach(decorator => {
+      addWhitespace(source, node, context);
+      source.push(emit.call(this, decorator, context));
+    });
+  }
   emitModifiers.call(this, source, node, context);
   emitStatic(source, 'set', node, context);
   addWhitespace(source, node, context);

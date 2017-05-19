@@ -420,6 +420,11 @@ describe('emit', () => {
           public get m1() {
               // comment
           }
+          @PropertyDecorator1
+          @PropertyDecorator2(80)
+          get greetings() {
+              return this.greeting;
+          }
       }
       class C {
           // comment
