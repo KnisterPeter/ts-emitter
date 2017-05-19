@@ -80,5 +80,7 @@
   "typescript/tests/cases/compiler/classMemberWithMissingIdentifier2.ts",
   "typescript/tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts",
   "typescript/tests/cases/compiler/overloadConsecutiveness.ts",
-  "typescript/tests/cases/compiler/propertyWrappedInTry.ts"
+  "typescript/tests/cases/compiler/propertyWrappedInTry.ts",
+  "typescript/tests/cases/compiler/errorRecoveryInClassDeclaration.ts",
+  "typescript/tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts"
 ]
