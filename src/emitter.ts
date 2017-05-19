@@ -283,6 +283,7 @@ export function emitImportDeclaration(this: any, node: ts.ImportDeclaration, con
   source.push(emit.call(this, node.moduleSpecifier, context));
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -365,6 +366,7 @@ export function emitExportDeclaration(this: any, node: ts.ExportDeclaration, con
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 

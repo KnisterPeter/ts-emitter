@@ -42,7 +42,7 @@ function getDiagnosticMessage(diagnostic: ts.Diagnostic): string {
 describe('emit', () => {
   it('should accept a typescript as and reprint it', () => {
     const source = `
-      import 'reflect-metadata';
+      import 'reflect-metadata'; // comment
       import * as path from 'path';
       import { join, other as other2 } from 'path';
       import a, { b } from 'path';
@@ -50,7 +50,7 @@ describe('emit', () => {
       import p = Alpha.x;
       import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
       const a: string = 'string';
-      export { a, b as c } from 'asdf';
+      export { a, b as c } from 'asdf'; // comment
       export default a;
       export as namespace Alpha;
       let b: number = 0;
