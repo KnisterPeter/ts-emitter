@@ -823,10 +823,12 @@ export function emitCaseBlock(this: any, node: ts.CaseBlock, context: EmitterCon
 
 export function emitCaseClause(this: any, node: ts.CaseClause, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'case', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   emitStatic(source, ':', node, context);
+  addTrailingComment(source, context.offset, node, context);
   emitStatements.call(this, source, node, context);
   endNode(node, context);
   return source.join('');

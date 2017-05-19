@@ -588,4 +588,16 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept leading comments in switch cases', () => {
+    const source = `
+      // comment
+      switch (a) {
+        // comment
+        case 0: // comment
+          break;
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
