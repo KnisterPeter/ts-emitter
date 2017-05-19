@@ -506,10 +506,10 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
-  emitTypeParameters.call(this, source, node, context);
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
+  emitTypeParameters.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   emitParameters.call(this, source, node, context);
   emitStatic(source, ')', node, context);

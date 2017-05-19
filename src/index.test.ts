@@ -241,6 +241,10 @@ describe('emit', () => {
       const a = async function() {}
       var a = (num) => num % 2 == 0
       var x: (...y: string[]) => void = function (.../*3*/y) { };
+      interface IPromise<T> {
+          then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>;
+          done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
+      }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
