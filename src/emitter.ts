@@ -559,7 +559,7 @@ export function emitMappedType(this: any, node: ts.MappedTypeNode, context: Emit
   }
   emitStatic(source, ':', node, context);
   addWhitespace(source, node, context);
-  source.push(emitType.call(this, node.type, context));
+  source.push(emit.call(this, node.type, context));
   addSemicolon(source, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
