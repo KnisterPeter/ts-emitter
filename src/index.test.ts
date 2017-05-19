@@ -527,11 +527,27 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
-  it('should accept lead comments in Parameter', () => {
+  it('should accept trailing comments in Parameter', () => {
     const source = `
       class c2 {
         set p3(/** this is value*/value: number) {
         }
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should accept trailing comments in EnumDeclaration', () => {
+    const source = `
+      const enum NaNOrInfinity {
+        A = 9007199254740992,
+        B = A * A,
+        C = B * B,
+        D = C * C,
+        E = D * D,
+        F = E * E, // overflow
+        G = 1 / 0, // overflow
+        H = 0 / 0  // NaN
       }
     `;
     const sourceFile = getSourceFile(source, true);

@@ -170,6 +170,7 @@ export function emitEnumDeclaration(this: any, node: ts.EnumDeclaration, context
       source.push(emit.call(this, node.members[i], context));
       if ((i < n - 1) || node.members.hasTrailingComma) {
         emitStatic(source, ',', node, context);
+        addTrailingComment(source, context.offset, node, context);
       }
     }
   }
