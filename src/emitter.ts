@@ -92,6 +92,7 @@ function emitParameters<T extends NodeWithParameters>(this: any,
   if (node.parameters) {
     for (let i = 0, n = node.parameters.length; i < n; i++) {
       addTrailingComment(source, context.offset, node, context);
+      addLeadingComment(source, context.offset, node, context);
       addWhitespace(source, node, context);
       source.push(emit.call(this, node.parameters[i], context));
       if ((i < n - 1) || node.parameters.hasTrailingComma) {

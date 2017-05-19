@@ -554,4 +554,21 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept leading and trailing comments in parameters', () => {
+    const source = `
+      declare module _ {
+          export function each<T>(
+              //list: List<T>,
+              //iterator: ListIterator<T, void>,
+              context?: any): void;
+              //foo: List<T>,
+
+          interface ListIterator<T, TResult> {
+              (value: T, index: number, list: T[]): TResult;
+          }
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
