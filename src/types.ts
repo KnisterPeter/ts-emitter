@@ -5,6 +5,7 @@ import {
   emitStatic,
   addSemicolon,
   endNode,
+  addLeadingComment,
   addTrailingComment
 } from './utils';
 
@@ -152,6 +153,7 @@ export function emitTypeTypeLiteral(this: any, node: ts.TypeLiteralNode, context
 export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatureDeclaration,
     context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'new', node, context);
   if (node.typeParameters) {
     emitStatic(source, '<', node, context);
@@ -187,6 +189,7 @@ export function emitTypeConstructSignature(this: any, node: ts.ConstructSignatur
 // tslint:disable-next-line cyclomatic-complexity
 export function emitTypeMethodSignature(this: any, node: ts.MethodSignature, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.name, context));
   if (node.questionToken) {
@@ -235,6 +238,7 @@ export function emitTypeArrayType(this: any, node: ts.ArrayTypeNode,
 
 export function emitTypeIndexSignature(this: any, node: ts.IndexSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.modifiers) {
     node.modifiers.forEach(modifier => {
       addWhitespace(source, node, context);
@@ -310,6 +314,7 @@ export function emitTypeTypeQuery(this: any, node: ts.TypeQueryNode, context: Em
 
 export function emitTypePropertySignature(this: any, node: ts.PropertySignature, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.modifiers) {
     node.modifiers.forEach(modifier => {
       addWhitespace(source, node, context);
@@ -370,6 +375,7 @@ export function emitTypeFirstTypeNode(this: any, node: ts.TypePredicateNode, con
 // tslint:disable-next-line cyclomatic-complexity
 export function emitTypeCallSignature(this: any, node: ts.CallSignatureDeclaration, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.typeParameters) {
     emitStatic(source, '<', node, context);
     for (let i = 0, n = node.typeParameters.length; i < n; i++) {
