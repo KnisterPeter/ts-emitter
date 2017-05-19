@@ -1416,6 +1416,7 @@ export function emitCallExpression(this: any, node: ts.CallExpression, context: 
   emitTypeArguments.call(this, source, node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.arguments.length; i < n; i++) {
+    addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.arguments[i], context));
     if ((i < n - 1) || node.arguments.hasTrailingComma) {
@@ -1579,6 +1580,7 @@ export function emitPostfixUnaryExpression(this: any, node: ts.PostfixUnaryExpre
 
 export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitTypeParameters.call(this, source, node, context);
   emitModifiers.call(this, source, node, context);
   const parenthesis = Boolean(node.typeParameters)
@@ -1668,6 +1670,7 @@ export function emitBinaryExpression(this: any, node: ts.BinaryExpression, conte
   source.push(emit.call(this, node.left, context));
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.operatorToken, context));
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.right, context));
   endNode(node, context);
@@ -2144,6 +2147,7 @@ export function emitTypeLiteral(this: any, node: ts.TypeLiteralNode, context: Em
 
 export function emitStringLiteral(this: any, node: ts.StringLiteral, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);

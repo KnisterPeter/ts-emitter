@@ -39,10 +39,13 @@ export function addLeadingComment(source: string[], posOrNode: number|ts.Node, n
   if (ranges) {
     source.push(ranges
       .map(range => {
-        const prefix = text.substring(context.offset, range.pos);
-        const comment = prefix + text.substring(range.pos, range.end);
-        context.offset += comment.length;
-        return comment;
+        if (context.offset <= range.pos) {
+          const prefix = text.substring(context.offset, range.pos);
+          const comment = prefix + text.substring(range.pos, range.end);
+          context.offset += comment.length;
+          return comment;
+        }
+        return '';
       })
       .join(''));
   }
