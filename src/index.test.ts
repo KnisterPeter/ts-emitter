@@ -674,4 +674,16 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should handle leading characters in union/intersection types', () => {
+    const source = `
+      type A =   |   string | number;
+      type B = [   |   string | number, | A | B];
+      type C = & A & B;
+      type A =
+        | { type: 'foo', payload: 'bar' }
+        | { type: 'bar', payload: 'foo' };
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

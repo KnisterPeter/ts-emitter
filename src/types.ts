@@ -12,7 +12,18 @@ import {
 export function emitType(this: any, node: ts.TypeNode, context: EmitterContext): string {
   const typeEmitterName = `emitType${ts.SyntaxKind[node.kind]}`;
   if (this[typeEmitterName] !== undefined) {
-    return this[typeEmitterName](node, context);
+    let source = '';
+    const leadingCharacters = context.sourceFile.text.substring(context.offset, node.end).trim();
+    const hasLeadingPipe = leadingCharacters.startsWith('|');
+    if (hasLeadingPipe) {
+      source += '|';
+    }
+    const hasLeadingAmpersand = leadingCharacters.startsWith('&');
+    if (hasLeadingAmpersand) {
+      source += '&';
+    }
+    source += this[typeEmitterName](node, context);
+    return source;
   }
   throw new Error(`Unknown type node kind ${ts.SyntaxKind[node.kind]}`);
 }
