@@ -581,3 +581,31 @@ export function emitTypeComputedPropertyName(this: any, node: ts.ComputedPropert
   endNode(node, context);
   return source.join('');
 }
+
+export function emitTypePrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpression,
+    context: EmitterContext): string {
+  // tslint:disable-next-line cyclomatic-complexity
+  function getPrefixUnaryOperator(): string {
+    switch (node.operator) {
+      case ts.SyntaxKind.PlusToken:
+        return '+';
+      case ts.SyntaxKind.PlusPlusToken:
+        return '++';
+      case ts.SyntaxKind.MinusToken:
+        return '-';
+      case ts.SyntaxKind.MinusMinusToken:
+        return '--';
+      case ts.SyntaxKind.ExclamationToken:
+        return '!';
+      case ts.SyntaxKind.TildeToken:
+        return '~';
+    }
+  }
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(getPrefixUnaryOperator());
+  addWhitespace(source, node, context);
+  source.push(emitType.call(this, node.operand, context));
+  endNode(node, context);
+  return source.join('');
+}
