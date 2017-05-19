@@ -94,5 +94,6 @@
   "typescript/tests/cases/compiler/genericCallWithoutArgs.ts",
   "typescript/tests/cases/compiler/unicodeIdentifierName2.ts",
   "typescript/tests/cases/compiler/untypedModuleImport_withAugmentation2.ts",
-  "typescript/tests/cases/compiler/class2.ts"
+  "typescript/tests/cases/compiler/class2.ts",
+  "typescript/tests/cases/compiler/modifiersInObjectLiterals.ts"
 ]
