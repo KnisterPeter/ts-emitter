@@ -71,5 +71,6 @@
   "typescript/tests/cases/compiler/conflictMarkerTrivia2.ts",
   "typescript/tests/cases/compiler/conflictMarkerTrivia3.tsx",
   "typescript/tests/cases/compiler/conflictMarkerTrivia4.ts",
+  "typescript/tests/cases/compiler/commonSourceDirectory.ts",
   "typescript/tests/cases/compiler/overloadConsecutiveness.ts"
 ]
