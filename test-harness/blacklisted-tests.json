@@ -99,5 +99,6 @@
   "typescript/tests/cases/compiler/unexpectedStatementBlockTerminator.ts",
   "typescript/tests/cases/compiler/unclosedExportClause01.ts",
   "typescript/tests/cases/compiler/unclosedExportClause02.ts",
-  "typescript/tests/cases/compiler/restParamModifier.ts"
+  "typescript/tests/cases/compiler/restParamModifier.ts",
+  "typescript/tests/cases/compiler/reservedWords2.ts"
 ]
