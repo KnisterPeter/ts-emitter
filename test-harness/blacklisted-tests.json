@@ -108,5 +108,10 @@
   "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance2.ts",
   "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance3.ts",
   "typescript/tests/cases/compiler/invalidUnicodeEscapeSequance4.ts",
-  "typescript/tests/cases/compiler/classUpdateTests.ts"
+  "typescript/tests/cases/compiler/classUpdateTests.ts",
+  "typescript/tests/cases/compiler/superWithTypeArgument.ts",
+  "typescript/tests/cases/compiler/superWithTypeArgument2.ts",
+  "typescript/tests/cases/compiler/superWithTypeArgument3.ts",
+  "typescript/tests/cases/compiler/superErrors.ts",
+  "typescript/tests/cases/compiler/superAccess2.ts"
 ]

@@ -72,6 +72,7 @@ describe('emit', () => {
       export class L extends M {
         constructor(a) {
           super(a);
+          super<T>(a);
         }
 
         get foo() { return 0; }
