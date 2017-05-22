@@ -117,6 +117,7 @@ describe('emit', () => {
       switch (a) {
         case b:
           a = 1;
+        case Foo: break;    // Error
         default: // comment
           b = 2;
       }

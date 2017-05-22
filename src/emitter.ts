@@ -832,6 +832,7 @@ export function emitBreakStatement(this: any, node: ts.BreakStatement, context: 
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
