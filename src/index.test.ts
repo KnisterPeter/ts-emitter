@@ -117,7 +117,7 @@ describe('emit', () => {
       switch (a) {
         case b:
           a = 1;
-        default:
+        default: // comment
           b = 2;
       }
       function* foo() {

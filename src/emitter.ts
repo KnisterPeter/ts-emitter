@@ -878,6 +878,7 @@ export function emitDefaultClause(this: any, node: ts.DefaultClause, context: Em
   const source: string[] = [];
   source.push(emitDefaultKeyword(node, context));
   emitStatic(source, ':', node, context);
+  addTrailingComment(source, context.offset, node, context);
   emitStatements.call(this, source, node, context);
   endNode(node, context);
   return source.join('');
