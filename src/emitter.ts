@@ -1595,6 +1595,7 @@ export function emitObjectLiteralExpression(this: any, node: ts.ObjectLiteralExp
 export function emitShorthandPropertyAssignment(this: any, node: ts.ShorthandPropertyAssignment,
   context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
   if (node.objectAssignmentInitializer) {
@@ -1603,6 +1604,7 @@ export function emitShorthandPropertyAssignment(this: any, node: ts.ShorthandPro
     source.push(emit.call(this, node.objectAssignmentInitializer, context));
   }
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
