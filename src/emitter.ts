@@ -1795,10 +1795,15 @@ export function emitBinaryExpression(this: any, node: ts.BinaryExpression, conte
   return source.join('');
 }
 
+function _emitToken(this: any, source: string[], token: string, node: ts.Node, context: EmitterContext): void {
+  addLeadingComment(source, node, context);
+  emitStatic(source, token, node, context);
+}
+
 export function emitFirstCompoundAssignment(this: any, node: ts.Token<ts.SyntaxKind.FirstCompoundAssignment>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '+=', node, context);
+  _emitToken(source, '+=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1806,7 +1811,7 @@ export function emitFirstCompoundAssignment(this: any, node: ts.Token<ts.SyntaxK
 export function emitGreaterThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.GreaterThanEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '>=', node, context);
+  _emitToken(source, '>=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1814,7 +1819,7 @@ export function emitGreaterThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKi
 export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '*=', node, context);
+  _emitToken(source, '*=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1822,7 +1827,7 @@ export function emitAsteriskEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
 export function emitLessThanLessThanToken(this: any, node: ts.Token<ts.SyntaxKind.LessThanLessThanToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '<<', node, context);
+  _emitToken(source, '<<', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1830,7 +1835,7 @@ export function emitLessThanLessThanToken(this: any, node: ts.Token<ts.SyntaxKin
 export function emitSlashToken(this: any, node: ts.Token<ts.SyntaxKind.SlashToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '/', node, context);
+  _emitToken(source, '/', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1838,7 +1843,7 @@ export function emitSlashToken(this: any, node: ts.Token<ts.SyntaxKind.SlashToke
 export function emitGreaterThanGreaterThanGreaterThanEqualsToken(this: any,
     node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '>>>=', node, context);
+  _emitToken(source, '>>>=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1846,7 +1851,7 @@ export function emitGreaterThanGreaterThanGreaterThanEqualsToken(this: any,
 export function emitPercentToken(this: any, node: ts.Token<ts.SyntaxKind.PercentToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '%', node, context);
+  _emitToken(source, '%', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1854,7 +1859,7 @@ export function emitPercentToken(this: any, node: ts.Token<ts.SyntaxKind.Percent
 export function emitPercentEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.PercentEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '%=', node, context);
+  _emitToken(source, '%=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1862,7 +1867,7 @@ export function emitPercentEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.P
 export function emitSlashEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.SlashEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '/=', node, context);
+  _emitToken(source, '/=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1870,7 +1875,7 @@ export function emitSlashEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.Sla
 export function emitLessThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.LessThanEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '<=', node, context);
+  _emitToken(source, '<=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1878,7 +1883,7 @@ export function emitLessThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.
 export function emitLessThanLessThanEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.LessThanLessThanEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '<<=', node, context);
+  _emitToken(source, '<<=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1886,7 +1891,7 @@ export function emitLessThanLessThanEqualsToken(this: any, node: ts.Token<ts.Syn
 export function emitGreaterThanGreaterThanEqualsToken(this: any,
     node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '>>=', node, context);
+  _emitToken(source, '>>=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1894,7 +1899,7 @@ export function emitGreaterThanGreaterThanEqualsToken(this: any,
 export function emitBarEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.BarEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '|=', node, context);
+  _emitToken(source, '|=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1902,7 +1907,7 @@ export function emitBarEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.BarEq
 export function emitAmpersandEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.AmpersandEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '&=', node, context);
+  _emitToken(source, '&=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1910,7 +1915,7 @@ export function emitAmpersandEqualsToken(this: any, node: ts.Token<ts.SyntaxKind
 export function emitAmpersandToken(this: any, node: ts.Token<ts.SyntaxKind.AmpersandToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '&', node, context);
+  _emitToken(source, '&', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1918,7 +1923,7 @@ export function emitAmpersandToken(this: any, node: ts.Token<ts.SyntaxKind.Amper
 export function emitCaretToken(this: any, node: ts.Token<ts.SyntaxKind.CaretToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '^', node, context);
+  _emitToken(source, '^', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1926,7 +1931,7 @@ export function emitCaretToken(this: any, node: ts.Token<ts.SyntaxKind.CaretToke
 export function emitMinusToken(this: any, node: ts.Token<ts.SyntaxKind.MinusToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '-', node, context);
+  _emitToken(source, '-', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1934,14 +1939,14 @@ export function emitMinusToken(this: any, node: ts.Token<ts.SyntaxKind.MinusToke
 export function emitLastBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.LastBinaryOperator>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '^=', node, context);
+  _emitToken(source, '^=', node, context);
   endNode(node, context);
   return source.join('');
 }
 
 export function emitPlusToken(this: any, node: ts.Token<ts.SyntaxKind.PlusToken>, context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '+', node, context);
+  _emitToken(source, '+', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1949,7 +1954,7 @@ export function emitPlusToken(this: any, node: ts.Token<ts.SyntaxKind.PlusToken>
 export function emitMinusEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.MinusEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '-=', node, context);
+  _emitToken(source, '-=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1957,7 +1962,7 @@ export function emitMinusEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.Min
 export function emitAsteriskToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '*', node, context);
+  _emitToken(source, '*', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1965,7 +1970,7 @@ export function emitAsteriskToken(this: any, node: ts.Token<ts.SyntaxKind.Asteri
 export function emitEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.EqualsEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '==', node, context);
+  _emitToken(source, '==', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1973,7 +1978,7 @@ export function emitEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.Eq
 export function emitEqualsEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.EqualsEqualsEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '===', node, context);
+  _emitToken(source, '===', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1981,7 +1986,7 @@ export function emitEqualsEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxK
 export function emitExclamationEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.ExclamationEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '!=', node, context);
+  _emitToken(source, '!=', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1989,7 +1994,7 @@ export function emitExclamationEqualsToken(this: any, node: ts.Token<ts.SyntaxKi
 export function emitExclamationEqualsEqualsToken(this: any, node: ts.Token<ts.SyntaxKind.ExclamationEqualsEqualsToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '!==', node, context);
+  _emitToken(source, '!==', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -1997,7 +2002,7 @@ export function emitExclamationEqualsEqualsToken(this: any, node: ts.Token<ts.Sy
 export function emitCommaToken(this: any, node: ts.Token<ts.SyntaxKind.CommaToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, ',', node, context);
+  _emitToken(source, ',', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2005,7 +2010,7 @@ export function emitCommaToken(this: any, node: ts.Token<ts.SyntaxKind.CommaToke
 export function emitGreaterThanToken(this: any, node: ts.Token<ts.SyntaxKind.GreaterThanToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '>', node, context);
+  _emitToken(source, '>', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2013,7 +2018,7 @@ export function emitGreaterThanToken(this: any, node: ts.Token<ts.SyntaxKind.Gre
 export function emitGreaterThanGreaterThanToken(this: any, node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '>>', node, context);
+  _emitToken(source, '>>', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2021,7 +2026,7 @@ export function emitGreaterThanGreaterThanToken(this: any, node: ts.Token<ts.Syn
 export function emitGreaterThanGreaterThanGreaterThanToken(this: any,
     node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken>, context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '>>>', node, context);
+  _emitToken(source, '>>>', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2029,7 +2034,7 @@ export function emitGreaterThanGreaterThanGreaterThanToken(this: any,
 export function emitBarToken(this: any, node: ts.Token<ts.SyntaxKind.BarToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '|', node, context);
+  _emitToken(source, '|', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2037,7 +2042,7 @@ export function emitBarToken(this: any, node: ts.Token<ts.SyntaxKind.BarToken>,
 export function emitBarBarToken(this: any, node: ts.Token<ts.SyntaxKind.BarBarToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '||', node, context);
+  _emitToken(source, '||', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2045,7 +2050,7 @@ export function emitBarBarToken(this: any, node: ts.Token<ts.SyntaxKind.BarBarTo
 export function emitAmpersandAmpersandToken(this: any, node: ts.Token<ts.SyntaxKind.AmpersandAmpersandToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '&&', node, context);
+  _emitToken(source, '&&', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2053,7 +2058,7 @@ export function emitAmpersandAmpersandToken(this: any, node: ts.Token<ts.SyntaxK
 export function emitAsteriskAsteriskToken(this: any, node: ts.Token<ts.SyntaxKind.AsteriskAsteriskToken>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '**', node, context);
+  _emitToken(source, '**', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2061,7 +2066,7 @@ export function emitAsteriskAsteriskToken(this: any, node: ts.Token<ts.SyntaxKin
 export function emitFirstBinaryOperator(this: any, node: ts.Token<ts.SyntaxKind.FirstBinaryOperator>,
     context: EmitterContext): string {
   const source: string[] = [];
-  emitStatic(source, '<', node, context);
+  _emitToken(source, '<', node, context);
   endNode(node, context);
   return source.join('');
 }
@@ -2076,6 +2081,7 @@ export function emitLastTypeNode(this: any, node: ts.LiteralTypeNode, context: E
 
 export function emitIdentifier(this: any, node: ts.Identifier, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);

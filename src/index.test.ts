@@ -796,4 +796,21 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept comments in binay expressions', () => {
+    const source = `
+      const a =
+        // comment
+        b
+        // comment
+        &&
+        // comment
+        c
+        // comment
+        ||
+        // comment
+        d;
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
