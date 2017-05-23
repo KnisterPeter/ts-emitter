@@ -1314,6 +1314,7 @@ export function emitVariableDeclaration(this: any, node: ts.VariableDeclaration,
   source.push(emit.call(this, node.name, context));
   if (node.type !== undefined) {
     emitStatic(source, ':', node, context);
+    addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }

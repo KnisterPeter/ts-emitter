@@ -281,6 +281,7 @@ describe('emit', () => {
       function /*1*/makePoint(x: number) {}
       foo./* */x = 1;
       foo/* */.x = 1;
+      var z2: /** type comment*/ (x: number) => string;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
