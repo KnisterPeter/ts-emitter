@@ -138,5 +138,6 @@
   "typescript/tests/cases/compiler/enumMemberResolution.ts",
   "typescript/tests/cases/compiler/invalidLetInForOfAndForIn_ES6.ts",
   "typescript/tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts",
-  "typescript/tests/cases/compiler/interfaceWithImplements1.ts"
+  "typescript/tests/cases/compiler/interfaceWithImplements1.ts",
+  "typescript/tests/cases/compiler/interfaceDeclaration4.ts"
 ]
