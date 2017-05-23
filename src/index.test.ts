@@ -291,6 +291,7 @@ describe('emit', () => {
               };
       };
       var y /* comment */ = /* comment */ 20;
+      <any>( /* Preserve */ j = f());
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

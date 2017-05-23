@@ -1470,11 +1470,14 @@ export function emitMetaProperty(this: any, node: ts.MetaProperty, context: Emit
 export function emitParenthesizedExpression(this: any, node: ts.ParenthesizedExpression,
     context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, '(', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   emitStatic(source, ')', node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
