@@ -444,6 +444,7 @@ export function emitInterfaceDeclaration(this: any, node: ts.InterfaceDeclaratio
       source.push(emit.call(this, node.heritageClauses[i], context));
     }
   }
+  addTrailingComment(source, context.offset, node, context);
   emitStatic(source, '{', node, context);
   addTrailingComment(source, context.offset, node, context);
   node.members.forEach(member => {
