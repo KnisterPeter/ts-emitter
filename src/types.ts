@@ -303,7 +303,8 @@ export function emitTypeParameter(this: any, node: ts.ParameterDeclaration, cont
 export function emitTypeIdentifier(this: any, node: ts.Identifier, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(node.text);
+  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
