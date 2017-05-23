@@ -1656,6 +1656,7 @@ export function emitArrowFunction(this: any, node: ts.ArrowFunction, context: Em
   addLeadingComment(source, node, context);
   emitTypeParameters.call(this, source, node, context);
   emitModifiers.call(this, source, node, context);
+  addTrailingComment(source, context.offset, node, context);
   const parenthesis = Boolean(node.typeParameters)
     || node.getSourceFile().getFullText()
       .substring(context.offset, node.getEnd()).trim().startsWith('(');
