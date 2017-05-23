@@ -703,6 +703,9 @@ export function emitPropertyDeclaration(this: any, node: ts.PropertyDeclaration,
   emitModifiers.call(this, source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.name, context));
+  if (node.questionToken) {
+    emitStatic(source, '?', node, context);
+  }
   if (node.type) {
     emitStatic(source, ':', node, context);
     addWhitespace(source, node, context);

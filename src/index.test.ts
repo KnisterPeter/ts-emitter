@@ -133,6 +133,7 @@ describe('emit', () => {
       try {
         class Test1 {
           static "prop1" = 0;
+          readonly realpath?: (path: string) => string;
         }
       } catch (e) {
       } finally {
