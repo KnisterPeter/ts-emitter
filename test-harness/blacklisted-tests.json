@@ -118,5 +118,6 @@
   "typescript/tests/cases/compiler/staticsInConstructorBodies.ts",
   "typescript/tests/cases/compiler/staticsInAFunction.ts",
   "typescript/tests/cases/compiler/for.ts",
-  "typescript/tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts"
+  "typescript/tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts",
+  "typescript/tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts"
 ]
