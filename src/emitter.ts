@@ -1144,6 +1144,7 @@ export function emitEmptyStatement(this: any, node: ts.EmptyStatement, context: 
 
 export function emitContinueStatement(this: any, node: ts.ContinueStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'continue', node, context);
   if (node.label) {
     addWhitespace(source, node, context);
@@ -1151,6 +1152,7 @@ export function emitContinueStatement(this: any, node: ts.ContinueStatement, con
   }
   addSemicolon(source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
