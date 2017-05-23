@@ -738,4 +738,15 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept white space', () => {
+    const source = `
+      module TypeScript2 {
+        export enum PullSymbolVisibility {}
+      　
+        export class PullSymbol {}
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
