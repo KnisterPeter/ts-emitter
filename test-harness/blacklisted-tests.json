@@ -116,5 +116,6 @@
   "typescript/tests/cases/compiler/superAccess2.ts",
   "typescript/tests/cases/compiler/stringLiteralsErrors.ts",
   "typescript/tests/cases/compiler/staticsInConstructorBodies.ts",
-  "typescript/tests/cases/compiler/staticsInAFunction.ts"
+  "typescript/tests/cases/compiler/staticsInAFunction.ts",
+  "typescript/tests/cases/compiler/for.ts"
 ]
