@@ -125,5 +125,6 @@
   "typescript/tests/cases/compiler/superInLambdas.ts",
   "typescript/tests/cases/compiler/staticClassProps.ts",
   "typescript/tests/cases/compiler/moduleProperty1.ts",
-  "typescript/tests/cases/compiler/commonSourceDirectory_dts.ts"
+  "typescript/tests/cases/compiler/commonSourceDirectory_dts.ts",
+  "typescript/tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts"
 ]
