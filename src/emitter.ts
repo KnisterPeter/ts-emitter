@@ -52,6 +52,7 @@ function emitElements<T extends ElementsNode>(this: any,
       }
     }
   }
+  addLeadingComment(source, context.offset, node, context);
   addTrailingComment(source, context.offset, node, context);
 }
 
