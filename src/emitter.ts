@@ -553,7 +553,12 @@ export function emitMappedType(this: any, node: ts.MappedTypeNode, context: Emit
   if (node.readonlyToken) {
     emitStatic(source, 'readonly', node, context);
   }
-  emitTypeParameters.call(this, source, node, context);
+  if (node.typeParameter) {
+    emitStatic(source, '[', node, context);
+    addWhitespace(source, node, context);
+    source.push(emitMappedTypeTypeParameter.call(this, node.typeParameter, context));
+    emitStatic(source, ']', node, context);
+  }
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
@@ -562,6 +567,20 @@ export function emitMappedType(this: any, node: ts.MappedTypeNode, context: Emit
   source.push(emit.call(this, node.type, context));
   addSemicolon(source, node, context);
   emitStatic(source, '}', node, context);
+  endNode(node, context);
+  return source.join('');
+}
+
+export function emitMappedTypeTypeParameter(this: any, node: ts.TypeParameterDeclaration,
+    context: EmitterContext): string {
+  const source: string[] = [];
+  addWhitespace(source, node, context);
+  source.push(emit.call(this, node.name, context));
+  if (node.constraint) {
+    emitStatic(source, 'in', node, context);
+    addWhitespace(source, node, context);
+    source.push(emit.call(this, node.constraint, context));
+  }
   endNode(node, context);
   return source.join('');
 }

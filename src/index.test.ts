@@ -689,4 +689,11 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should handle mapped types', () => {
+    const source = `
+      function f<S extends { [K in keyof S]: string }>(): string {}
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
