@@ -1271,15 +1271,21 @@ export function emitDeleteExpression(this: any, node: ts.DeleteExpression, conte
 
 export function emitConditionalExpression(this: any, node: ts.ConditionalExpression, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.condition, context));
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '?', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.whenTrue, context));
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, ':', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.whenFalse, context));
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 

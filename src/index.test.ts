@@ -150,7 +150,7 @@ describe('emit', () => {
         [2]:1,
       }
       delete a; // error
-      a ? b : c;
+      /* comment */ a /* comment */ ? /* comment */ b /* comment */ : /* comment */ c;
       var n = <number>(null);
       await Promise.resolve("The test is passed without an error.")
       const {a, a: y, a = 1} = test;
@@ -773,6 +773,20 @@ describe('emit', () => {
         /* comment */
       }
       /* comment */
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should accept comments in conditional statements', () => {
+    const source = `
+      const descriptor = test
+          ? test
+              // comment
+              ? a
+
+              // comment
+              : b
+          : undefined;
     `;
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
