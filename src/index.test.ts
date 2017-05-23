@@ -290,6 +290,7 @@ describe('emit', () => {
                   //(s1: string, s2: string): number;
               };
       };
+      var y /* comment */ = /* comment */ 20;
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
