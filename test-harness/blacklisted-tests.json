@@ -88,6 +88,7 @@
   "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1WithExport.ts",
   "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportWithExport.ts",
   "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.ts",
+  "typescript/tests/cases/compiler/es6ImportWithoutFromClauseWithExport.ts",
   "typescript/tests/cases/compiler/arrowFunctionsMissingTokens.ts",
   "typescript/tests/cases/compiler/assertInWrapSomeTypeParameter.ts",
   "typescript/tests/cases/compiler/genericCallsWithoutParens.ts",
