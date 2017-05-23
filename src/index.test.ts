@@ -294,6 +294,8 @@ describe('emit', () => {
       <any>( /* Preserve */ j = f());
       var v: { bar(): void, baz }
       interface Foo { bar(): void, baz }
+      const sourceFile = <SourceFile>new SourceFileConstructor(
+        SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

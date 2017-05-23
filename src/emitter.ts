@@ -1177,6 +1177,7 @@ export function emitThrowStatement(this: any, node: ts.ThrowStatement, context: 
 
 export function emitNewExpression(this: any, node: ts.NewExpression, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'new', node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
@@ -1184,8 +1185,10 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
   if (node.getSourceFile().getFullText()
     .substring(context.offset, node.getEnd()).trim().startsWith('(')) {
     emitStatic(source, '(', node, context);
+    addTrailingComment(source, context.offset, node, context);
     if (node.arguments) {
       for (let i = 0, n = node.arguments.length; i < n; i++) {
+        addTrailingComment(source, context.offset, node, context);
         addWhitespace(source, node, context);
         source.push(emit.call(this, node.arguments[i], context));
         if ((i < n - 1) || node.arguments.hasTrailingComma) {
@@ -1196,6 +1199,7 @@ export function emitNewExpression(this: any, node: ts.NewExpression, context: Em
     emitStatic(source, ')', node, context);
   }
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
