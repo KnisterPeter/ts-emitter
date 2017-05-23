@@ -107,11 +107,14 @@ function emitParameters<T extends NodeWithParameters>(this: any,
       addLeadingComment(source, context.offset, node, context);
       addWhitespace(source, node, context);
       source.push(emit.call(this, node.parameters[i], context));
+      addLeadingComment(source, context.offset, node, context);
       if ((i < n - 1) || node.parameters.hasTrailingComma) {
         emitStatic(source, ',', node, context);
       }
+      addLeadingComment(source, context.offset, node, context);
     }
   }
+  addLeadingComment(source, context.offset, node, context);
   addTrailingComment(source, context.offset, node, context);
 }
 
