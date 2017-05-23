@@ -1666,11 +1666,13 @@ export function emitPrefixUnaryExpression(this: any, node: ts.PrefixUnaryExpress
     }
   }
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(getPrefixUnaryOperator());
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.operand, context));
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
