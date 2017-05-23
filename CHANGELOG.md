@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/KnisterPeter/ts-emitter/compare/v0.1.0...v0.1.1) (2017-05-23)
+
+
+### Bug Fixes
+
+* add comment to ShorthandPropertyAssignment ([02e1db7](https://github.com/KnisterPeter/ts-emitter/commit/02e1db7))
+* add comments to binary expression and identifier ([99ef5c5](https://github.com/KnisterPeter/ts-emitter/commit/99ef5c5))
+* add comments to continue statement ([8feec9b](https://github.com/KnisterPeter/ts-emitter/commit/8feec9b))
+* add comments to for statement ([50784c2](https://github.com/KnisterPeter/ts-emitter/commit/50784c2))
+* add comments to if statements and types ([de79dbd](https://github.com/KnisterPeter/ts-emitter/commit/de79dbd))
+* add comments to new expression ([cd830ed](https://github.com/KnisterPeter/ts-emitter/commit/cd830ed))
+* add comments to PrefixUnaryExpression ([ada9918](https://github.com/KnisterPeter/ts-emitter/commit/ada9918))
+* add comments to switch cases ([3aeb94c](https://github.com/KnisterPeter/ts-emitter/commit/3aeb94c))
+* add comments to ternary expression ([ea8c10c](https://github.com/KnisterPeter/ts-emitter/commit/ea8c10c))
+* add questionToken to PropertyDeclaration ([b914f55](https://github.com/KnisterPeter/ts-emitter/commit/b914f55))
+
+
+
 <a name="0.1.0"></a>
 # 0.1.0 (2017-05-23)
 
