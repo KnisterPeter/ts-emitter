@@ -814,4 +814,14 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept comments in for statements', () => {
+    const source = `
+      for (/* comment */ let /* comment */ a = 0 /* comment */ ; /* comment */ a < b /* comment */ ;
+          /* comment */ ++c /* comment */) {
+        // comment
+      }
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

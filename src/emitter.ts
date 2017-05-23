@@ -987,16 +987,21 @@ export function emitForStatement(this: any, node: ts.ForStatement, context: Emit
   addLeadingComment(source, node, context);
   emitStatic(source, 'for', node, context);
   emitStatic(source, '(', node, context);
+  addTrailingComment(source, context.offset, node, context);
   if (node.initializer) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.initializer, context));
   }
+  addTrailingComment(source, context.offset, node, context);
   emitStatic(source, ';', node, context);
+  addTrailingComment(source, context.offset, node, context);
   if (node.condition) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.condition, context));
   }
+  addTrailingComment(source, context.offset, node, context);
   emitStatic(source, ';', node, context);
+  addTrailingComment(source, context.offset, node, context);
   if (node.incrementor) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.incrementor, context));
