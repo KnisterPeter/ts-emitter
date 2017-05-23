@@ -2203,6 +2203,7 @@ export function emitTupleType(this: any, node: ts.TupleTypeNode, context: Emitte
 
 export function emitFunctionType(this: any, node: ts.FunctionTypeNode, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   if (node.name !== undefined) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.name, context));

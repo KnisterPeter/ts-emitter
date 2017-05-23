@@ -129,6 +129,8 @@ export function emitTypeFunctionType(this: any, node: ts.FunctionTypeNode, conte
   emitStatic(source, '(', node, context);
   if (node.parameters) {
     for (let i = 0, n = node.parameters.length; i < n; i++) {
+      addTrailingComment(source, context.offset, node, context);
+      addLeadingComment(source, context.offset, node, context);
       addWhitespace(source, node, context);
       source.push(emitType.call(this, node.parameters[i], context));
       if ((i < n - 1) || node.parameters.hasTrailingComma) {
