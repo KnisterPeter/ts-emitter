@@ -90,6 +90,10 @@
   "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.ts",
   "typescript/tests/cases/compiler/es6ImportWithoutFromClauseWithExport.ts",
   "typescript/tests/cases/compiler/es6ImportNameSpaceImportWithExport.ts",
+  "typescript/tests/cases/compiler/es6ImportNamedImportWithExport.ts",
+  "typescript/tests/cases/compiler/es6ImportNamedImportParsingError.ts",
+  "typescript/tests/cases/compiler/es6ImportDefaultBindingWithExport.ts",
+  "typescript/tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.ts",
   "typescript/tests/cases/compiler/es6ImportParseErrors.ts",
   "typescript/tests/cases/compiler/arrowFunctionsMissingTokens.ts",
   "typescript/tests/cases/compiler/assertInWrapSomeTypeParameter.ts",
@@ -130,5 +134,6 @@
   "typescript/tests/cases/compiler/moduleProperty1.ts",
   "typescript/tests/cases/compiler/commonSourceDirectory_dts.ts",
   "typescript/tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts",
-  "typescript/tests/cases/compiler/extension.ts"
+  "typescript/tests/cases/compiler/extension.ts",
+  "typescript/tests/cases/compiler/enumMemberResolution.ts"
 ]
