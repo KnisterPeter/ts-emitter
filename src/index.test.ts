@@ -649,6 +649,9 @@ describe('emit', () => {
         // comment
         case 0: // comment
           break;
+          // comment
+        default:
+          // comment
       }
     `;
     const sourceFile = getSourceFile(source, true);

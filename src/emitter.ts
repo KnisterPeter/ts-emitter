@@ -878,18 +878,22 @@ export function emitSwitchStatement(this: any, node: ts.SwitchStatement, context
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.caseBlock, context));
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
 export function emitCaseBlock(this: any, node: ts.CaseBlock, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, '{', node, context);
   for (let i = 0, n = node.clauses.length; i < n; i++) {
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.clauses[i], context));
   }
+  addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '}', node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -903,16 +907,19 @@ export function emitCaseClause(this: any, node: ts.CaseClause, context: EmitterC
   addTrailingComment(source, context.offset, node, context);
   emitStatements.call(this, source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
 export function emitDefaultClause(this: any, node: ts.DefaultClause, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   source.push(emitDefaultKeyword(node, context));
   emitStatic(source, ':', node, context);
   addTrailingComment(source, context.offset, node, context);
   emitStatements.call(this, source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
