@@ -549,10 +549,12 @@ export function emitMethodSignature(this: any, node: ts.MethodSignature, context
 
 export function emitTypeReference(this: any, node: ts.TypeReferenceNode, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.typeName, context));
   emitTypeArguments.call(this, source, node, context);
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
@@ -919,13 +921,17 @@ export function emitIfStatement(this: any, node: ts.IfStatement, context: Emitte
   addLeadingComment(source, node, context);
   emitStatic(source, 'if', node, context);
   emitStatic(source, '(', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.expression, context));
   emitStatic(source, ')', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.thenStatement, context));
   if (node.elseStatement) {
+    addLeadingComment(source, context.offset, node, context);
     emitStatic(source, 'else', node, context);
+    addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
     source.push(emit.call(this, node.elseStatement, context));
   }
@@ -1046,6 +1052,7 @@ export function emitWithStatement(this: any, node: ts.WithStatement, context: Em
 
 export function emitUnionType(this: any, node: ts.UnionTypeNode, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   for (let i = 0, n = node.types.length; i < n; i++) {
     const type = node.types[i];
     addWhitespace(source, node, context);
@@ -1054,6 +1061,7 @@ export function emitUnionType(this: any, node: ts.UnionTypeNode, context: Emitte
       emitStatic(source, '|', node, context);
     }
   }
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 

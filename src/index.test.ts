@@ -749,4 +749,32 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept comments in UnionTypes and TypeReference', () => {
+    const source = `
+      export type ArrayBindingOrAssignmentPattern
+          = ArrayBindingPattern
+          | ArrayLiteralExpression1 // comment
+          | ArrayLiteralExpression2 // comment
+          ;
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
+  it('should accept comments in if-else statements', () => {
+    const source = `
+      /* comment */
+      if (/* comment */ test /* comment */) /* comment */ {
+        /* comment */
+      }
+      /* comment */
+      else
+      /* comment */
+      {
+        /* comment */
+      }
+      /* comment */
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });

@@ -91,6 +91,7 @@ export function _emitTypeKeyword(this: any, keyword: string, node: ts.KeywordTyp
 
 export function emitTypeTypeReference(this: any, node: ts.TypeReferenceNode, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
   source.push(emitType.call(this, node.typeName, context));
   if (node.typeArguments) {
@@ -105,6 +106,7 @@ export function emitTypeTypeReference(this: any, node: ts.TypeReferenceNode, con
     emitStatic(source, '>', node, context);
   }
   endNode(node, context);
+  addTrailingComment(source, node, context);
   return source.join('');
 }
 
