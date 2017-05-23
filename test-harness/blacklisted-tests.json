@@ -113,5 +113,6 @@
   "typescript/tests/cases/compiler/superWithTypeArgument2.ts",
   "typescript/tests/cases/compiler/superWithTypeArgument3.ts",
   "typescript/tests/cases/compiler/superErrors.ts",
-  "typescript/tests/cases/compiler/superAccess2.ts"
+  "typescript/tests/cases/compiler/superAccess2.ts",
+  "typescript/tests/cases/compiler/stringLiteralsErrors.ts"
 ]
