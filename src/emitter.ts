@@ -844,6 +844,7 @@ export function emitLabeledStatement(this: any, node: ts.LabeledStatement, conte
 
 export function emitBreakStatement(this: any, node: ts.BreakStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, 'break', node, context);
   if (node.label) {
     addWhitespace(source, node, context);

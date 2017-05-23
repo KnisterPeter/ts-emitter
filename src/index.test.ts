@@ -108,6 +108,7 @@ describe('emit', () => {
       }
       var a = [undefined, "def"];
       while (true) {
+        // comment
         break;
       }
       do 
