@@ -284,6 +284,12 @@ describe('emit', () => {
       var z2: /** type comment*/ (x: number) => string;
       function f</**type*/T>(a: T, b: T) {}
       var z = /** lambda comment */ (x: number, y: number) => x + y;
+      var objc8: {
+          t7: {
+                  (n: number, s: string): number;    
+                  //(s1: string, s2: string): number;
+              };
+      };
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);

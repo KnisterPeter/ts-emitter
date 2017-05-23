@@ -153,6 +153,7 @@ export function emitTypeTypeLiteral(this: any, node: ts.TypeLiteralNode, context
     for (let i = 0, n = node.members.length; i < n; i++) {
       addWhitespace(source, node, context);
       source.push(emitType.call(this, node.members[i], context));
+      addLeadingComment(source, context.offset, node, context);
     }
   }
   emitStatic(source, '}', node, context);
