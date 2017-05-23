@@ -121,5 +121,6 @@
   "typescript/tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts",
   "typescript/tests/cases/compiler/emitClassExpressionInDeclarationFile.ts",
   "typescript/tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts",
-  "typescript/tests/cases/compiler/optionalPropertiesSyntax.ts"
+  "typescript/tests/cases/compiler/optionalPropertiesSyntax.ts",
+  "typescript/tests/cases/compiler/superInLambdas.ts"
 ]
