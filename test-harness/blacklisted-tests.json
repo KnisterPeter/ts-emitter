@@ -139,5 +139,7 @@
   "typescript/tests/cases/compiler/invalidLetInForOfAndForIn_ES6.ts",
   "typescript/tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts",
   "typescript/tests/cases/compiler/interfaceWithImplements1.ts",
-  "typescript/tests/cases/compiler/interfaceDeclaration4.ts"
+  "typescript/tests/cases/compiler/interfaceDeclaration4.ts",
+  "typescript/tests/cases/compiler/instantiateTypeParameter.ts",
+  "typescript/tests/cases/compiler/incompleteObjectLiteral1.ts"
 ]
