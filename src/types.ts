@@ -234,6 +234,9 @@ export function emitTypeMethodSignature(this: any, node: ts.MethodSignature, con
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
+  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
+  }
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);

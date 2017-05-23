@@ -292,6 +292,8 @@ describe('emit', () => {
       };
       var y /* comment */ = /* comment */ 20;
       <any>( /* Preserve */ j = f());
+      var v: { bar(): void, baz }
+      interface Foo { bar(): void, baz }
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
