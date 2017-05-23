@@ -64,6 +64,7 @@ function emitTypeParameters<T extends TypedNode>(this: any,
   if (node.typeParameters) {
     emitStatic(source, '<', node, context);
     for (let i = 0, n = node.typeParameters.length; i < n; i++) {
+      addTrailingComment(source, context.offset, node, context);
       addWhitespace(source, node, context);
       source.push(emit.call(this, node.typeParameters[i], context));
       if ((i < n - 1) || node.typeParameters.hasTrailingComma) {

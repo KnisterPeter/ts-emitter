@@ -282,6 +282,7 @@ describe('emit', () => {
       foo./* */x = 1;
       foo/* */.x = 1;
       var z2: /** type comment*/ (x: number) => string;
+      function f</**type*/T>(a: T, b: T) {}
     `;
     const sourceFile = getSourceFile(source);
     expect(emit(sourceFile)).toBe(source);
