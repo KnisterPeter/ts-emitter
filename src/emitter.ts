@@ -1598,6 +1598,7 @@ export function emitPropertyAssignment(this: any, node: ts.PropertyAssignment,
     emitStatic(source, '?', node, context);
   }
   emitStatic(source, ':', node, context);
+  addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
   source.push(emit.call(this, node.initializer, context));
   endNode(node, context);
