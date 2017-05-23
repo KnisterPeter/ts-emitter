@@ -1117,6 +1117,7 @@ export function emitCatchClause(this: any, node: ts.CatchClause, context: Emitte
 
 export function emitEmptyStatement(this: any, node: ts.EmptyStatement, context: EmitterContext): string {
   const source: string[] = [];
+  addLeadingComment(source, node, context);
   emitStatic(source, ';', node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);

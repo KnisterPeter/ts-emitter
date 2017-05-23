@@ -696,4 +696,13 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(emit(sourceFile)).toBe(source);
   });
+  it('should accept leading comment on empty statements', () => {
+    const source = `
+      // @target: ES3
+      // @sourcemap: true
+      ;
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(emit(sourceFile)).toBe(source);
+  });
 });
