@@ -10,7 +10,6 @@ export function emit(pathOrNode: string|ts.SourceFile, encoding?: string): strin
     ? readFile(pathOrNode, encoding || 'utf8')
     : pathOrNode;
   return internalEmit(sourceFile, {
-    sourceFile,
     offset: 0
   });
 }

@@ -13,7 +13,7 @@ export function emitType(this: any, node: ts.TypeNode, context: EmitterContext):
   const typeEmitterName = `emitType${ts.SyntaxKind[node.kind]}`;
   if (this[typeEmitterName] !== undefined) {
     let source = '';
-    const leadingCharacters = context.sourceFile.text.substring(context.offset, node.end).trim();
+    const leadingCharacters = node.getSourceFile().getFullText().substring(context.offset, node.end).trim();
     const hasLeadingPipe = leadingCharacters.startsWith('|');
     if (hasLeadingPipe) {
       source += '|';
@@ -351,7 +351,7 @@ export function emitTypePropertySignature(this: any, node: ts.PropertySignature,
     addWhitespace(source, node, context);
     source.push(emitType.call(this, node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).trim().startsWith(',')) {
+  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
     emitStatic(source, ',', node, context);
   }
   addSemicolon(source, node, context);

@@ -11,7 +11,6 @@ import {
 } from './utils';
 
 export interface EmitterContext {
-  sourceFile: ts.SourceFile;
   offset: number;
 }
 
@@ -511,7 +510,7 @@ export function emitPropertySignature(this: any, node: ts.PropertySignature, con
     addWhitespace(source, node, context);
     source.push(emitType(node.type, context));
   }
-  if (context.sourceFile.text.substring(context.offset).trim().startsWith(',')) {
+  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
     emitStatic(source, ',', node, context);
   }
   addSemicolon(source, node, context);
