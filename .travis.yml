@@ -9,7 +9,6 @@ branches:
   only:
     - master
     - /^greenkeeper-.*$/
-    - /^greenkeeper/.*$/
 notifications:
   email:
     on_success: never
