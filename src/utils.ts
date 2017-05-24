@@ -1,8 +1,7 @@
 import * as ts from 'typescript';
 import { EmitterContext } from './emitter';
 
-export function emitStatic(source: string[], text: string, node: ts.Node,
-  context: EmitterContext): void {
+export function emitStatic(source: string[], text: string, node: ts.Node, context: EmitterContext): void {
   addWhitespace(source, node, context);
   source.push(text);
   context.offset += text.length;
@@ -87,5 +86,27 @@ export function endNode(node: ts.Node, context: EmitterContext): void {
   const end = node.getEnd();
   if (context.offset < end) {
     context.offset = end;
+  }
+}
+
+export function addLeadingAmpersand(source: string[], node: ts.Node, context: EmitterContext): void {
+  // note: special case here. The '&' is not added with emitStatic since in this case the
+  // context.offset is still before the node.fullStart
+  const text = node.getSourceFile().getFullText().substring(context.offset, node.end).trim();
+  const hasLeadingAmpersand = text.startsWith('&');
+  if (hasLeadingAmpersand) {
+    source.push('&');
+    context.offset += 1;
+  }
+}
+
+export function addLeadingBar(source: string[], node: ts.Node, context: EmitterContext): void {
+  // note: special case here. The '|' is not added with emitStatic since in this case the
+  // context.offset is still before the node.fullStart
+  const text = node.getSourceFile().getFullText().substring(context.offset, node.end).trim();
+  const hasLeadingBar = text.startsWith('|');
+  if (hasLeadingBar) {
+    source.push('|');
+    context.offset += 1;
   }
 }
