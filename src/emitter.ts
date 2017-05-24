@@ -15,16 +15,85 @@ export interface EmitterContext {
   offset: number;
 }
 
-interface StatementsNode extends ts.Node {
-  statements?: ts.NodeArray<ts.Node>;
+// tslint:disable-next-line cyclomatic-complexity
+function emitStatement(node: ts.Statement, context: EmitterContext): string {
+  switch (node.kind) {
+    case ts.SyntaxKind.ImportDeclaration:
+      return emitImportDeclaration(node as ts.ImportDeclaration, context);
+    case ts.SyntaxKind.ImportEqualsDeclaration:
+      return emitImportEqualsDeclaration(node as ts.ImportEqualsDeclaration, context);
+    case ts.SyntaxKind.VariableStatement:
+      return emitVariableStatement(node as ts.VariableStatement, context);
+    case ts.SyntaxKind.ExportDeclaration:
+      return emitExportDeclaration(node as ts.ExportDeclaration, context);
+    case ts.SyntaxKind.ExportAssignment:
+      return emitExportAssignment(node as ts.ExportAssignment, context);
+    case ts.SyntaxKind.NamespaceExportDeclaration:
+      return emitNamespaceExportDeclaration(node as ts.NamespaceExportDeclaration, context);
+    case ts.SyntaxKind.ExpressionStatement:
+      return emitExpressionStatement(node as ts.ExpressionStatement, context);
+    case ts.SyntaxKind.FunctionDeclaration:
+      return emitFunctionDeclaration(node as ts.FunctionDeclaration, context);
+    case ts.SyntaxKind.ClassDeclaration:
+      return emitClassDeclaration(node as ts.ClassDeclaration, context);
+    case ts.SyntaxKind.TypeAliasDeclaration:
+      return emitTypeAliasDeclaration(node as ts.TypeAliasDeclaration, context);
+    case ts.SyntaxKind.InterfaceDeclaration:
+      return emitInterfaceDeclaration(node as ts.InterfaceDeclaration, context);
+    case ts.SyntaxKind.ForInStatement:
+      return emitForInStatement(node as ts.ForInStatement, context);
+    case ts.SyntaxKind.ForOfStatement:
+      return emitForOfStatement(node as ts.ForOfStatement, context);
+    case ts.SyntaxKind.ForStatement:
+      return emitForStatement(node as ts.ForStatement, context);
+    case ts.SyntaxKind.WithStatement:
+      return emitWithStatement(node as ts.WithStatement, context);
+    case ts.SyntaxKind.ModuleDeclaration:
+      return emitModuleDeclaration(node as ts.ModuleDeclaration, context);
+    case ts.SyntaxKind.WhileStatement:
+      return emitWhileStatement(node as ts.WhileStatement, context);
+    case ts.SyntaxKind.EnumDeclaration:
+      return emitEnumDeclaration(node as ts.EnumDeclaration, context);
+    case ts.SyntaxKind.DoStatement:
+      return emitDoStatement(node as ts.DoStatement, context);
+    case ts.SyntaxKind.EmptyStatement:
+      return emitEmptyStatement(node as ts.EmptyStatement, context);
+    case ts.SyntaxKind.IfStatement:
+      return emitIfStatement(node as ts.IfStatement, context);
+    case ts.SyntaxKind.SwitchStatement:
+      return emitSwitchStatement(node as ts.SwitchStatement, context);
+    case ts.SyntaxKind.BreakStatement:
+      return emitBreakStatement(node as ts.BreakStatement, context);
+    case ts.SyntaxKind.LabeledStatement:
+      return emitLabeledStatement(node as ts.LabeledStatement, context);
+    case ts.SyntaxKind.ContinueStatement:
+      return emitContinueStatement(node as ts.ContinueStatement, context);
+    case ts.SyntaxKind.ReturnStatement:
+      return emitReturnStatement(node as ts.ReturnStatement, context);
+    case ts.SyntaxKind.TryStatement:
+      return emitTryStatement(node as ts.TryStatement, context);
+    case ts.SyntaxKind.DebuggerStatement:
+      return emitDebuggerStatement(node as ts.DebuggerStatement, context);
+    case ts.SyntaxKind.Block:
+      return emitBlock(node as ts.Block, context);
+    case ts.SyntaxKind.ThrowStatement:
+      return emitThrowStatement(node as ts.ThrowStatement, context);
+    default:
+      throw new Error(`Unknown statement kind '${ts.SyntaxKind[node.kind]}'`);
+  }
 }
 
+interface StatementsNode extends ts.Node {
+  statements?: ts.NodeArray<ts.Statement>;
+}
+
+// tslint:disable-next-line cyclomatic-complexity
 function emitStatements<T extends StatementsNode>(source: string[], node: T, context: EmitterContext): void {
   if (node.statements) {
     for (let i = 0, n = node.statements.length; i < n; i++) {
       const statement = node.statements[i];
       addWhitespace(source, statement, context);
-      source.push(emit(statement, context));
+      source.push(emitStatement(statement, context));
     }
   }
 }
@@ -149,7 +218,7 @@ export function emitSourceFile(node: ts.SourceFile, context: EmitterContext): st
   source.push(emitShebang(node, context));
   emitStatements(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.endOfFileToken, context));
+  source.push(emitEndOfFileToken(node.endOfFileToken, context));
   endNode(node, context);
   return source.join('');
 }
@@ -168,13 +237,13 @@ export function emitEnumDeclaration(node: ts.EnumDeclaration, context: EmitterCo
   emitModifiers(source, node, context);
   source.push(emitEnumKeyword(node, context));
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   emitStatic(source, '{', node, context);
   addTrailingComment(source, context.offset, node, context);
   if (node.members) {
     for (let i = 0, n = node.members.length; i < n; i++) {
       addWhitespace(source, node, context);
-      source.push(emit(node.members[i], context));
+      source.push(emitEnumMember(node.members[i], context));
       if ((i < n - 1) || node.members.hasTrailingComma) {
         emitStatic(source, ',', node, context);
         addTrailingComment(source, context.offset, node, context);
@@ -191,15 +260,115 @@ export function emitEnumMember(node: ts.EnumMember, context: EmitterContext): st
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   if (node.initializer) {
     emitStatic(source, '=', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.initializer, context));
+    source.push(emitExpression(node.initializer, context));
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
+}
+
+function emitExpression(node: ts.Expression, context: EmitterContext): string {
+  // tslint:disable-next-line cyclomatic-complexity
+  switch (node.kind) {
+    case ts.SyntaxKind.NonNullExpression:
+      return emitNonNullExpression(node as ts.NonNullExpression, context);
+    case ts.SyntaxKind.TemplateExpression:
+      return emitTemplateExpression(node as ts.TemplateExpression, context);
+    case ts.SyntaxKind.OmittedExpression:
+      return emitOmittedExpression(node as ts.OmittedExpression, context);
+    case ts.SyntaxKind.SpreadElement:
+      return emitSpreadElement(node as ts.SpreadElement, context);
+    case ts.SyntaxKind.VoidExpression:
+      return emitVoidExpression(node as ts.VoidExpression, context);
+    case ts.SyntaxKind.FirstTemplateToken:
+      return emitFirstTemplateToken(node, context);
+    case ts.SyntaxKind.JsxElement:
+      return emitJsxElement(node as ts.JsxElement, context);
+    case ts.SyntaxKind.JsxSelfClosingElement:
+      return emitJsxSelfClosingElement(node as ts.JsxSelfClosingElement, context);
+    case ts.SyntaxKind.ClassExpression:
+      return emitClassExpression(node as ts.ClassExpression, context);
+    case ts.SyntaxKind.Identifier:
+      return emitIdentifier(node as ts.Identifier, context);
+    case ts.SyntaxKind.RegularExpressionLiteral:
+      return emitRegularExpressionLiteral(node as ts.RegularExpressionLiteral, context);
+    case ts.SyntaxKind.PostfixUnaryExpression:
+      return emitPostfixUnaryExpression(node as ts.PostfixUnaryExpression, context);
+    case ts.SyntaxKind.YieldExpression:
+      return emitYieldExpression(node as ts.YieldExpression, context);
+    case ts.SyntaxKind.ObjectLiteralExpression:
+      return emitObjectLiteralExpression(node as ts.ObjectLiteralExpression, context);
+    case ts.SyntaxKind.DeleteExpression:
+      return emitDeleteExpression(node as ts.DeleteExpression, context);
+    case ts.SyntaxKind.ConditionalExpression:
+      return emitConditionalExpression(node as ts.ConditionalExpression, context);
+    case ts.SyntaxKind.AwaitExpression:
+      return emitAwaitExpression(node as ts.AwaitExpression, context);
+    case ts.SyntaxKind.NewExpression:
+      return emitNewExpression(node as ts.NewExpression, context);
+    case ts.SyntaxKind.FunctionExpression:
+      return emitFunctionExpression(node as ts.FunctionExpression, context);
+    case ts.SyntaxKind.ArrayLiteralExpression:
+      return emitArrayLiteralExpression(node as ts.ArrayLiteralExpression, context);
+    case ts.SyntaxKind.TypeOfExpression:
+      return emitTypeOfExpression(node as ts.TypeOfExpression, context);
+    case ts.SyntaxKind.ArrowFunction:
+      return emitArrowFunction(node as ts.ArrowFunction, context);
+    case ts.SyntaxKind.AsExpression:
+      return emitAsExpression(node as ts.AsExpression, context);
+    case ts.SyntaxKind.MetaProperty:
+      return emitMetaProperty(node as ts.MetaProperty, context);
+    case ts.SyntaxKind.TaggedTemplateExpression:
+      return emitTaggedTemplateExpression(node as ts.TaggedTemplateExpression, context);
+    case ts.SyntaxKind.TypeAssertionExpression:
+      return emitTypeAssertionExpression(node as ts.TypeAssertion, context);
+    case ts.SyntaxKind.StringLiteral:
+      return emitStringLiteral(node as ts.StringLiteral, context);
+    case ts.SyntaxKind.FirstLiteralToken:
+      // todo: check if ts.NumericLiteral is correct
+      return emitFirstLiteralToken(node as ts.NumericLiteral, context);
+    case ts.SyntaxKind.BinaryExpression:
+      return emitBinaryExpression(node as ts.BinaryExpression, context);
+    case ts.SyntaxKind.NullKeyword:
+      return emitNullKeyword(node, context);
+    case ts.SyntaxKind.ThisKeyword:
+      return emitThisKeyword(node, context);
+    case ts.SyntaxKind.TrueKeyword:
+      return emitTrueKeyword(node, context);
+    case ts.SyntaxKind.FalseKeyword:
+      return emitFalseKeyword(node, context);
+    case ts.SyntaxKind.PrefixUnaryExpression:
+      return emitPrefixUnaryExpression(node as ts.PrefixUnaryExpression, context);
+    case ts.SyntaxKind.PropertyAccessExpression:
+      return emitPropertyAccessExpression(node as ts.PropertyAccessExpression, context);
+    case ts.SyntaxKind.CallExpression:
+      return emitCallExpression(node as ts.CallExpression, context);
+    case ts.SyntaxKind.ElementAccessExpression:
+      return emitElementAccessExpression(node as ts.ElementAccessExpression, context);
+    case ts.SyntaxKind.ParenthesizedExpression:
+      return emitParenthesizedExpression(node as ts.ParenthesizedExpression, context);
+    default:
+      throw new Error(`Unknown Expression kind '${ts.SyntaxKind[node.kind]}'`);
+  }
+}
+
+function emitPropertName(node: ts.PropertyName, context: EmitterContext): string {
+  switch (node.kind) {
+    case ts.SyntaxKind.Identifier:
+      return emitIdentifier(node, context);
+    case ts.SyntaxKind.StringLiteral:
+      return emitStringLiteral(node, context);
+    case ts.SyntaxKind.ComputedPropertyName:
+      return emitComputedPropertyName(node, context);
+    case ts.SyntaxKind.FirstLiteralToken:
+      return emitFirstLiteralToken(node, context);
+    default:
+      throw new Error(`Unknown PropertyName kind '${ts.SyntaxKind[(node as any).kind]}'`);
+  }
 }
 
 export function emitModuleDeclaration(node: ts.ModuleDeclaration, context: EmitterContext): string {
@@ -247,7 +416,7 @@ export function emitImportEqualsDeclaration(node: ts.ImportEqualsDeclaration,
   emitModifiers(source, node, context);
   emitStatic(source, 'import', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   emitStatic(source, '=', node, context);
   addWhitespace(source, node, context);
   source.push(emit(node.moduleReference, context));
@@ -265,7 +434,7 @@ export function emitExternalModuleReference(node: ts.ExternalModuleReference,
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
   if (node.expression) {
-    source.push(emit(node.expression, context));
+    source.push(emitExpression(node.expression, context));
   }
   emitStatic(source, ')', node, context);
   endNode(node, context);
@@ -278,7 +447,7 @@ export function emitFirstNode(node: ts.QualifiedName, context: EmitterContext): 
   source.push(emit(node.left, context));
   emitStatic(source, '.', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.right, context));
+  source.push(emitIdentifier(node.right, context));
   endNode(node, context);
   return source.join('');
 }
@@ -289,11 +458,11 @@ export function emitImportDeclaration(node: ts.ImportDeclaration, context: Emitt
   emitStatic(source, 'import', node, context);
   if (node.importClause) {
     addWhitespace(source, node, context);
-    source.push(emit(node.importClause, context));
+    source.push(emitImportClause(node.importClause, context));
     emitStatic(source, 'from', node, context);
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.moduleSpecifier, context));
+  source.push(emitExpression(node.moduleSpecifier, context));
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -304,7 +473,7 @@ export function emitImportClause(node: ts.ImportClause, context: EmitterContext)
   const source: string[] = [];
   if (node.name) {
     addWhitespace(source, node, context);
-    source.push(emit(node.name, context));
+    source.push(emitIdentifier(node.name, context));
     if (node.namedBindings) {
       emitStatic(source, ',', node, context);
     }
@@ -321,7 +490,7 @@ export function emitNamespaceImport(node: ts.NamespaceImport, context: EmitterCo
   const source: string[] = [];
   emitStatic(source, '* as ', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   endNode(node, context);
   return source.join('');
 }
@@ -339,11 +508,11 @@ export function emitImportSpecifier(node: ts.ImportSpecifier, context: EmitterCo
   const source: string[] = [];
   if (node.propertyName) {
     addWhitespace(source, node, context);
-    source.push(emit(node.propertyName, context));
+    source.push(emitIdentifier(node.propertyName, context));
     emitStatic(source, 'as', node, context);
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   endNode(node, context);
   return source.join('');
 }
@@ -356,7 +525,7 @@ export function emitNamespaceExportDeclaration(node: ts.NamespaceExportDeclarati
   emitStatic(source, 'as', node, context);
   emitStatic(source, 'namespace', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   addSemicolon(source, node, context);
   endNode(node, context);
   return source.join('');
@@ -368,14 +537,14 @@ export function emitExportDeclaration(node: ts.ExportDeclaration, context: Emitt
   source.push(emitExportKeyword(node, context));
   addWhitespace(source, node, context);
   if (node.exportClause) {
-    source.push(emit(node.exportClause, context));
+    source.push(emitNamedExports(node.exportClause, context));
   } else {
     emitStatic(source, '*', node, context);
   }
   if (node.moduleSpecifier) {
     emitStatic(source, 'from', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.moduleSpecifier, context));
+    source.push(emitExpression(node.moduleSpecifier, context));
   }
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -396,11 +565,11 @@ export function emitExportSpecifier(node: ts.ExportSpecifier, context: EmitterCo
   const source: string[] = [];
   if (node.propertyName) {
     addWhitespace(source, node, context);
-    source.push(emit(node.propertyName, context));
+    source.push(emitIdentifier(node.propertyName, context));
     emitStatic(source, 'as', node, context);
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   endNode(node, context);
   return source.join('');
 }
@@ -415,7 +584,7 @@ export function emitExportAssignment(node: ts.ExportAssignment, context: Emitter
     source.push(emitDefaultKeyword(node, context));
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -428,13 +597,13 @@ export function emitInterfaceDeclaration(node: ts.InterfaceDeclaration, context:
   emitModifiers(source, node, context);
   emitStatic(source, 'interface', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   emitTypeParameters(source, node, context);
   if (node.heritageClauses) {
     emitStatic(source, 'extends', node, context);
     for (let i = 0, n = node.heritageClauses.length; i < n; i++) {
       addWhitespace(source, node, context);
-      source.push(emit(node.heritageClauses[i], context));
+      source.push(emitHeritageClause(node.heritageClauses[i], context));
     }
   }
   addTrailingComment(source, context.offset, node, context);
@@ -495,7 +664,7 @@ export function emitPropertySignature(node: ts.PropertySignature, context: Emitt
   addLeadingComment(source, node, context);
   emitModifiers(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
@@ -518,7 +687,7 @@ export function emitMethodSignature(node: ts.MethodSignature, context: EmitterCo
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
@@ -581,7 +750,7 @@ export function emitMappedTypeTypeParameter(node: ts.TypeParameterDeclaration,
     context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   if (node.constraint) {
     emitStatic(source, 'in', node, context);
     addWhitespace(source, node, context);
@@ -598,14 +767,14 @@ export function emitClassDeclaration(node: ts.ClassDeclaration, context: Emitter
   if (node.decorators) {
     node.decorators.forEach(decorator => {
       addWhitespace(source, node, context);
-      source.push(emit(decorator, context));
+      source.push(emitDecorator(decorator, context));
     });
   }
   emitModifiers(source, node, context);
   emitStatic(source, 'class', node, context);
   if (node.name) {
     addWhitespace(source, node, context);
-    source.push(emit(node.name, context));
+    source.push(emitIdentifier(node.name, context));
   }
   emitTypeParameters(source, node, context);
   if (node.heritageClauses) {
@@ -619,7 +788,7 @@ export function emitClassDeclaration(node: ts.ClassDeclaration, context: Emitter
           break;
       }
       addWhitespace(source, node, context);
-      source.push(emit(node.heritageClauses[i], context));
+      source.push(emitHeritageClause(node.heritageClauses[i], context));
     }
   }
   addTrailingComment(source, context.offset, node, context);
@@ -678,7 +847,7 @@ export function emitConstructor(node: ts.ConstructorDeclaration, context: Emitte
   emitStatic(source, ')', node, context);
   if (node.body) {
     addWhitespace(source, node, context);
-    source.push(emit(node.body, context));
+    source.push(emitBlock(node.body, context));
   }
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -692,12 +861,12 @@ export function emitPropertyDeclaration(node: ts.PropertyDeclaration, context: E
   if (node.decorators) {
     node.decorators.forEach(decorator => {
       addWhitespace(source, node, context);
-      source.push(emit(decorator, context));
+      source.push(emitDecorator(decorator, context));
     });
   }
   emitModifiers(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
@@ -709,7 +878,7 @@ export function emitPropertyDeclaration(node: ts.PropertyDeclaration, context: E
   if (node.initializer) {
     emitStatic(source, '=', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.initializer, context));
+    source.push(emitExpression(node.initializer, context));
   }
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -723,13 +892,13 @@ export function emitGetAccessor(node: ts.GetAccessorDeclaration, context: Emitte
   if (node.decorators) {
     node.decorators.forEach(decorator => {
       addWhitespace(source, node, context);
-      source.push(emit(decorator, context));
+      source.push(emitDecorator(decorator, context));
     });
   }
   emitModifiers(source, node, context);
   emitStatic(source, 'get', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   emitStatic(source, '(', node, context);
   emitParameters(source, node, context);
   emitStatic(source, ')', node, context);
@@ -740,7 +909,7 @@ export function emitGetAccessor(node: ts.GetAccessorDeclaration, context: Emitte
   }
   addWhitespace(source, node, context);
   if (node.body) {
-    source.push(emit(node.body, context));
+    source.push(emitBlock(node.body, context));
   } else {
     addSemicolon(source, node, context);
   }
@@ -755,13 +924,13 @@ export function emitSetAccessor(node: ts.SetAccessorDeclaration, context: Emitte
   if (node.decorators) {
     node.decorators.forEach(decorator => {
       addWhitespace(source, node, context);
-      source.push(emit(decorator, context));
+      source.push(emitDecorator(decorator, context));
     });
   }
   emitModifiers(source, node, context);
   emitStatic(source, 'set', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   emitStatic(source, '(', node, context);
   emitParameters(source, node, context);
   emitStatic(source, ')', node, context);
@@ -772,7 +941,7 @@ export function emitSetAccessor(node: ts.SetAccessorDeclaration, context: Emitte
   }
   addWhitespace(source, node, context);
   if (node.body) {
-    source.push(emit(node.body, context));
+    source.push(emitBlock(node.body, context));
   } else {
     addSemicolon(source, node, context);
   }
@@ -787,7 +956,7 @@ export function emitMethodDeclaration(node: ts.MethodDeclaration, context: Emitt
   if (node.decorators) {
     node.decorators.forEach(decorator => {
       addWhitespace(source, node, context);
-      source.push(emit(decorator, context));
+      source.push(emitDecorator(decorator, context));
     });
   }
   emitModifiers(source, node, context);
@@ -795,7 +964,7 @@ export function emitMethodDeclaration(node: ts.MethodDeclaration, context: Emitt
     emitStatic(source, '*', node, context);
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
@@ -810,7 +979,7 @@ export function emitMethodDeclaration(node: ts.MethodDeclaration, context: Emitt
   }
   if (node.body) {
     addWhitespace(source, node, context);
-    source.push(emit(node.body, context));
+    source.push(emitBlock(node.body, context));
   } else {
     addSemicolon(source, node, context);
   }
@@ -829,10 +998,8 @@ export function emitSemicolonClassElement(node: ts.SemicolonClassElement, contex
 export function emitVariableStatement(node: ts.VariableStatement, context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
-  node.forEachChild(child => {
-    addWhitespace(source, node, context);
-    source.push(emit(child, context));
-  });
+  emitModifiers(source, node, context);
+  source.push(emitVariableDeclarationList(node.declarationList, context));
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -843,10 +1010,10 @@ export function emitLabeledStatement(node: ts.LabeledStatement, context: Emitter
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.label, context));
+  source.push(emitIdentifier(node.label, context));
   emitStatic(source, ':', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   endNode(node, context);
   return source.join('');
 }
@@ -857,7 +1024,7 @@ export function emitBreakStatement(node: ts.BreakStatement, context: EmitterCont
   emitStatic(source, 'break', node, context);
   if (node.label) {
     addWhitespace(source, node, context);
-    source.push(emit(node.label, context));
+    source.push(emitIdentifier(node.label, context));
   }
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -871,10 +1038,10 @@ export function emitSwitchStatement(node: ts.SwitchStatement, context: EmitterCo
   emitStatic(source, 'switch', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.caseBlock, context));
+  source.push(emitCaseBlock(node.caseBlock, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -900,7 +1067,7 @@ export function emitCaseClause(node: ts.CaseClause, context: EmitterContext): st
   addLeadingComment(source, node, context);
   emitStatic(source, 'case', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ':', node, context);
   addTrailingComment(source, context.offset, node, context);
   emitStatements(source, node, context);
@@ -928,17 +1095,17 @@ export function emitIfStatement(node: ts.IfStatement, context: EmitterContext): 
   emitStatic(source, '(', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.thenStatement, context));
+  source.push(emitStatement(node.thenStatement, context));
   if (node.elseStatement) {
     addLeadingComment(source, context.offset, node, context);
     emitStatic(source, 'else', node, context);
     addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.elseStatement, context));
+    source.push(emitStatement(node.elseStatement, context));
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -951,10 +1118,10 @@ export function emitWhileStatement(node: ts.WhileStatement, context: EmitterCont
   emitStatic(source, 'while', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -965,11 +1132,11 @@ export function emitDoStatement(node: ts.DoStatement, context: EmitterContext): 
   addLeadingComment(source, node, context);
   emitStatic(source, 'do', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   emitStatic(source, 'while', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -992,18 +1159,18 @@ export function emitForStatement(node: ts.ForStatement, context: EmitterContext)
   addTrailingComment(source, context.offset, node, context);
   if (node.condition) {
     addWhitespace(source, node, context);
-    source.push(emit(node.condition, context));
+    source.push(emitExpression(node.condition, context));
   }
   addTrailingComment(source, context.offset, node, context);
   emitStatic(source, ';', node, context);
   addTrailingComment(source, context.offset, node, context);
   if (node.incrementor) {
     addWhitespace(source, node, context);
-    source.push(emit(node.incrementor, context));
+    source.push(emitExpression(node.incrementor, context));
   }
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1018,10 +1185,10 @@ export function emitForInStatement(node: ts.ForInStatement, context: EmitterCont
   source.push(emit(node.initializer, context));
   emitStatic(source, 'in', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1036,10 +1203,10 @@ export function emitForOfStatement(node: ts.ForOfStatement, context: EmitterCont
   source.push(emit(node.initializer, context));
   emitStatic(source, 'of', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1051,10 +1218,10 @@ export function emitWithStatement(node: ts.WithStatement, context: EmitterContex
   emitStatic(source, 'with', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.statement, context));
+  source.push(emitStatement(node.statement, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1080,7 +1247,7 @@ export function emitExpressionStatement(node: ts.ExpressionStatement, context: E
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1093,7 +1260,7 @@ export function emitReturnStatement(node: ts.ReturnStatement, context: EmitterCo
   emitStatic(source, 'return', node, context);
   if (node.expression) {
     addWhitespace(source, node, context);
-    source.push(emit(node.expression, context));
+    source.push(emitExpression(node.expression, context));
   }
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -1116,15 +1283,15 @@ export function emitTryStatement(node: ts.TryStatement, context: EmitterContext)
   addLeadingComment(source, node, context);
   emitStatic(source, 'try', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.tryBlock, context));
+  source.push(emitBlock(node.tryBlock, context));
   if (node.catchClause) {
     addWhitespace(source, node, context);
-    source.push(emit(node.catchClause, context));
+    source.push(emitCatchClause(node.catchClause, context));
   }
   if (node.finallyBlock) {
     emitStatic(source, 'finally', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.finallyBlock, context));
+    source.push(emitBlock(node.finallyBlock, context));
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1136,10 +1303,10 @@ export function emitCatchClause(node: ts.CatchClause, context: EmitterContext): 
   emitStatic(source, 'catch', node, context);
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.variableDeclaration, context));
+  source.push(emitVariableDeclaration(node.variableDeclaration, context));
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.block, context));
+  source.push(emitBlock(node.block, context));
   endNode(node, context);
   return source.join('');
 }
@@ -1159,7 +1326,7 @@ export function emitContinueStatement(node: ts.ContinueStatement, context: Emitt
   emitStatic(source, 'continue', node, context);
   if (node.label) {
     addWhitespace(source, node, context);
-    source.push(emit(node.label, context));
+    source.push(emitIdentifier(node.label, context));
   }
   addSemicolon(source, node, context);
   endNode(node, context);
@@ -1172,7 +1339,7 @@ export function emitThrowStatement(node: ts.ThrowStatement, context: EmitterCont
   addLeadingComment(source, node, context);
   emitStatic(source, 'throw', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1194,7 +1361,7 @@ export function emitNewExpression(node: ts.NewExpression, context: EmitterContex
       for (let i = 0, n = node.arguments.length; i < n; i++) {
         addTrailingComment(source, context.offset, node, context);
         addWhitespace(source, node, context);
-        source.push(emit(node.arguments[i], context));
+        source.push(emitExpression(node.arguments[i], context));
         if ((i < n - 1) || node.arguments.hasTrailingComma) {
           emitStatic(source, ',', node, context);
         }
@@ -1234,7 +1401,7 @@ export function emitBindingElement(node: ts.BindingElement, context: EmitterCont
   }
   if (node.propertyName) {
     addWhitespace(source, node, context);
-    source.push(emit(node.propertyName, context));
+    source.push(emitPropertName(node.propertyName, context));
     emitStatic(source, ':', node, context);
   }
   addWhitespace(source, node, context);
@@ -1242,7 +1409,7 @@ export function emitBindingElement(node: ts.BindingElement, context: EmitterCont
   if (node.initializer) {
     emitStatic(source, '=', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.initializer, context));
+    source.push(emitExpression(node.initializer, context));
   }
   endNode(node, context);
   return source.join('');
@@ -1290,17 +1457,17 @@ export function emitConditionalExpression(node: ts.ConditionalExpression, contex
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.condition, context));
+  source.push(emitExpression(node.condition, context));
   addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '?', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.whenTrue, context));
+  source.push(emitExpression(node.whenTrue, context));
   addLeadingComment(source, context.offset, node, context);
   emitStatic(source, ':', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.whenFalse, context));
+  source.push(emitExpression(node.whenFalse, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1315,7 +1482,7 @@ export function emitElementAccessExpression(node: ts.ElementAccessExpression,
   emitStatic(source, '[', node, context);
   if (node.argumentExpression) {
     addWhitespace(source, node, context);
-    source.push(emit(node.argumentExpression, context));
+    source.push(emitExpression(node.argumentExpression, context));
   }
   emitStatic(source, ']', node, context);
   endNode(node, context);
@@ -1339,7 +1506,7 @@ export function emitVariableDeclarationList(node: ts.VariableDeclarationList,
   addTrailingComment(source, context.offset, node, context);
   for (let i = 0, n = node.declarations.length; i < n; i++) {
     addWhitespace(source, node, context);
-    source.push(emit(node.declarations[i], context));
+    source.push(emitVariableDeclaration(node.declarations[i], context));
     if ((i < n - 1) || node.declarations.hasTrailingComma) {
       emitStatic(source, ',', node, context);
     }
@@ -1362,7 +1529,7 @@ export function emitVariableDeclaration(node: ts.VariableDeclaration, context: E
     emitStatic(source, '=', node, context);
     addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.initializer, context));
+    source.push(emitExpression(node.initializer, context));
   }
   endNode(node, context);
   return source.join('');
@@ -1393,7 +1560,7 @@ export function emitFunctionDeclaration(node: ts.FunctionDeclaration, context: E
   addTrailingComment(source, context.offset, node, context);
   if (node.name) {
     addWhitespace(source, node, context);
-    source.push(emit(node.name, context));
+    source.push(emitIdentifier(node.name, context));
   }
   emitTypeParameters(source, node, context);
   emitStatic(source, '(', node, context);
@@ -1406,7 +1573,7 @@ export function emitFunctionDeclaration(node: ts.FunctionDeclaration, context: E
   }
   if (node.body) {
     addWhitespace(source, node, context);
-    source.push(emit(node.body, context));
+    source.push(emitBlock(node.body, context));
   } else {
     addSemicolon(source, node, context);
   }
@@ -1421,7 +1588,7 @@ export function emitClassExpression(node: ts.ClassExpression, context: EmitterCo
   emitStatic(source, 'class', node, context);
   if (node.name) {
     addWhitespace(source, node, context);
-    source.push(emit(node.name, context));
+    source.push(emitIdentifier(node.name, context));
   }
   emitTypeParameters(source, node, context);
   if (node.heritageClauses) {
@@ -1435,7 +1602,7 @@ export function emitClassExpression(node: ts.ClassExpression, context: EmitterCo
           break;
       }
       addWhitespace(source, node, context);
-      source.push(emit(node.heritageClauses[i], context));
+      source.push(emitHeritageClause(node.heritageClauses[i], context));
     }
   }
   emitStatic(source, '{', node, context);
@@ -1459,7 +1626,7 @@ export function emitFunctionExpression(node: ts.FunctionExpression, context: Emi
   }
   if (node.name) {
     addWhitespace(source, node, context);
-    source.push(emit(node.name, context));
+    source.push(emitIdentifier(node.name, context));
   }
   emitTypeParameters(source, node, context);
   emitStatic(source, '(', node, context);
@@ -1471,7 +1638,7 @@ export function emitFunctionExpression(node: ts.FunctionExpression, context: Emi
     source.push(emit(node.type, context));
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.body, context));
+  source.push(emitBlock(node.body, context));
   endNode(node, context);
   return source.join('');
 }
@@ -1484,7 +1651,7 @@ export function emitYieldExpression(node: ts.YieldExpression, context: EmitterCo
   }
   if (node.expression) {
     addWhitespace(source, node, context);
-    source.push(emit(node.expression, context));
+    source.push(emitExpression(node.expression, context));
   }
   endNode(node, context);
   return source.join('');
@@ -1501,7 +1668,7 @@ export function emitMetaProperty(node: ts.MetaProperty, context: EmitterContext)
   }
   emitStatic(source, '.', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   endNode(node, context);
   return source.join('');
 }
@@ -1513,14 +1680,13 @@ export function emitParenthesizedExpression(node: ts.ParenthesizedExpression,
   emitStatic(source, '(', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ')', node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
 }
 
-// tslint:disable-next-line cyclomatic-complexity
 export function emitCallExpression(node: ts.CallExpression, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
@@ -1531,7 +1697,7 @@ export function emitCallExpression(node: ts.CallExpression, context: EmitterCont
     addLeadingComment(source, context.offset, node, context);
     addTrailingComment(source, context.offset, node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.arguments[i], context));
+    source.push(emitExpression(node.arguments[i], context));
     if ((i < n - 1) || node.arguments.hasTrailingComma) {
       emitStatic(source, ',', node, context);
     }
@@ -1552,7 +1718,7 @@ export function emitPropertyAccessExpression(node: ts.PropertyAccessExpression,
   emitStatic(source, '.', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   endNode(node, context);
   return source.join('');
 }
@@ -1561,7 +1727,7 @@ export function emitNonNullExpression(node: ts.NonNullExpression,
   context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, '!', node, context);
   endNode(node, context);
   return source.join('');
@@ -1601,11 +1767,11 @@ export function emitShorthandPropertyAssignment(node: ts.ShorthandPropertyAssign
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   if (node.objectAssignmentInitializer) {
     emitStatic(source, '=', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.objectAssignmentInitializer, context));
+    source.push(emitExpression(node.objectAssignmentInitializer, context));
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1617,7 +1783,7 @@ export function emitComputedPropertyName(node: ts.ComputedPropertyName,
   const source: string[] = [];
   emitStatic(source, '[', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, ']', node, context);
   endNode(node, context);
   return source.join('');
@@ -1638,14 +1804,14 @@ export function emitPropertyAssignment(node: ts.PropertyAssignment,
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitPropertName(node.name, context));
   if (node.questionToken) {
     emitStatic(source, '?', node, context);
   }
   emitStatic(source, ':', node, context);
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.initializer, context));
+  source.push(emitExpression(node.initializer, context));
   endNode(node, context);
   addTrailingComment(source, node, context);
   return source.join('');
@@ -1732,7 +1898,7 @@ export function emitParameter(node: ts.ParameterDeclaration, context: EmitterCon
   if (node.decorators) {
     node.decorators.forEach(decorator => {
       addWhitespace(source, node, context);
-      source.push(emit(decorator, context));
+      source.push(emitDecorator(decorator, context));
     });
   }
   emitModifiers(source, node, context);
@@ -1753,7 +1919,7 @@ export function emitParameter(node: ts.ParameterDeclaration, context: EmitterCon
   if (node.initializer) {
     emitStatic(source, '=', node, context);
     addWhitespace(source, node, context);
-    source.push(emit(node.initializer, context));
+    source.push(emitExpression(node.initializer, context));
   }
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1767,7 +1933,7 @@ export function emitBlock(node: ts.Block, context: EmitterContext): string {
   addTrailingComment(source, context.offset, node, context);
   node.statements.forEach(statement => {
     addWhitespace(source, node, context);
-    source.push(emit(statement, context));
+    source.push(emitStatement(statement, context));
   });
   addLeadingComment(source, context.offset, node, context);
   emitStatic(source, '}', node, context);
@@ -1778,7 +1944,7 @@ export function emitBlock(node: ts.Block, context: EmitterContext): string {
 export function emitAsExpression(node: ts.AsExpression, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitStatic(source, 'as', node, context);
   addWhitespace(source, node, context);
   source.push(emit(node.type, context));
@@ -1791,12 +1957,12 @@ export function emitBinaryExpression(node: ts.BinaryExpression, context: Emitter
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.left, context));
+  source.push(emitExpression(node.left, context));
   addWhitespace(source, node, context);
   source.push(emit(node.operatorToken, context));
   addTrailingComment(source, context.offset, node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.right, context));
+  source.push(emitExpression(node.right, context));
   endNode(node, context);
   return source.join('');
 }
@@ -2080,7 +2246,7 @@ export function emitFirstBinaryOperator(node: ts.Token<ts.SyntaxKind.FirstBinary
 export function emitLastTypeNode(node: ts.LiteralTypeNode, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.literal, context));
+  source.push(emitExpression(node.literal, context));
   endNode(node, context);
   return source.join('');
 }
@@ -2102,7 +2268,7 @@ export function emitTypeAliasDeclaration(node: ts.TypeAliasDeclaration, context:
   emitModifiers(source, node, context);
   emitStatic(source, 'type', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   emitTypeParameters(source, node, context);
   emitStatic(source, '=', node, context);
   addWhitespace(source, node, context);
@@ -2116,7 +2282,7 @@ export function emitTypeAliasDeclaration(node: ts.TypeAliasDeclaration, context:
 export function emitTypeParameter(node: ts.TypeParameterDeclaration, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   if (node.constraint) {
     emitStatic(source, 'extends', node, context);
     addWhitespace(source, node, context);
@@ -2196,7 +2362,7 @@ export function emitSpreadElement(node: ts.SpreadElement, context: EmitterContex
   const source: string[] = [];
   emitStatic(source, '...', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   endNode(node, context);
   return source.join('');
 }
@@ -2205,7 +2371,7 @@ export function emitSpreadAssignment(node: ts.SpreadAssignment, context: Emitter
   const source: string[] = [];
   emitStatic(source, '...', node, context);
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   endNode(node, context);
   return source.join('');
 }
@@ -2287,7 +2453,7 @@ export function emitFunctionType(node: ts.FunctionTypeNode, context: EmitterCont
   addLeadingComment(source, node, context);
   if (node.name !== undefined) {
     addWhitespace(source, node, context);
-    source.push(emit(node.name, context));
+    source.push(emitPropertName(node.name, context));
   }
   emitTypeParameters(source, node, context);
   emitStatic(source, '(', node, context);
@@ -2351,10 +2517,10 @@ export function emitTemplateExpression(node: ts.TemplateExpression,
     context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.head, context));
+  source.push(emitTemplateHead(node.head, context));
   node.templateSpans.forEach(span => {
     addWhitespace(source, node, context);
-    source.push(emit(span, context));
+    source.push(emitTemplateSpan(span, context));
   });
   endNode(node, context);
   return source.join('');
@@ -2373,7 +2539,7 @@ export function emitTemplateSpan(node: ts.TemplateSpan,
     context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   addWhitespace(source, node, context);
   source.push(emit(node.literal, context));
   endNode(node, context);
@@ -2398,7 +2564,7 @@ export function emitLastTemplateToken(node: ts.LiteralLikeNode,
   return source.join('');
 }
 
-export function emitFirstTemplateToken(node: ts.LiteralLikeNode, context: EmitterContext): string {
+export function emitFirstTemplateToken(node: ts.Expression, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
   const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
@@ -2427,14 +2593,14 @@ export function emitParenthesizedType(node: ts.ParenthesizedTypeNode, context: E
 export function emitJsxElement(node: ts.JsxElement, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.openingElement, context));
+  source.push(emitJsxOpeningElement(node.openingElement, context));
   for (let i = 0, n = node.children.length; i < n; i++) {
     const child = node.children[i];
     addWhitespace(source, child, context);
     source.push(emit(child, context));
   }
   addWhitespace(source, node, context);
-  source.push(emit(node.closingElement, context));
+  source.push(emitJsxClosingElement(node.closingElement, context));
   endNode(node, context);
   return source.join('');
 }
@@ -2444,7 +2610,7 @@ export function emitJsxSelfClosingElement(node: ts.JsxSelfClosingElement, contex
   emitStatic(source, '<', node, context);
   addWhitespace(source, node, context);
   source.push(emit(node.tagName, context));
-  source.push(emit(node.attributes, context));
+  source.push(emitJsxAttributes(node.attributes, context));
   emitStatic(source, '/>', node, context);
   endNode(node, context);
   return source.join('');
@@ -2455,7 +2621,7 @@ export function emitJsxOpeningElement(node: ts.JsxOpeningElement, context: Emitt
   emitStatic(source, '<', node, context);
   addWhitespace(source, node, context);
   source.push(emit(node.tagName, context));
-  source.push(emit(node.attributes, context));
+  source.push(emitJsxAttributes(node.attributes, context));
   emitStatic(source, '>', node, context);
   endNode(node, context);
   return source.join('');
@@ -2474,7 +2640,7 @@ export function emitJsxAttributes(node: ts.JsxAttributes, context: EmitterContex
 export function emitJsxAttribute(node: ts.JsxAttribute, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.name, context));
+  source.push(emitIdentifier(node.name, context));
   if (node.initializer) {
     emitStatic(source, '=', node, context);
     addWhitespace(source, node, context);
@@ -2497,7 +2663,7 @@ export function emitJsxExpression(node: ts.JsxExpression, context: EmitterContex
   emitStatic(source, '{', node, context);
   if (node.expression) {
     addWhitespace(source, node, context);
-    source.push(emit(node.expression, context));
+    source.push(emitExpression(node.expression, context));
   }
   emitStatic(source, '}', node, context);
   endNode(node, context);
@@ -2640,31 +2806,18 @@ function _emitKeyword(keyword: string, node: ts.Node, context: EmitterContext): 
 
 const emitter = {
   [ts.SyntaxKind.SourceFile]: emitSourceFile,
-  [ts.SyntaxKind.EndOfFileToken]: emitEndOfFileToken,
-  [ts.SyntaxKind.ImportDeclaration]: emitImportDeclaration,
-  [ts.SyntaxKind.StringLiteral]: emitStringLiteral,
-  [ts.SyntaxKind.ImportClause]: emitImportClause,
   [ts.SyntaxKind.NamespaceImport]: emitNamespaceImport,
-  [ts.SyntaxKind.Identifier]: emitIdentifier,
   [ts.SyntaxKind.NamedImports]: emitNamedImports,
   [ts.SyntaxKind.ImportSpecifier]: emitImportSpecifier,
-  [ts.SyntaxKind.ClassDeclaration]: emitClassDeclaration,
-  [ts.SyntaxKind.InterfaceDeclaration]: emitInterfaceDeclaration,
-  [ts.SyntaxKind.ImportEqualsDeclaration]: emitImportEqualsDeclaration,
   [ts.SyntaxKind.FirstNode]: emitFirstNode,
-  [ts.SyntaxKind.VariableStatement]: emitVariableStatement,
+  [ts.SyntaxKind.StringLiteral]: emitStringLiteral,
+  [ts.SyntaxKind.Identifier]: emitIdentifier,
   [ts.SyntaxKind.ExternalModuleReference]: emitExternalModuleReference,
   [ts.SyntaxKind.VariableDeclarationList]: emitVariableDeclarationList,
-  [ts.SyntaxKind.VariableDeclaration]: emitVariableDeclaration,
-  [ts.SyntaxKind.ExportDeclaration]: emitExportDeclaration,
-  [ts.SyntaxKind.NamedExports]: emitNamedExports,
   [ts.SyntaxKind.Constructor]: emitConstructor,
   [ts.SyntaxKind.ExportSpecifier]: emitExportSpecifier,
   [ts.SyntaxKind.Block]: emitBlock,
   [ts.SyntaxKind.IndexSignature]: emitIndexSignature,
-  [ts.SyntaxKind.ExportAssignment]: emitExportAssignment,
-  [ts.SyntaxKind.ExpressionStatement]: emitExpressionStatement,
-  [ts.SyntaxKind.NamespaceExportDeclaration]: emitNamespaceExportDeclaration,
   [ts.SyntaxKind.BinaryExpression]: emitBinaryExpression,
   [ts.SyntaxKind.FirstLiteralToken]: emitFirstLiteralToken,
   [ts.SyntaxKind.PropertyAccessExpression]: emitPropertyAccessExpression,
@@ -2675,7 +2828,6 @@ const emitter = {
   [ts.SyntaxKind.FalseKeyword]: emitFalseKeyword,
   [ts.SyntaxKind.PublicKeyword]: emitPublicKeyword,
   [ts.SyntaxKind.Parameter]: emitParameter,
-  [ts.SyntaxKind.FunctionDeclaration]: emitFunctionDeclaration,
   [ts.SyntaxKind.ModuleDeclaration]: emitModuleDeclaration,
   [ts.SyntaxKind.NewExpression]: emitNewExpression,
   [ts.SyntaxKind.ExportKeyword]: emitExportKeyword,
@@ -2684,15 +2836,11 @@ const emitter = {
   [ts.SyntaxKind.PlusToken]: emitPlusToken,
   [ts.SyntaxKind.CallExpression]: emitCallExpression,
   [ts.SyntaxKind.FunctionExpression]: emitFunctionExpression,
-  [ts.SyntaxKind.ReturnStatement]: emitReturnStatement,
   [ts.SyntaxKind.PropertyDeclaration]: emitPropertyDeclaration,
-  [ts.SyntaxKind.EnumDeclaration]: emitEnumDeclaration,
   [ts.SyntaxKind.ObjectLiteralExpression]: emitObjectLiteralExpression,
   [ts.SyntaxKind.DeclareKeyword]: emitDeclareKeyword,
   [ts.SyntaxKind.PropertyAssignment]: emitPropertyAssignment,
   [ts.SyntaxKind.PrivateKeyword]: emitPrivateKeyword,
-  [ts.SyntaxKind.HeritageClause]: emitHeritageClause,
-  [ts.SyntaxKind.EnumMember]: emitEnumMember,
   [ts.SyntaxKind.ExpressionWithTypeArguments]: emitExpressionWithTypeArguments,
   [ts.SyntaxKind.ConstKeyword]: emitConstKeyword,
   [ts.SyntaxKind.SuperKeyword]: emitSuperKeyword,
@@ -2701,18 +2849,10 @@ const emitter = {
   [ts.SyntaxKind.SetAccessor]: emitSetAccessor,
   [ts.SyntaxKind.JsxElement]: emitJsxElement,
   [ts.SyntaxKind.MethodDeclaration]: emitMethodDeclaration,
-  [ts.SyntaxKind.JsxOpeningElement]: emitJsxOpeningElement,
-  [ts.SyntaxKind.JsxClosingElement]: emitJsxClosingElement,
-  [ts.SyntaxKind.Decorator]: emitDecorator,
-  [ts.SyntaxKind.JsxAttributes]: emitJsxAttributes,
-  [ts.SyntaxKind.EmptyStatement]: emitEmptyStatement,
-  [ts.SyntaxKind.ThrowStatement]: emitThrowStatement,
   [ts.SyntaxKind.JsxExpression]: emitJsxExpression,
-  [ts.SyntaxKind.TypeAliasDeclaration]: emitTypeAliasDeclaration,
   [ts.SyntaxKind.TypeParameter]: emitTypeParameter,
   [ts.SyntaxKind.JsxText]: emitJsxText,
   [ts.SyntaxKind.CallSignature]: emitCallSignature,
-  [ts.SyntaxKind.JsxSelfClosingElement]: emitJsxSelfClosingElement,
   [ts.SyntaxKind.ConstructSignature]: emitConstructSignature,
   [ts.SyntaxKind.JsxAttribute]: emitJsxAttribute,
   [ts.SyntaxKind.PropertySignature]: emitPropertySignature,
@@ -2720,46 +2860,28 @@ const emitter = {
   [ts.SyntaxKind.MethodSignature]: emitMethodSignature,
   [ts.SyntaxKind.ParenthesizedExpression]: emitParenthesizedExpression,
   [ts.SyntaxKind.PrefixUnaryExpression]: emitPrefixUnaryExpression,
-  [ts.SyntaxKind.ForInStatement]: emitForInStatement,
-  [ts.SyntaxKind.ForOfStatement]: emitForOfStatement,
-  [ts.SyntaxKind.ForStatement]: emitForStatement,
   [ts.SyntaxKind.TemplateExpression]: emitTemplateExpression,
-  [ts.SyntaxKind.TaggedTemplateExpression]: emitTaggedTemplateExpression,
   [ts.SyntaxKind.FirstBinaryOperator]: emitFirstBinaryOperator,
   [ts.SyntaxKind.AmpersandAmpersandToken]: emitAmpersandAmpersandToken,
   [ts.SyntaxKind.PostfixUnaryExpression]: emitPostfixUnaryExpression,
-  [ts.SyntaxKind.WithStatement]: emitWithStatement,
-  [ts.SyntaxKind.TemplateHead]: emitTemplateHead,
   [ts.SyntaxKind.AsyncKeyword]: emitAsyncKeyword,
   [ts.SyntaxKind.AwaitExpression]: emitAwaitExpression,
   [ts.SyntaxKind.ArrayLiteralExpression]: emitArrayLiteralExpression,
-  [ts.SyntaxKind.TemplateSpan]: emitTemplateSpan,
-  [ts.SyntaxKind.WhileStatement]: emitWhileStatement,
   [ts.SyntaxKind.TemplateMiddle]: emitTemplateMiddle,
-  [ts.SyntaxKind.BreakStatement]: emitBreakStatement,
   [ts.SyntaxKind.LastTemplateToken]: emitLastTemplateToken,
-  [ts.SyntaxKind.DoStatement]: emitDoStatement,
   [ts.SyntaxKind.ArrayBindingPattern]: emitArrayBindingPattern,
-  [ts.SyntaxKind.IfStatement]: emitIfStatement,
   [ts.SyntaxKind.OmittedExpression]: emitOmittedExpression,
-  [ts.SyntaxKind.SwitchStatement]: emitSwitchStatement,
   [ts.SyntaxKind.BindingElement]: emitBindingElement,
-  [ts.SyntaxKind.CaseBlock]: emitCaseBlock,
-  [ts.SyntaxKind.ComputedPropertyName]: emitComputedPropertyName,
   [ts.SyntaxKind.CaseClause]: emitCaseClause,
-  [ts.SyntaxKind.YieldExpression]: emitYieldExpression,
   [ts.SyntaxKind.DefaultClause]: emitDefaultClause,
   [ts.SyntaxKind.ObjectBindingPattern]: emitObjectBindingPattern,
-  [ts.SyntaxKind.LabeledStatement]: emitLabeledStatement,
   [ts.SyntaxKind.ElementAccessExpression]: emitElementAccessExpression,
   [ts.SyntaxKind.AsteriskToken]: emitAsteriskToken,
-  [ts.SyntaxKind.TryStatement]: emitTryStatement,
   [ts.SyntaxKind.SlashToken]: emitSlashToken,
   [ts.SyntaxKind.StaticKeyword]: emitStaticKeyword,
   [ts.SyntaxKind.MappedType]: emitMappedType,
   [ts.SyntaxKind.ReadonlyKeyword]: emitReadonlyKeyword,
   [ts.SyntaxKind.TypeOperator]: emitTypeOperator,
-  [ts.SyntaxKind.CatchClause]: emitCatchClause,
   [ts.SyntaxKind.TypeReference]: emitTypeReference,
   [ts.SyntaxKind.VoidExpression]: emitVoidExpression,
   [ts.SyntaxKind.StringKeyword]: emitStringKeyword,
@@ -2767,10 +2889,8 @@ const emitter = {
   [ts.SyntaxKind.ExclamationEqualsEqualsToken]: emitExclamationEqualsEqualsToken,
   [ts.SyntaxKind.BarBarToken]: emitBarBarToken,
   [ts.SyntaxKind.ClassExpression]: emitClassExpression,
-  [ts.SyntaxKind.DeleteExpression]: emitDeleteExpression,
   [ts.SyntaxKind.TypeAssertionExpression]: emitTypeAssertionExpression,
   [ts.SyntaxKind.NullKeyword]: emitNullKeyword,
-  [ts.SyntaxKind.ContinueStatement]: emitContinueStatement,
   [ts.SyntaxKind.LastBinaryOperator]: emitLastBinaryOperator,
   [ts.SyntaxKind.TypeLiteral]: emitTypeLiteral,
   [ts.SyntaxKind.SpreadElement]: emitSpreadElement,
@@ -2786,8 +2906,6 @@ const emitter = {
   [ts.SyntaxKind.FirstTemplateToken]: emitFirstTemplateToken,
   [ts.SyntaxKind.SemicolonClassElement]: emitSemicolonClassElement,
   [ts.SyntaxKind.AsExpression]: emitAsExpression,
-  [ts.SyntaxKind.MetaProperty]: emitMetaProperty,
-  [ts.SyntaxKind.DebuggerStatement]: emitDebuggerStatement,
   [ts.SyntaxKind.ExclamationEqualsToken]: emitExclamationEqualsToken,
   [ts.SyntaxKind.AmpersandToken]: emitAmpersandToken,
   [ts.SyntaxKind.CaretToken]: emitCaretToken,
