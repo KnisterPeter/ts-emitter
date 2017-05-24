@@ -142,14 +142,11 @@ export function emit(this: any, node: ts.Node, context: EmitterContext): string 
 
 function emitShebang(this: any, node: ts.SourceFile, context: EmitterContext): string {
   const source: string[] = [];
-  const ranges = ts.getLeadingCommentRanges(node.getSourceFile().getFullText(), node.getFullStart());
-  let pos = node.getStart();
-  if (ranges) {
-    pos = ranges[0].pos;
+  const filePrefix = ts.getShebang(node.getSourceFile().getFullText());
+  if (filePrefix) {
+    source.push(filePrefix);
+    context.offset += filePrefix.length;
   }
-  const filePrefix = node.getSourceFile().getFullText().substring(0, pos);
-  source.push(filePrefix);
-  context.offset += filePrefix.length;
   return source.join('');
 }
 
