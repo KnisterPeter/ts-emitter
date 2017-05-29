@@ -7,6 +7,10 @@ export function fromPath(path: string, encoding = 'utf8'): ts.SourceFile {
   return readFile(path, encoding);
 }
 
+export function fromSource(source: string, path = 'source.tsx'): ts.SourceFile {
+  return parse(source, path);
+}
+
 export function toSource(ast: ts.SourceFile): string {
   return emitSourceFile(ast, {
     offset: 0
@@ -15,6 +19,10 @@ export function toSource(ast: ts.SourceFile): string {
 
 function readFile(filepath: string, encoding: string): ts.SourceFile {
   const source = fs.readFileSync(filepath).toString(encoding);
+  return parse(source, filepath);
+}
+
+function parse(source: string, path: string): ts.SourceFile {
   const options = Object.assign(
     {},
     ts.getDefaultCompilerOptions(),
@@ -37,6 +45,6 @@ function readFile(filepath: string, encoding: string): ts.SourceFile {
       }
     }
   );
-  const program = ts.createProgram([filepath], options, host);
-  return program.getSourceFile(filepath);
+  const program = ts.createProgram([path], options, host);
+  return program.getSourceFile(path);
 }

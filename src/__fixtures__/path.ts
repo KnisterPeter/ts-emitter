@@ -1,3 +1,3 @@
 export function echo(input: string): string {
-  return input;
+  return 'hello, '  + input;
 }

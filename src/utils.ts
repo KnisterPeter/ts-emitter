@@ -1,6 +1,19 @@
 import * as ts from 'typescript';
 import { EmitterContext } from './emitter';
 
+export function getSourceFile(node: ts.Node): ts.SourceFile {
+  let sourceFile = node.getSourceFile();
+  if (!sourceFile) {
+    if ((node as any).original) {
+      sourceFile = ((node as any).original as ts.Node).getSourceFile();
+    }
+  }
+  if (!sourceFile) {
+    console.log(`Failed to get sourceFile for node:`, node);
+  }
+  return sourceFile;
+}
+
 export function emitStatic(source: string[], text: string, node: ts.Node, context: EmitterContext): void {
   addWhitespace(source, node, context);
   source.push(text);
@@ -10,14 +23,14 @@ export function emitStatic(source: string[], text: string, node: ts.Node, contex
 const whitespaces = /^([ \f\n\r\t\v\u0085\u00A0\u2028\u2029\u3000]+)/;
 export function addWhitespace(source: string[], node: ts.Node, context: EmitterContext): void {
   if (context.offset <= node.getFullStart()) {
-    const text = node.getSourceFile().getFullText().substring(node.getFullStart(), node.end);
+    const text = getSourceFile(node).getFullText().substring(node.getFullStart(), node.end);
     const leadingWhitespace = text.match(whitespaces);
     if (leadingWhitespace) {
       context.offset = node.getFullStart() + leadingWhitespace[1].length;
       source.push(leadingWhitespace[1]);
     }
   } else {
-    const text = node.getSourceFile().getFullText().substring(context.offset, node.end);
+    const text = getSourceFile(node).getFullText().substring(context.offset, node.end);
     const trailingWhitespace = text.match(whitespaces);
     if (trailingWhitespace) {
       context.offset = context.offset + trailingWhitespace[1].length;
@@ -34,7 +47,7 @@ export function addLeadingComment(source: string[], posOrNode: number|ts.Node, n
   const node = optionalContext ? nodeOrContext as ts.Node : posOrNode as ts.Node;
   const pos = optionalContext ? posOrNode as number : node.getFullStart();
 
-  const text = node.getSourceFile().getFullText();
+  const text = getSourceFile(node).getFullText();
   const ranges = ts.getLeadingCommentRanges(text, pos);
   if (ranges) {
     source.push(ranges
@@ -59,7 +72,7 @@ export function addTrailingComment(source: string[], posOrNode: number|ts.Node, 
   const node = optionalContext ? nodeOrContext as ts.Node : posOrNode as ts.Node;
   const pos = optionalContext ? posOrNode as number : node.getEnd();
 
-  const text = node.getSourceFile().getFullText();
+  const text = getSourceFile(node).getFullText();
   const ranges = ts.getTrailingCommentRanges(text, pos);
   if (ranges) {
     source.push(ranges
@@ -77,8 +90,14 @@ export function addTrailingComment(source: string[], posOrNode: number|ts.Node, 
 }
 
 export function addSemicolon(source: string[], node: ts.Node, context: EmitterContext): void {
-  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(';')) {
+  if (getSourceFile(node).getFullText().substring(context.offset).trim().startsWith(';')) {
     emitStatic(source, ';', node, context);
+  }
+}
+
+export function addComma(source: string[], node: ts.Node, context: EmitterContext): void {
+  if (getSourceFile(node).getFullText().substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
   }
 }
 
@@ -92,7 +111,7 @@ export function endNode(node: ts.Node, context: EmitterContext): void {
 export function addLeadingAmpersand(source: string[], node: ts.Node, context: EmitterContext): void {
   // note: special case here. The '&' is not added with emitStatic since in this case the
   // context.offset is still before the node.fullStart
-  const text = node.getSourceFile().getFullText().substring(context.offset, node.end).trim();
+  const text = getSourceFile(node).getFullText().substring(context.offset, node.end).trim();
   const hasLeadingAmpersand = text.startsWith('&');
   if (hasLeadingAmpersand) {
     source.push('&');
@@ -103,7 +122,7 @@ export function addLeadingAmpersand(source: string[], node: ts.Node, context: Em
 export function addLeadingBar(source: string[], node: ts.Node, context: EmitterContext): void {
   // note: special case here. The '|' is not added with emitStatic since in this case the
   // context.offset is still before the node.fullStart
-  const text = node.getSourceFile().getFullText().substring(context.offset, node.end).trim();
+  const text = getSourceFile(node).getFullText().substring(context.offset, node.end).trim();
   const hasLeadingBar = text.startsWith('|');
   if (hasLeadingBar) {
     source.push('|');

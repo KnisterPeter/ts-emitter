@@ -6,9 +6,11 @@ import {
   addLeadingComment,
   addTrailingComment,
   addSemicolon,
+  addComma,
   endNode,
   addLeadingAmpersand,
-  addLeadingBar
+  addLeadingBar,
+  getSourceFile
 } from './utils';
 
 export interface EmitterContext {
@@ -198,7 +200,7 @@ function emitModifiers<T extends NodeWithModifiers>(source: string[], node: T, c
 
 function emitShebang(node: ts.SourceFile, context: EmitterContext): string {
   const source: string[] = [];
-  const filePrefix = ts.getShebang(node.getSourceFile().getFullText());
+  const filePrefix = ts.getShebang(getSourceFile(node).getFullText());
   if (filePrefix) {
     source.push(filePrefix);
     context.offset += filePrefix.length;
@@ -762,9 +764,7 @@ export function emitPropertySignature(node: ts.PropertySignature, context: Emitt
     addWhitespace(source, node, context);
     source.push(emitTypeNode(node.type, context));
   }
-  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
-    emitStatic(source, ',', node, context);
-  }
+  addComma(source, node, context);
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -789,9 +789,7 @@ export function emitMethodSignature(node: ts.MethodSignature, context: EmitterCo
     addWhitespace(source, node, context);
     source.push(emitTypeNode(node.type, context));
   }
-  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
-    emitStatic(source, ',', node, context);
-  }
+  addComma(source, node, context);
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -1442,7 +1440,7 @@ export function emitNewExpression(node: ts.NewExpression, context: EmitterContex
   addWhitespace(source, node, context);
   source.push(emit(node.expression, context));
   emitTypeArguments(source, node, context);
-  if (node.getSourceFile().getFullText()
+  if (getSourceFile(node).getFullText()
     .substring(context.offset, node.getEnd()).trim().startsWith('(')) {
     emitStatic(source, '(', node, context);
     addTrailingComment(source, context.offset, node, context);
@@ -1961,7 +1959,7 @@ export function emitArrowFunction(node: ts.ArrowFunction, context: EmitterContex
   emitModifiers(source, node, context);
   addTrailingComment(source, context.offset, node, context);
   const parenthesis = Boolean(node.typeParameters)
-    || node.getSourceFile().getFullText()
+    || getSourceFile(node).getFullText()
       .substring(context.offset, node.getEnd()).trim().startsWith('(');
   if (parenthesis) {
     emitStatic(source, '(', node, context);
@@ -2344,7 +2342,9 @@ export function emitIdentifier(node: ts.Identifier, context: EmitterContext): st
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -2477,9 +2477,7 @@ export function emitIndexSignature(node: ts.IndexSignatureDeclaration, context: 
     addWhitespace(source, node, context);
     source.push(emitTypeNode(node.type, context));
   }
-  if (node.getSourceFile().getFullText().substring(context.offset).trim().startsWith(',')) {
-    emitStatic(source, ',', node, context);
-  }
+  addComma(source, node, context);
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -2576,7 +2574,9 @@ export function emitStringLiteral(node: ts.StringLiteral, context: EmitterContex
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   return source.join('');
@@ -2586,7 +2586,10 @@ export function emitFirstLiteralToken(node: ts.NumericLiteral, context: EmitterC
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  source.push(node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()));
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
+  source.push(literal);
   endNode(node, context);
   return source.join('');
 }
@@ -2618,7 +2621,9 @@ export function emitTemplateExpression(node: ts.TemplateExpression,
 export function emitTemplateHead(node: ts.TemplateHead,
     context: EmitterContext): string {
   const source: string[] = [];
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   return source.join('');
@@ -2638,7 +2643,9 @@ export function emitTemplateSpan(node: ts.TemplateSpan,
 export function emitTemplateMiddle(node: ts.TemplateMiddle,
     context: EmitterContext): string {
   const source: string[] = [];
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   return source.join('');
@@ -2647,7 +2654,9 @@ export function emitTemplateMiddle(node: ts.TemplateMiddle,
 export function emitLastTemplateToken(node: ts.LiteralLikeNode,
     context: EmitterContext): string {
   const source: string[] = [];
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   return source.join('');
@@ -2656,7 +2665,9 @@ export function emitLastTemplateToken(node: ts.LiteralLikeNode,
 export function emitFirstTemplateToken(node: ts.Expression, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   return source.join('');
@@ -2741,7 +2752,9 @@ export function emitJsxAttribute(node: ts.JsxAttribute, context: EmitterContext)
 
 export function emitJsxText(node: ts.JsxText, context: EmitterContext): string {
   const source: string[] = [];
-  const text = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd());
+  const text = (node as any).newText
+    ? (node as any).newText
+    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   emitStatic(source, text, node, context);
   endNode(node, context);
   return source.join('');
