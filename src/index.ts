@@ -1,14 +1,14 @@
 import * as fs from 'fs';
 import * as ts from 'typescript';
 
-import { emit as internalEmit } from './emitter';
+import { emitSourceFile } from './emitter';
 
 export function fromPath(path: string, encoding = 'utf8'): ts.SourceFile {
   return readFile(path, encoding);
 }
 
 export function toSource(ast: ts.SourceFile): string {
-  return internalEmit(ast, {
+  return emitSourceFile(ast, {
     offset: 0
   });
 }
