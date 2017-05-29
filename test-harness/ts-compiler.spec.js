@@ -2,12 +2,12 @@ const { readFileSync } = require('fs');
 const { sync: globbySync } = require('globby');
 const { join } = require('path');
 
-const { emit } = require('..');
+const { fromPath, toSource } = require('..');
 
 const paths = globbySync(join(__dirname, `typescript/src/compiler/**/*.ts`));
 paths.forEach(path => {
   test(path, () => {
     const source = readFileSync(path).toString('utf8');
-    expect(emit(path)).toBe(source);
+    expect(toSource(fromPath(path))).toBe(source);
   });
 });

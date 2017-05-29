@@ -3,13 +3,12 @@ import * as ts from 'typescript';
 
 import { emit as internalEmit } from './emitter';
 
-export function emit(path: string, encoding: string): string;
-export function emit(node: ts.SourceFile): string;
-export function emit(pathOrNode: string|ts.SourceFile, encoding?: string): string {
-  const sourceFile = typeof pathOrNode === 'string'
-    ? readFile(pathOrNode, encoding || 'utf8')
-    : pathOrNode;
-  return internalEmit(sourceFile, {
+export function fromPath(path: string, encoding = 'utf8'): ts.SourceFile {
+  return readFile(path, encoding);
+}
+
+export function toSource(ast: ts.SourceFile): string {
+  return internalEmit(ast, {
     offset: 0
   });
 }

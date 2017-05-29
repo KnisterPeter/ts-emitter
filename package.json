@@ -33,8 +33,10 @@
   "license": "MIT",
   "devDependencies": {
     "@knisterpeter/standard-tslint": "^1.5.1",
+    "@types/common-tags": "^1.2.5",
     "@types/jest": "^19.2.3",
     "@types/node": "^7.0.18",
+    "common-tags": "^1.4.0",
     "coveralls": "^2.11.15",
     "globby": "^6.1.0",
     "husky": "^0.13.3",

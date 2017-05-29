@@ -36,7 +36,14 @@ $ npm run harness
 
 ### API
 
-TODO
+```typescript
+  import { fromPath, toSource } from 'ts-emitter';
+
+  const ast = fromPath('path/to/source-file.ts'));
+  // Do something with the AST
+  const source = toSource(ast);
+```
+
 
 [license-image]: https://img.shields.io/github/license/KnisterPeter/ts-emitter.svg
 [license-link]: https://github.com/KnisterPeter/ts-emitter

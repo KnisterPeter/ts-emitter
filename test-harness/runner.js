@@ -5,7 +5,7 @@ const ts = require('typescript');
 const blacklisted = require('./blacklisted-tests.json');
 const iconv = require('iconv-lite');
 
-const { emit } = require('..');
+const { toSource } = require('..');
 
 function getBOM(input) {
   const _0 = input[0];
@@ -57,7 +57,7 @@ module.exports = {
           const buffer = readFileSync(path);
           const encoding = getBOM(buffer);
           const source = iconv.decode(buffer, encoding);
-          expect(emit(getSourceFile(path, source))).toBe(source);
+          expect(toSource(getSourceFile(path, source))).toBe(source);
         });
       });
     } else {
