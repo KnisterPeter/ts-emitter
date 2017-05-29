@@ -9,7 +9,6 @@ test('fromPath should return a parsed AST', () => {
   expect(ast).toBeDefined();
 });
 
-
 test('toSource should return a string', () => {
   const ast = fromPath(join(__dirname, '__fixtures__', 'path.ts'));
   const source = toSource(ast);
@@ -21,7 +20,7 @@ test('toSource should return a string', () => {
 });
 
 test('updating the AST should respect formatting', () => {
-  const identity = <T extends ts.Node>(context: ts.TransformationContext) =>
+  const rename = <T extends ts.Node>(context: ts.TransformationContext) =>
         (rootNode: T) => {
     function visit(node: ts.Node): ts.Node {
         const visitedNode = ts.visitEachChild(node, visit, context);
@@ -46,12 +45,12 @@ test('updating the AST should respect formatting', () => {
         return visitedNode;
     }
     return ts.visitNode(rootNode, visit);
-};
+  };
 
   const ast = fromPath(join(__dirname, '__fixtures__', 'path.ts'));
-  const newAst = ts.transform(ast, [identity]).transformed[0];
+  const newAst = ts.transform<ts.SourceFile>(ast, [rename]).transformed[0];
+  const source = toSource(newAst);
 
-  const source = toSource(newAst as ts.SourceFile);
   expect(source.trim()).toBe(stripIndent`
     export function renamed(input: string): string {
       return 'hello, '  + input;

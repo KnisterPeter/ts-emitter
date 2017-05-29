@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { EmitterContext } from './emitter';
 
-function getSourceFile(node: ts.Node): ts.SourceFile {
+export function getSourceFile(node: ts.Node): ts.SourceFile {
   let sourceFile = node.getSourceFile();
   if (!sourceFile) {
     if ((node as any).original) {
@@ -92,6 +92,12 @@ export function addTrailingComment(source: string[], posOrNode: number|ts.Node, 
 export function addSemicolon(source: string[], node: ts.Node, context: EmitterContext): void {
   if (getSourceFile(node).getFullText().substring(context.offset).trim().startsWith(';')) {
     emitStatic(source, ';', node, context);
+  }
+}
+
+export function addComma(source: string[], node: ts.Node, context: EmitterContext): void {
+  if (getSourceFile(node).getFullText().substring(context.offset).trim().startsWith(',')) {
+    emitStatic(source, ',', node, context);
   }
 }
 
