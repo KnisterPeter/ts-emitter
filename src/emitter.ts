@@ -2344,7 +2344,9 @@ export function emitIdentifier(node: ts.Identifier, context: EmitterContext): st
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  const literal = node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
+  const literal = (node as any).newText
+    ? (node as any).newText
+    : node.getSourceFile().getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
   endNode(node, context);
   addTrailingComment(source, node, context);
