@@ -22,6 +22,9 @@ export function emitStatic(source: string[], text: string, node: ts.Node, contex
 
 const whitespaces = /^([ \f\n\r\t\v\u0085\u00A0\u2028\u2029\u3000]+)/;
 export function addWhitespace(source: string[], node: ts.Node, context: EmitterContext): void {
+  if (context.offset > node.getEnd()) {
+    return;
+  }
   if (context.offset <= node.getFullStart()) {
     const text = getSourceFile(node).getFullText().substring(node.getFullStart(), node.end);
     const leadingWhitespace = text.match(whitespaces);

@@ -1959,6 +1959,7 @@ export function emitArrowFunction(node: ts.ArrowFunction, context: EmitterContex
   emitModifiers(source, node, context);
   addTrailingComment(source, context.offset, node, context);
   const parenthesis = Boolean(node.typeParameters)
+    || node.parameters.length === 0
     || getSourceFile(node).getFullText()
       .substring(context.offset, node.getEnd()).trim().startsWith('(');
   if (parenthesis) {
