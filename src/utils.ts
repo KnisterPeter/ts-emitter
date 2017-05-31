@@ -5,7 +5,7 @@ export function getSourceFile(node: ts.Node): ts.SourceFile {
   let sourceFile = node.getSourceFile();
   if (!sourceFile) {
     if ((node as any).original) {
-      sourceFile = ((node as any).original as ts.Node).getSourceFile();
+      sourceFile = getSourceFile((node as any).original as ts.Node);
     }
   }
   if (!sourceFile) {
