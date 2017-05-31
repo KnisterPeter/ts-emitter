@@ -1,6 +1,6 @@
 {
   "name": "ts-emitter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Emitting typescript as back to typescript",
   "main": "./dist/src/index.js",
   "files": [
