@@ -8,9 +8,9 @@ export function getSourceFile(node: ts.Node): ts.SourceFile {
       sourceFile = getSourceFile((node as any).original as ts.Node);
     }
   }
-  if (!sourceFile) {
-    console.log(`Failed to get sourceFile for node:`, node);
-  }
+  // if (!sourceFile) {
+  //   console.log(`Failed to get sourceFile for node:`, node);
+  // }
   return sourceFile;
 }
 
@@ -50,6 +50,9 @@ export function addLeadingComment(source: string[], posOrNode: number|ts.Node, n
   const node = optionalContext ? nodeOrContext as ts.Node : posOrNode as ts.Node;
   const pos = optionalContext ? posOrNode as number : node.getFullStart();
 
+  if (!getSourceFile(node)) {
+    return;
+  }
   const text = getSourceFile(node).getFullText();
   const ranges = ts.getLeadingCommentRanges(text, pos);
   if (ranges) {
@@ -75,6 +78,9 @@ export function addTrailingComment(source: string[], posOrNode: number|ts.Node, 
   const node = optionalContext ? nodeOrContext as ts.Node : posOrNode as ts.Node;
   const pos = optionalContext ? posOrNode as number : node.getEnd();
 
+  if (!getSourceFile(node)) {
+    return;
+  }
   const text = getSourceFile(node).getFullText();
   const ranges = ts.getTrailingCommentRanges(text, pos);
   if (ranges) {

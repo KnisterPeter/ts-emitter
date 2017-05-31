@@ -473,14 +473,7 @@ function emitEntityName(node: ts.EntityName, context: EmitterContext): string {
 }
 
 export function emitFirstNode(node: ts.QualifiedName, context: EmitterContext): string {
-  const source: string[] = [];
-  addWhitespace(source, node, context);
-  source.push(emitEntityName(node.left, context));
-  emitStatic(source, '.', node, context);
-  addWhitespace(source, node, context);
-  source.push(emitIdentifier(node.right, context));
-  endNode(node, context);
-  return source.join('');
+  return emitQualifiedName(node, context);
 }
 
 export function emitImportDeclaration(node: ts.ImportDeclaration, context: EmitterContext): string {
@@ -652,9 +645,11 @@ export function emitInterfaceDeclaration(node: ts.InterfaceDeclaration, context:
   return source.join('');
 }
 
-function emitTypeNode(node: ts.TypeNode, context: EmitterContext): string {
+function emitTypeNode(node: ts.Node, context: EmitterContext): string {
   // tslint:disable-next-line cyclomatic-complexity
   switch (node.kind) {
+    case ts.SyntaxKind.QualifiedName:
+      return emitQualifiedName(node as ts.QualifiedName, context);
     case ts.SyntaxKind.FirstTypeNode:
       return emitFirstTypeNode(node as ts.TypePredicateNode, context);
     case ts.SyntaxKind.LastTypeNode:
@@ -2348,7 +2343,9 @@ export function emitIdentifier(node: ts.Identifier, context: EmitterContext): st
   addWhitespace(source, node, context);
   const literal = (node as any).newText
     ? (node as any).newText
-    : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
+    : getSourceFile(node)
+      ? getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim()
+      : node.text;
   source.push(literal);
   endNode(node, context);
   addTrailingComment(source, node, context);
@@ -2915,7 +2912,7 @@ const emitter = {
   [ts.SyntaxKind.NamespaceImport]: emitNamespaceImport,
   [ts.SyntaxKind.NamedImports]: emitNamedImports,
   [ts.SyntaxKind.ImportSpecifier]: emitImportSpecifier,
-  [ts.SyntaxKind.FirstNode]: emitFirstNode,
+  [ts.SyntaxKind.QualifiedName]: emitQualifiedName,
   [ts.SyntaxKind.StringLiteral]: emitStringLiteral,
   [ts.SyntaxKind.Identifier]: emitIdentifier,
   [ts.SyntaxKind.ExternalModuleReference]: emitExternalModuleReference,
