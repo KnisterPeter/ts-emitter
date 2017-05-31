@@ -1285,6 +1285,9 @@ export function emitForOfStatement(node: ts.ForOfStatement, context: EmitterCont
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, 'for', node, context);
+  if (node.awaitModifier) {
+    emitStatic(source, 'await', node, context);
+  }
   emitStatic(source, '(', node, context);
   addWhitespace(source, node, context);
   source.push(emit(node.initializer, context));
