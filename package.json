@@ -34,7 +34,7 @@
   "devDependencies": {
     "@knisterpeter/standard-tslint": "^1.5.1",
     "@types/common-tags": "^1.2.5",
-    "@types/jest": "^19.2.3",
+    "@types/jest": "^20.0.0",
     "@types/node": "^8.0.0",
     "common-tags": "^1.4.0",
     "coveralls": "^2.11.15",
