@@ -1387,8 +1387,10 @@ export function emitCatchClause(node: ts.CatchClause, context: EmitterContext): 
   const source: string[] = [];
   emitStatic(source, 'catch', node, context);
   emitStatic(source, '(', node, context);
-  addWhitespace(source, node, context);
-  source.push(emitVariableDeclaration(node.variableDeclaration, context));
+  if (node.variableDeclaration) {
+    addWhitespace(source, node, context);
+    source.push(emitVariableDeclaration(node.variableDeclaration, context));
+  }
   emitStatic(source, ')', node, context);
   addWhitespace(source, node, context);
   source.push(emitBlock(node.block, context));
