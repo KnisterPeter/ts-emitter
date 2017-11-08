@@ -209,7 +209,7 @@ function emitShebang(node: ts.SourceFile, context: EmitterContext): string {
 }
 
 export function emit(node: ts.Node, context: EmitterContext): string {
-  if (emitter[node.kind]) {
+  if ((emitter as any)[node.kind]) {
     return (emitter as any)[node.kind](node, context);
   }
   throw new Error(`Unknown node kind ${ts.SyntaxKind[node.kind]}`);
