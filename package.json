@@ -39,7 +39,7 @@
     "@types/node": "^8.0.50",
     "common-tags": "^1.4.0",
     "coveralls": "^3.0.0",
-    "globby": "^6.1.0",
+    "globby": "^7.0.0",
     "husky": "^0.14.3",
     "iconv-lite": "^0.4.19",
     "jest": "^21.2.1",
