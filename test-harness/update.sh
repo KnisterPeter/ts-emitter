@@ -1,9 +1,14 @@
 #!/bin/sh
 
+SHA=2ff333c71c2fa880e92b15ab20b3c75e4f0a9cb7
+
 cd $(dirname $0)
 rm -rf typescript
-#git clone --shallow-since=2017-05-31 -n https://github.com/Microsoft/TypeScript.git typescript
-git clone --depth=5000 -n https://github.com/Microsoft/TypeScript.git typescript
+#git clone --shallow-since=2017-07-01 -n https://github.com/Microsoft/TypeScript.git typescript
+#git clone -n https://github.com/Microsoft/TypeScript.git typescript
+#git checkout ${SHA}
+curl -L --output repo.tar.gz https://github.com/Microsoft/TypeScript/archive/${SHA}.tar.gz
+tar xzf repo.tar.gz
+rm -f repo.tar.gz
+mv TypeScript-${SHA} typescript
 cd typescript
-git checkout 3eda9c627bfff7f6653ac3363c33a778862aa6d2
-
