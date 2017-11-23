@@ -8,7 +8,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "linter": "tslint --project ./tsconfig.json --type-check",
+    "linter": "tslint --project ./tsconfig.json",
     "start": "npm test -- --watch",
     "clean": "rimraf dist",
     "build": "tsc",
