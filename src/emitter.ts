@@ -353,6 +353,10 @@ function emitExpression(node: ts.Expression, context: EmitterContext): string {
       return emitElementAccessExpression(node as ts.ElementAccessExpression, context);
     case ts.SyntaxKind.ParenthesizedExpression:
       return emitParenthesizedExpression(node as ts.ParenthesizedExpression, context);
+    case ts.SyntaxKind.ImportKeyword:
+      return emitImportKeyword(node, context);
+    case ts.SyntaxKind.SuperKeyword:
+      return emitSuperKeyword(node, context);
     default:
       throw new Error(`Unknown Expression kind '${ts.SyntaxKind[node.kind]}'`);
   }
@@ -1777,7 +1781,7 @@ export function emitParenthesizedExpression(node: ts.ParenthesizedExpression,
 export function emitCallExpression(node: ts.CallExpression, context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
-  source.push(emit(node.expression, context));
+  source.push(emitExpression(node.expression, context));
   emitTypeArguments(source, node, context);
   emitStatic(source, '(', node, context);
   for (let i = 0, n = node.arguments.length; i < n; i++) {
@@ -2795,6 +2799,10 @@ export function emitUndefinedKeyword(node: ts.Node, context: EmitterContext): st
 
 export function emitFalseKeyword(node: ts.Node, context: EmitterContext): string {
   return _emitKeyword('false', node, context);
+}
+
+export function emitImportKeyword(node: ts.Node, context: EmitterContext): string {
+  return _emitKeyword('import', node, context);
 }
 
 export function emitSuperKeyword(node: ts.Node, context: EmitterContext): string {
