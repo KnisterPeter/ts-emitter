@@ -20,8 +20,7 @@
     "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "prerelease": "git checkout master && git pull origin master && npm test && npm run update-harness && npm run harness",
     "release": "standard-version",
-    "postrelease": "git push --follow-tags origin master && npm publish",
-    "prepush": "npm run linter && npm run test"
+    "postrelease": "git push --follow-tags origin master && npm publish"
   },
   "author": {
     "name": "Markus Wolf",
