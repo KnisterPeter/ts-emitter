@@ -3,9 +3,9 @@
   "version": "0.3.1",
   "description": "Emitting typescript as back to typescript",
   "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist"
   ],
   "scripts": {
     "linter": "tslint --project ./tsconfig.json",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "KnisterPeter/ts-emitter"
+    "url": "https://github.com/KnisterPeter/ts-emitter.git"
   },
   "license": "MIT",
   "devDependencies": {
@@ -38,7 +38,7 @@
     "@types/node": "^8.0.50",
     "common-tags": "^1.4.0",
     "coveralls": "^3.0.0",
-    "globby": "^7.0.0",
+    "globby": "^7.1.1",
     "husky": "^0.14.3",
     "iconv-lite": "^0.4.19",
     "jest": "^21.2.1",
