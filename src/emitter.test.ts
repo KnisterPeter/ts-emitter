@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 
 import { toSource } from './index';
 
-function getSourceFile(source: string, enableJsx = false): ts.SourceFile {
+export function getSourceFile(source: string, enableJsx = false): ts.SourceFile {
   const options = {
     ...ts.getDefaultCompilerOptions(),
     experimentalDecorators: true,
