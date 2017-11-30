@@ -425,7 +425,7 @@ export function emitModuleBlock(node: ts.ModuleBlock, context: EmitterContext): 
 }
 
 export function emitImportEqualsDeclaration(node: ts.ImportEqualsDeclaration,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitModifiers(source, node, context);
@@ -442,7 +442,7 @@ export function emitImportEqualsDeclaration(node: ts.ImportEqualsDeclaration,
 }
 
 export function emitExternalModuleReference(node: ts.ExternalModuleReference,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, 'require', node, context);
@@ -546,7 +546,7 @@ export function emitImportSpecifier(node: ts.ImportSpecifier, context: EmitterCo
 }
 
 export function emitNamespaceExportDeclaration(node: ts.NamespaceExportDeclaration,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, 'export', node, context);
@@ -712,7 +712,7 @@ function emitTypeNode(node: ts.Node, context: EmitterContext): string {
 }
 
 export function emitConstructSignature(node: ts.ConstructSignatureDeclaration,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, 'new', node, context);
@@ -833,7 +833,7 @@ export function emitMappedType(node: ts.MappedTypeNode, context: EmitterContext)
 }
 
 export function emitMappedTypeTypeParameter(node: ts.TypeParameterDeclaration,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emitIdentifier(node.name, context));
@@ -1318,12 +1318,16 @@ export function emitWithStatement(node: ts.WithStatement, context: EmitterContex
 
 export function emitUnionType(node: ts.UnionTypeNode, context: EmitterContext): string {
   const source: string[] = [];
+  addTrailingComment(source, context.offset, node, context);
+  addWhitespace(source, context.offset, node, context);
   addLeadingBar(source, node, context);
   addLeadingComment(source, node, context);
   for (let i = 0, n = node.types.length; i < n; i++) {
     const type = node.types[i];
     addWhitespace(source, node, context);
     source.push(emitTypeNode(type, context));
+    addWhitespace(source, context.offset, node, context);
+    addTrailingComment(source, context.offset, node, context);
     if ((i < n - 1) || node.types.hasTrailingComma) {
       emitStatic(source, '|', node, context);
     }
@@ -1565,7 +1569,7 @@ export function emitConditionalExpression(node: ts.ConditionalExpression, contex
 }
 
 export function emitElementAccessExpression(node: ts.ElementAccessExpression,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
@@ -1765,7 +1769,7 @@ export function emitMetaProperty(node: ts.MetaProperty, context: EmitterContext)
 }
 
 export function emitParenthesizedExpression(node: ts.ParenthesizedExpression,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addLeadingComment(source, node, context);
   emitStatic(source, '(', node, context);
@@ -1881,7 +1885,7 @@ export function emitComputedPropertyName(node: ts.ComputedPropertyName,
 }
 
 export function emitArrayLiteralExpression(node: ts.ArrayLiteralExpression,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, '[', node, context);
   emitElements(source, node, context);
@@ -1938,7 +1942,7 @@ export function emitPrefixUnaryExpression(node: ts.PrefixUnaryExpression, contex
 }
 
 export function emitPostfixUnaryExpression(node: ts.PostfixUnaryExpression,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   function getPostfixUnaryOperator(): string {
     switch (node.operator) {
       case ts.SyntaxKind.PlusPlusToken:
@@ -2065,7 +2069,7 @@ function _emitToken(source: string[], token: string, node: ts.Node, context: Emi
 }
 
 export function emitFirstCompoundAssignment(node: ts.Token<ts.SyntaxKind.FirstCompoundAssignment>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '+=', node, context);
   endNode(node, context);
@@ -2073,7 +2077,7 @@ export function emitFirstCompoundAssignment(node: ts.Token<ts.SyntaxKind.FirstCo
 }
 
 export function emitGreaterThanEqualsToken(node: ts.Token<ts.SyntaxKind.GreaterThanEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '>=', node, context);
   endNode(node, context);
@@ -2081,7 +2085,7 @@ export function emitGreaterThanEqualsToken(node: ts.Token<ts.SyntaxKind.GreaterT
 }
 
 export function emitAsteriskEqualsToken(node: ts.Token<ts.SyntaxKind.AsteriskEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '*=', node, context);
   endNode(node, context);
@@ -2089,7 +2093,7 @@ export function emitAsteriskEqualsToken(node: ts.Token<ts.SyntaxKind.AsteriskEqu
 }
 
 export function emitLessThanLessThanToken(node: ts.Token<ts.SyntaxKind.LessThanLessThanToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '<<', node, context);
   endNode(node, context);
@@ -2097,7 +2101,7 @@ export function emitLessThanLessThanToken(node: ts.Token<ts.SyntaxKind.LessThanL
 }
 
 export function emitSlashToken(node: ts.Token<ts.SyntaxKind.SlashToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '/', node, context);
   endNode(node, context);
@@ -2105,7 +2109,7 @@ export function emitSlashToken(node: ts.Token<ts.SyntaxKind.SlashToken>,
 }
 
 export function emitGreaterThanGreaterThanGreaterThanEqualsToken(this: any,
-    node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
+  node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '>>>=', node, context);
   endNode(node, context);
@@ -2113,7 +2117,7 @@ export function emitGreaterThanGreaterThanGreaterThanEqualsToken(this: any,
 }
 
 export function emitPercentToken(node: ts.Token<ts.SyntaxKind.PercentToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '%', node, context);
   endNode(node, context);
@@ -2121,7 +2125,7 @@ export function emitPercentToken(node: ts.Token<ts.SyntaxKind.PercentToken>,
 }
 
 export function emitPercentEqualsToken(node: ts.Token<ts.SyntaxKind.PercentEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '%=', node, context);
   endNode(node, context);
@@ -2129,7 +2133,7 @@ export function emitPercentEqualsToken(node: ts.Token<ts.SyntaxKind.PercentEqual
 }
 
 export function emitSlashEqualsToken(node: ts.Token<ts.SyntaxKind.SlashEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '/=', node, context);
   endNode(node, context);
@@ -2137,7 +2141,7 @@ export function emitSlashEqualsToken(node: ts.Token<ts.SyntaxKind.SlashEqualsTok
 }
 
 export function emitLessThanEqualsToken(node: ts.Token<ts.SyntaxKind.LessThanEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '<=', node, context);
   endNode(node, context);
@@ -2145,7 +2149,7 @@ export function emitLessThanEqualsToken(node: ts.Token<ts.SyntaxKind.LessThanEqu
 }
 
 export function emitLessThanLessThanEqualsToken(node: ts.Token<ts.SyntaxKind.LessThanLessThanEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '<<=', node, context);
   endNode(node, context);
@@ -2153,7 +2157,7 @@ export function emitLessThanLessThanEqualsToken(node: ts.Token<ts.SyntaxKind.Les
 }
 
 export function emitGreaterThanGreaterThanEqualsToken(this: any,
-    node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
+  node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanEqualsToken>, context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '>>=', node, context);
   endNode(node, context);
@@ -2161,7 +2165,7 @@ export function emitGreaterThanGreaterThanEqualsToken(this: any,
 }
 
 export function emitBarEqualsToken(node: ts.Token<ts.SyntaxKind.BarEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '|=', node, context);
   endNode(node, context);
@@ -2169,7 +2173,7 @@ export function emitBarEqualsToken(node: ts.Token<ts.SyntaxKind.BarEqualsToken>,
 }
 
 export function emitAmpersandEqualsToken(node: ts.Token<ts.SyntaxKind.AmpersandEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '&=', node, context);
   endNode(node, context);
@@ -2177,7 +2181,7 @@ export function emitAmpersandEqualsToken(node: ts.Token<ts.SyntaxKind.AmpersandE
 }
 
 export function emitAmpersandToken(node: ts.Token<ts.SyntaxKind.AmpersandToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '&', node, context);
   endNode(node, context);
@@ -2185,7 +2189,7 @@ export function emitAmpersandToken(node: ts.Token<ts.SyntaxKind.AmpersandToken>,
 }
 
 export function emitCaretToken(node: ts.Token<ts.SyntaxKind.CaretToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '^', node, context);
   endNode(node, context);
@@ -2193,7 +2197,7 @@ export function emitCaretToken(node: ts.Token<ts.SyntaxKind.CaretToken>,
 }
 
 export function emitMinusToken(node: ts.Token<ts.SyntaxKind.MinusToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '-', node, context);
   endNode(node, context);
@@ -2201,7 +2205,7 @@ export function emitMinusToken(node: ts.Token<ts.SyntaxKind.MinusToken>,
 }
 
 export function emitLastBinaryOperator(node: ts.Token<ts.SyntaxKind.LastBinaryOperator>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '^=', node, context);
   endNode(node, context);
@@ -2216,7 +2220,7 @@ export function emitPlusToken(node: ts.Token<ts.SyntaxKind.PlusToken>, context: 
 }
 
 export function emitMinusEqualsToken(node: ts.Token<ts.SyntaxKind.MinusEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '-=', node, context);
   endNode(node, context);
@@ -2224,7 +2228,7 @@ export function emitMinusEqualsToken(node: ts.Token<ts.SyntaxKind.MinusEqualsTok
 }
 
 export function emitAsteriskToken(node: ts.Token<ts.SyntaxKind.AsteriskToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '*', node, context);
   endNode(node, context);
@@ -2232,7 +2236,7 @@ export function emitAsteriskToken(node: ts.Token<ts.SyntaxKind.AsteriskToken>,
 }
 
 export function emitEqualsEqualsToken(node: ts.Token<ts.SyntaxKind.EqualsEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '==', node, context);
   endNode(node, context);
@@ -2240,7 +2244,7 @@ export function emitEqualsEqualsToken(node: ts.Token<ts.SyntaxKind.EqualsEqualsT
 }
 
 export function emitEqualsEqualsEqualsToken(node: ts.Token<ts.SyntaxKind.EqualsEqualsEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '===', node, context);
   endNode(node, context);
@@ -2248,7 +2252,7 @@ export function emitEqualsEqualsEqualsToken(node: ts.Token<ts.SyntaxKind.EqualsE
 }
 
 export function emitExclamationEqualsToken(node: ts.Token<ts.SyntaxKind.ExclamationEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '!=', node, context);
   endNode(node, context);
@@ -2256,7 +2260,7 @@ export function emitExclamationEqualsToken(node: ts.Token<ts.SyntaxKind.Exclamat
 }
 
 export function emitExclamationEqualsEqualsToken(node: ts.Token<ts.SyntaxKind.ExclamationEqualsEqualsToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '!==', node, context);
   endNode(node, context);
@@ -2264,7 +2268,7 @@ export function emitExclamationEqualsEqualsToken(node: ts.Token<ts.SyntaxKind.Ex
 }
 
 export function emitCommaToken(node: ts.Token<ts.SyntaxKind.CommaToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, ',', node, context);
   endNode(node, context);
@@ -2272,7 +2276,7 @@ export function emitCommaToken(node: ts.Token<ts.SyntaxKind.CommaToken>,
 }
 
 export function emitGreaterThanToken(node: ts.Token<ts.SyntaxKind.GreaterThanToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '>', node, context);
   endNode(node, context);
@@ -2280,7 +2284,7 @@ export function emitGreaterThanToken(node: ts.Token<ts.SyntaxKind.GreaterThanTok
 }
 
 export function emitGreaterThanGreaterThanToken(node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '>>', node, context);
   endNode(node, context);
@@ -2288,7 +2292,7 @@ export function emitGreaterThanGreaterThanToken(node: ts.Token<ts.SyntaxKind.Gre
 }
 
 export function emitGreaterThanGreaterThanGreaterThanToken(this: any,
-    node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken>, context: EmitterContext): string {
+  node: ts.Token<ts.SyntaxKind.GreaterThanGreaterThanGreaterThanToken>, context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '>>>', node, context);
   endNode(node, context);
@@ -2296,7 +2300,7 @@ export function emitGreaterThanGreaterThanGreaterThanToken(this: any,
 }
 
 export function emitBarToken(node: ts.Token<ts.SyntaxKind.BarToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '|', node, context);
   endNode(node, context);
@@ -2304,7 +2308,7 @@ export function emitBarToken(node: ts.Token<ts.SyntaxKind.BarToken>,
 }
 
 export function emitBarBarToken(node: ts.Token<ts.SyntaxKind.BarBarToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '||', node, context);
   endNode(node, context);
@@ -2312,7 +2316,7 @@ export function emitBarBarToken(node: ts.Token<ts.SyntaxKind.BarBarToken>,
 }
 
 export function emitAmpersandAmpersandToken(node: ts.Token<ts.SyntaxKind.AmpersandAmpersandToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '&&', node, context);
   endNode(node, context);
@@ -2320,7 +2324,7 @@ export function emitAmpersandAmpersandToken(node: ts.Token<ts.SyntaxKind.Ampersa
 }
 
 export function emitAsteriskAsteriskToken(node: ts.Token<ts.SyntaxKind.AsteriskAsteriskToken>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '**', node, context);
   endNode(node, context);
@@ -2328,7 +2332,7 @@ export function emitAsteriskAsteriskToken(node: ts.Token<ts.SyntaxKind.AsteriskA
 }
 
 export function emitFirstBinaryOperator(node: ts.Token<ts.SyntaxKind.FirstBinaryOperator>,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   _emitToken(source, '<', node, context);
   endNode(node, context);
@@ -2492,7 +2496,7 @@ export function emitIndexSignature(node: ts.IndexSignatureDeclaration, context: 
 }
 
 export function emitRegularExpressionLiteral(node: ts.RegularExpressionLiteral,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, node.text, node, context);
   endNode(node, context);
@@ -2564,6 +2568,9 @@ export function emitFunctionType(node: ts.FunctionTypeNode, context: EmitterCont
 
 export function emitTypeLiteral(node: ts.TypeLiteralNode, context: EmitterContext): string {
   const source: string[] = [];
+  addTrailingComment(source, context.offset, node, context);
+  addWhitespace(source, context.offset, node, context);
+  addLeadingBar(source, node, context);
   emitStatic(source, '{', node, context);
   if (node.members !== undefined) {
     for (let i = 0, n = node.members.length; i < n; i++) {
@@ -2602,7 +2609,7 @@ export function emitFirstLiteralToken(node: ts.NumericLiteral, context: EmitterC
 }
 
 export function emitTaggedTemplateExpression(node: ts.TaggedTemplateExpression,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emit(node.tag, context));
@@ -2613,7 +2620,7 @@ export function emitTaggedTemplateExpression(node: ts.TaggedTemplateExpression,
 }
 
 export function emitTemplateExpression(node: ts.TemplateExpression,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emitTemplateHead(node.head, context));
@@ -2626,7 +2633,7 @@ export function emitTemplateExpression(node: ts.TemplateExpression,
 }
 
 export function emitTemplateHead(node: ts.TemplateHead,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   const literal = (node as any).newText
     ? (node as any).newText
@@ -2637,7 +2644,7 @@ export function emitTemplateHead(node: ts.TemplateHead,
 }
 
 export function emitTemplateSpan(node: ts.TemplateSpan,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   addWhitespace(source, node, context);
   source.push(emitExpression(node.expression, context));
@@ -2648,7 +2655,7 @@ export function emitTemplateSpan(node: ts.TemplateSpan,
 }
 
 export function emitTemplateMiddle(node: ts.TemplateMiddle,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   const literal = (node as any).newText
     ? (node as any).newText
@@ -2659,7 +2666,7 @@ export function emitTemplateMiddle(node: ts.TemplateMiddle,
 }
 
 export function emitLastTemplateToken(node: ts.LiteralLikeNode,
-    context: EmitterContext): string {
+  context: EmitterContext): string {
   const source: string[] = [];
   const literal = (node as any).newText
     ? (node as any).newText

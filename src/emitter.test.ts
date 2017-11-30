@@ -786,4 +786,24 @@ describe('emit', () => {
     const sourceFile = getSourceFile(source, true);
     expect(toSource(sourceFile)).toBe(source);
   });
+  it('should accept comments in TypeAliasDeclaration', () => {
+    const source = `
+      export type ModuleReference =
+        /** <reference path> or <reference types> */
+        | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
+    `;
+    const sourceFile = getSourceFile(source, true);
+    expect(toSource(sourceFile)).toBe(source);
+  });
+  it('should accept comments in UnionTypes', () => {
+    const source = `
+      export type ModuleReference =
+        /** "import" also includes require() calls. */
+        | { kind: "import", literal: StringLiteral }
+        /** <reference path> or <reference types> */
+        | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
+  `;
+    const sourceFile = getSourceFile(source, true);
+    expect(toSource(sourceFile)).toBe(source);
+  });
 });
