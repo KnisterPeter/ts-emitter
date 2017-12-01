@@ -1394,13 +1394,15 @@ export function emitTryStatement(node: ts.TryStatement, context: EmitterContext)
 export function emitCatchClause(node: ts.CatchClause, context: EmitterContext): string {
   const source: string[] = [];
   emitStatic(source, 'catch', node, context);
-  emitStatic(source, '(', node, context);
   if (node.variableDeclaration) {
+    emitStatic(source, '(', node, context);
+    if (node.variableDeclaration) {
+      addWhitespace(source, node, context);
+      source.push(emitVariableDeclaration(node.variableDeclaration, context));
+    }
+    emitStatic(source, ')', node, context);
     addWhitespace(source, node, context);
-    source.push(emitVariableDeclaration(node.variableDeclaration, context));
   }
-  emitStatic(source, ')', node, context);
-  addWhitespace(source, node, context);
   source.push(emitBlock(node.block, context));
   endNode(node, context);
   return source.join('');
@@ -2588,7 +2590,7 @@ export function emitStringLiteral(node: ts.StringLiteral, context: EmitterContex
   const source: string[] = [];
   addLeadingComment(source, node, context);
   addWhitespace(source, node, context);
-  const literal = (node as any).newText
+  const literal: string = (node as any).newText
     ? (node as any).newText
     : getSourceFile(node).getFullText().substring(node.getStart(), node.getEnd()).trim();
   source.push(literal);
