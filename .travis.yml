@@ -12,6 +12,7 @@ notifications:
   email:
     on_success: never
 cache:
+  yarn: true
   directories:
   - node_modules
 
