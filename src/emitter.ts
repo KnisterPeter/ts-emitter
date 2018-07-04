@@ -657,6 +657,7 @@ function emitTypeNode(node: ts.Node, context: EmitterContext): string {
     case ts.SyntaxKind.FirstTypeNode:
       return emitFirstTypeNode(node as ts.TypePredicateNode, context);
     case ts.SyntaxKind.LastTypeNode:
+    case ts.SyntaxKind.LiteralType:
       return emitLastTypeNode(node as ts.LiteralTypeNode, context);
     case ts.SyntaxKind.FunctionType:
       return emitFunctionType(node as ts.FunctionTypeNode, context);
@@ -3022,6 +3023,7 @@ const emitter = {
   [ts.SyntaxKind.ArrayType]: emitArrayType,
   [ts.SyntaxKind.NumberKeyword]: emitNumberKeyword,
   [ts.SyntaxKind.ShorthandPropertyAssignment]: emitShorthandPropertyAssignment,
+  [ts.SyntaxKind.LiteralType]: emitLastTypeNode,
   [ts.SyntaxKind.LastTypeNode]: emitLastTypeNode,
   [ts.SyntaxKind.TypeQuery]: emitTypeQuery,
   [ts.SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: emitGreaterThanGreaterThanGreaterThanEqualsToken,

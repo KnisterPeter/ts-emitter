@@ -19,5 +19,9 @@ export function getSourceFile(source: string, enableJsx = false): ts.SourceFile 
   };
   const fileName = enableJsx ? 'source.tsx' : 'source.ts';
   const program = ts.createProgram([fileName], options, host);
-  return program.getSourceFile(fileName);
+  const sourceFile = program.getSourceFile(fileName);
+  if (!sourceFile) {
+    throw new Error(`Unable to find/parse '${fileName}'`);
+  }
+  return sourceFile;
 }

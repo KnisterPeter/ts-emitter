@@ -46,5 +46,9 @@ function parse(source: string, path: string): ts.SourceFile {
     }
   );
   const program = ts.createProgram([path], options, host);
-  return program.getSourceFile(path);
+  const sourceFile = program.getSourceFile(path);
+  if (!sourceFile) {
+    throw new Error(`Unable to find/parse '${path}'`);
+  }
+  return sourceFile;
 }

@@ -1,3 +1,4 @@
+// tslint:disable-next-line:no-implicit-dependencies
 import { stripIndent } from 'common-tags';
 import { join } from 'path';
 import * as ts from 'typescript';
