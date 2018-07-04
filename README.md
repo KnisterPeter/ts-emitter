@@ -6,7 +6,7 @@
 [![Coverage Status][coverage-image]][coverage-link]
 [![Commitizen friendly][commitizen-image]][commitizen-link]
 [![Standard Version][standard-version-image]][standard-version-link]
-[![Greenkeeper badge](https://badges.greenkeeper.io/KnisterPeter/ts-emitter.svg)](https://greenkeeper.io/)
+[![renovate badge](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovateapp.com/)
 
 Emitting typescript as back to typescript.
 
