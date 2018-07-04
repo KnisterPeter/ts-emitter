@@ -16,7 +16,7 @@
     "test": "jest",
     "update-harness": "./test-harness/update.sh && ./test-harness/gen-specs.sh",
     "preharness": "npm run build",
-    "harness": "jest --coverage false --testRegex '.spec.js$'",
+    "harness": "jest --runInBand --coverage false --testRegex '.spec.js$'",
     "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "prerelease": "git checkout master && git pull origin master && npm test && npm run update-harness && npm run harness",
     "release": "standard-version",
