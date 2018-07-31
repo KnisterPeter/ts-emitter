@@ -1437,7 +1437,9 @@ export function emitThrowStatement(node: ts.ThrowStatement, context: EmitterCont
   addLeadingComment(source, node, context);
   emitStatic(source, 'throw', node, context);
   addWhitespace(source, node, context);
-  source.push(emitExpression(node.expression, context));
+  if (node.expression) {
+    source.push(emitExpression(node.expression, context));
+  }
   addSemicolon(source, node, context);
   endNode(node, context);
   addTrailingComment(source, node, context);
