@@ -62,6 +62,7 @@
       "js",
       "json"
     ],
+    "testURL": "http://localhost",
     "collectCoverage": true
   },
   "renovate": {
