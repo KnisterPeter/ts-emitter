@@ -35,7 +35,7 @@
     "@knisterpeter/standard-tslint": "1.7.2",
     "@types/common-tags": "1.4.0",
     "@types/jest": "23.3.1",
-    "@types/node": "10.7.1",
+    "@types/node": "10.9.1",
     "common-tags": "1.8.0",
     "coveralls": "3.0.2",
     "globby": "8.0.1",
