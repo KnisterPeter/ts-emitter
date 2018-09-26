@@ -39,7 +39,7 @@
     "common-tags": "1.8.0",
     "coveralls": "3.0.2",
     "globby": "8.0.1",
-    "husky": "0.14.3",
+    "husky": "1.0.0",
     "iconv-lite": "0.4.24",
     "jest": "23.6.0",
     "rimraf": "2.6.2",
@@ -81,5 +81,8 @@
         "automerge": true
       }
     ]
+  },
+  "husky": {
+    "hooks": {}
   }
 }
