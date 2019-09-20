@@ -36,7 +36,7 @@
     "@types/common-tags": "1.8.0",
     "@types/jest": "24.0.18",
     "@types/node": "10.12.24",
-    "codecov": "3.6.0",
+    "codecov": "3.6.1",
     "common-tags": "1.8.0",
     "coveralls": "3.0.6",
     "globby": "10.0.1",
