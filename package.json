@@ -52,6 +52,9 @@
   "peerDependencies": {
     "typescript": "^2.6.1 || ^3.0.0"
   },
+  "engines": {
+    "node" : ">=10"
+  },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
@@ -81,7 +84,9 @@
         ],
         "automerge": true
       }
-    ]
+    ],
+    "supportPolicy": ["all"],
+    "travis": { "enabled": true }
   },
   "husky": {
     "hooks": {}
