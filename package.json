@@ -73,20 +73,31 @@
     "extends": [
       "config:base"
     ],
-    "semanticPrefix": "chore:",
     "lockFileMaintenance": {
-      "enabled": true
+      "enabled": true,
+      "automerge": true,
+      "automergeType": "branch"
     },
     "packageRules": [
       {
-        "packagePatterns": [
-          "@types/"
+        "depTypeList": [
+          "devDependencies"
         ],
-        "automerge": true
+        "updateTypes": [
+          "minor",
+          "patch"
+        ],
+        "automerge": true,
+        "automergeType": "branch"
+      },
+      {
+        "packagePatterns": [
+          "^@types/"
+        ],
+        "automerge": true,
+        "automergeType": "branch"
       }
-    ],
-    "supportPolicy": ["all"],
-    "travis": { "enabled": true }
+    ]
   },
   "husky": {
     "hooks": {}
