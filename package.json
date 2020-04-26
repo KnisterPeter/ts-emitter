@@ -38,7 +38,7 @@
     "@types/node": "10.12.24",
     "codecov": "3.6.5",
     "common-tags": "1.8.0",
-    "coveralls": "3.0.13",
+    "coveralls": "3.1.0",
     "globby": "11.0.0",
     "husky": "4.2.5",
     "iconv-lite": "0.5.1",
