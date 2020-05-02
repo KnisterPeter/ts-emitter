@@ -42,7 +42,7 @@
     "globby": "11.0.0",
     "husky": "4.2.5",
     "iconv-lite": "0.5.1",
-    "jest": "25.4.0",
+    "jest": "25.5.3",
     "rimraf": "3.0.2",
     "standard-version": "7.1.0",
     "ts-jest": "25.4.0",
