@@ -10,6 +10,10 @@
 
 Emitting typescript as back to typescript.
 
+# DEPRECATED
+
+ts-emitter is currently not maintained and should be seen as deprecated
+
 ## Features
 
 * Keep original source as much as possible and only update whats changed.
